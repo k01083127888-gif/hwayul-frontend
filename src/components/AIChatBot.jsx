@@ -86,7 +86,7 @@ export function AIChatBot({ onClose, isAdmin = false }) {
     if (!isAdmin && newCount >= 3) setShowCTA(true);
     try {
       const history = messages.map(m => ({ role: m.role === "assistant" ? "assistant" : "user", content: m.text }));
-      const res = await fetch("https://hwayul-backend-production.up.railway.app/api/claude", {
+      const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/claude", {
         method:"POST",
         body: JSON.stringify({
           model:"claude-sonnet-4-20250514",
