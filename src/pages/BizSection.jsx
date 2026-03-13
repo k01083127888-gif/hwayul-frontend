@@ -1,0 +1,197 @@
+import { useState } from "react";
+import C from "../tokens/colors.js";
+import { addSubmission } from "../utils/store.js";
+import { isValidEmail, isValidPhone } from "../utils/validators.js";
+import { Input, DarkInput, SectionTag, DarkSectionTag } from "../components/common/FormElements.jsx";
+import { ValidationMsg } from "../components/common/ValidationMsg.jsx";
+import { PrivacyConsent } from "../components/common/PrivacyConsent.jsx";
+import { PrivacyPolicyModal } from "../components/common/PrivacyPolicyModal.jsx";
+
+// ── BizSection ─────────────────────────────────────────────────────────────────
+export function BizSection() {
+  const [step, setStep] = useState(1);
+  const [form, setForm] = useState({ name:"", company:"", phone:"", email:"", position:"", size:"", consultType:"", note:"", date:"", time:"", consent:false });
+  const F = k => e => setForm(f => ({ ...f, [k]: e.target.value }));
+  const [done, setDone] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [showPrivacy, setShowPrivacy] = useState(false);
+
+  const TIMES = ["09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00"];
+  const TYPES = ["직장내 괴롭힘 예방교육 컨설팅", "사건처리 프로세스 구축", "조직문화 진단 및 개선", "취업규칙·내부규정 정비", "고충처리위원회 운영 지원", "기타 HR 컴플라이언스"];
+  const SIZES = ["10인 미만", "10~49인", "50~299인", "300인 이상"];
+
+  const validateStep1 = () => {
+    const e = {};
+    if (!form.name.trim()) e.name = "성명을 입력해 주세요.";
+    if (!form.company.trim()) e.company = "기업명을 입력해 주세요.";
+    if (!form.phone.trim()) e.phone = "연락처를 입력해 주세요.";
+    else if (!isValidPhone(form.phone)) e.phone = "올바른 전화번호 형식이 아닙니다. (예: 010-1234-5678)";
+    if (!form.email.trim()) e.email = "이메일을 입력해 주세요.";
+    else if (!isValidEmail(form.email)) e.email = "올바른 이메일 형식이 아닙니다.";
+    if (!form.consent) e.consent = "개인정보 수집·이용에 동의해 주세요.";
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+  const infoComplete = form.name && form.company && form.phone && form.email && form.consent;
+
+  if (done) return (
+    <section style={{ padding:"80px 32px", background:C.navyMid, minHeight:"100vh", display:"flex", alignItems:"center" }}>
+      <div style={{ maxWidth:600, margin:"0 auto", textAlign:"center" }}>
+        <div style={{ fontSize:56, marginBottom:20 }}>🏢✅</div>
+        <h3 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"1.5rem", fontWeight:800, color:C.cream, marginBottom:12 }}>기업 상담 신청이 완료되었습니다</h3>
+        <p style={{ color:"rgba(244,241,235,0.6)", lineHeight:1.8, marginBottom:28 }}>입력하신 연락처로 영업일 1일 이내 담당 노무사가 연락드립니다.<br/>확인 이메일이 발송되었습니다.</p>
+        <div style={{ padding:"18px 24px", background:"rgba(201,168,76,0.1)", border:"1px solid rgba(201,168,76,0.25)", borderRadius:10, marginBottom:28 }}>
+          <div style={{ fontSize:13, color:C.gold, fontWeight:700 }}>신청 정보</div>
+          <div style={{ fontSize:13, color:"rgba(244,241,235,0.7)", marginTop:8, lineHeight:1.7 }}>
+            {form.name} 님 ({form.company}) · {form.consultType}{form.date && form.time ? <><br/>{form.date} {form.time}</> : <><br/><span style={{ fontSize:12, color:"rgba(244,241,235,0.45)" }}>일정은 담당 노무사와 별도 조율</span></>}
+          </div>
+        </div>
+        <button onClick={() => { setDone(false); setStep(1); setForm({ name:"", company:"", phone:"", email:"", position:"", size:"", consultType:"", note:"", date:"", time:"" }); }} style={{ padding:"12px 32px", borderRadius:8, border:`2px solid rgba(255,255,255,0.2)`, background:"transparent", color:C.cream, fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>새 예약하기</button>
+      </div>
+    </section>
+  );
+
+  return (
+    <section style={{ padding:"80px 32px", background:C.navyMid, minHeight:"100vh" }}>
+      <div style={{ maxWidth:820, margin:"0 auto" }}>
+        <div style={{ marginBottom:36, textAlign:"center" }}>
+          <DarkSectionTag>ENTERPRISE CONSULTING</DarkSectionTag>
+          <h2 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"clamp(1.6rem, 3vw, 2.1rem)", fontWeight:800, color:C.cream, marginTop:8, letterSpacing:"-0.5px" }}>기업 상담 예약</h2>
+          <p style={{ color:"rgba(244,241,235,0.55)", marginTop:8, fontSize:14 }}>직장내 괴롭힘 예방·대응 체계 구축을 위한 기업 전용 전문 컨설팅 서비스입니다.</p>
+        </div>
+
+        {/* 스텝 */}
+        <div style={{ display:"flex", justifyContent:"center", gap:0, marginBottom:36 }}>
+          {["담당자 정보", "상담 유형", "일정 선택 (선택)"].map((s, i) => (
+            <div key={i} style={{ display:"flex", alignItems:"center" }}>
+              <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:6 }}>
+                <div style={{ width:30, height:30, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", background:step > i + 1 ? C.gold : step === i + 1 ? "rgba(201,168,76,0.25)" : "rgba(255,255,255,0.07)", border:`2px solid ${step >= i + 1 ? C.gold : "rgba(255,255,255,0.1)"}`, color:step > i + 1 ? C.navy : step === i + 1 ? C.gold : "rgba(255,255,255,0.3)", fontWeight:800, fontSize:12 }}>
+                  {step > i + 1 ? "✓" : i + 1}
+                </div>
+                <span style={{ fontSize:10, color:step === i + 1 ? C.gold : "rgba(244,241,235,0.3)" }}>{s}</span>
+              </div>
+              {i < 2 && <div style={{ width:70, height:2, background:step > i + 1 ? C.gold : "rgba(255,255,255,0.08)", margin:"0 8px", marginBottom:20 }} />}
+            </div>
+          ))}
+        </div>
+
+        <div style={{ background:"rgba(255,255,255,0.04)", borderRadius:16, padding:36, border:"1px solid rgba(255,255,255,0.07)" }}>
+
+          {/* STEP 1 — 담당자 정보 (필수) */}
+          {step === 1 && (
+            <div>
+              <div style={{ padding:"12px 16px", background:"rgba(192,57,43,0.12)", border:"1px solid rgba(192,57,43,0.3)", borderRadius:8, marginBottom:28 }}>
+                <span style={{ fontSize:13, color:"#FF8A80" }}>⚠️ <strong>성명, 연락처, 이메일은 필수 입력 항목입니다.</strong> 담당 노무사가 직접 연락드립니다.</span>
+              </div>
+              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16, marginBottom:16 }}>
+                <DarkInput label="성명" value={form.name} onChange={F("name")} placeholder="홍길동" required />
+                <DarkInput label="직책·직급" value={form.position} onChange={F("position")} placeholder="인사팀장, HR담당자 등" />
+                <DarkInput label="연락처" value={form.phone} onChange={F("phone")} placeholder="010-0000-0000" type="tel" required />
+                <DarkInput label="이메일" value={form.email} onChange={F("email")} placeholder="hr@company.com" type="email" required />
+                <DarkInput label="회사명" value={form.company} onChange={F("company")} placeholder="(주)예시기업" required />
+                <div>
+                  <label style={{ display:"block", fontSize:12, fontWeight:700, color:"rgba(244,241,235,0.55)", marginBottom:6, letterSpacing:"0.5px", textTransform:"uppercase" }}>사업장 규모</label>
+                  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
+                    {SIZES.map(s => (
+                      <button key={s} onClick={() => setForm(f => ({ ...f, size:s }))} style={{ padding:"9px", borderRadius:7, border:`2px solid ${form.size === s ? C.gold : "rgba(255,255,255,0.1)"}`, background:form.size === s ? "rgba(201,168,76,0.12)" : "rgba(255,255,255,0.02)", color:form.size === s ? C.gold : "rgba(244,241,235,0.55)", fontWeight:form.size === s ? 700 : 400, fontSize:12, cursor:"pointer", fontFamily:"inherit", transition:"all 0.2s" }}>{s}</button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <ValidationMsg show={errors.name} msg={errors.name} />
+              <ValidationMsg show={errors.phone} msg={errors.phone} />
+              <ValidationMsg show={errors.email} msg={errors.email} />
+              <PrivacyConsent checked={form.consent} onChange={() => setForm(f => ({ ...f, consent:!f.consent }))} dark={true} onViewPolicy={() => setShowPrivacy(true)} />
+              <ValidationMsg show={errors.consent} msg={errors.consent} />
+              <button onClick={() => { if(validateStep1()) setStep(2); }} style={{ width:"100%", padding:"14px", background:infoComplete ? C.gold : "rgba(255,255,255,0.08)", border:"none", borderRadius:8, color:infoComplete ? C.navy : "rgba(255,255,255,0.28)", fontWeight:800, fontSize:15, cursor:infoComplete ? "pointer" : "not-allowed", fontFamily:"inherit", marginTop:8 }}>
+                {infoComplete ? "다음 단계 →" : "필수 항목을 모두 입력해 주세요"}
+              </button>
+              <PrivacyPolicyModal isOpen={showPrivacy} onClose={() => setShowPrivacy(false)} dark={true} />
+            </div>
+          )}
+
+          {/* STEP 2 — 상담 유형 */}
+          {step === 2 && (
+            <div>
+              <h3 style={{ color:C.cream, fontWeight:700, marginBottom:22 }}>상담 유형을 선택하세요</h3>
+              <div style={{ display:"flex", flexDirection:"column", gap:11, marginBottom:24 }}>
+                {TYPES.map(t => (
+                  <button key={t} onClick={() => setForm(f => ({ ...f, consultType:t }))} style={{ padding:"15px 18px", borderRadius:10, border:`2px solid ${form.consultType === t ? C.gold : "rgba(255,255,255,0.1)"}`, background:form.consultType === t ? "rgba(201,168,76,0.1)" : "rgba(255,255,255,0.02)", color:form.consultType === t ? C.gold : "rgba(244,241,235,0.65)", fontWeight:form.consultType === t ? 700 : 400, fontSize:14, cursor:"pointer", fontFamily:"inherit", textAlign:"left", transition:"all 0.2s" }}>
+                    {form.consultType === t ? "▶ " : "    "}{t}
+                  </button>
+                ))}
+              </div>
+              <div style={{ marginBottom:24 }}>
+                <label style={{ display:"block", fontSize:12, fontWeight:700, color:"rgba(244,241,235,0.55)", marginBottom:8, letterSpacing:"0.5px", textTransform:"uppercase" }}>사전 요청 메모 (선택)</label>
+                <textarea value={form.note} onChange={F("note")} placeholder="미리 전달할 내용, 현재 상황, 요청 사항을 적어주세요." rows={3} style={{ width:"100%", padding:"12px 14px", borderRadius:8, border:"2px solid rgba(255,255,255,0.1)", background:"rgba(255,255,255,0.04)", color:C.cream, fontSize:14, fontFamily:"inherit", outline:"none", resize:"vertical", boxSizing:"border-box" }} />
+              </div>
+              <div style={{ display:"flex", gap:12 }}>
+                <button onClick={() => setStep(1)} style={{ padding:"14px 22px", background:"rgba(255,255,255,0.06)", border:"none", borderRadius:8, color:"rgba(244,241,235,0.65)", fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>← 이전</button>
+                <button onClick={() => form.consultType && setStep(3)} style={{ flex:1, padding:"14px", background:form.consultType ? C.gold : "rgba(255,255,255,0.08)", border:"none", borderRadius:8, color:form.consultType ? C.navy : "rgba(255,255,255,0.28)", fontWeight:800, fontSize:14, cursor:form.consultType ? "pointer" : "not-allowed", fontFamily:"inherit" }}>일정 선택 →</button>
+              </div>
+              {form.consultType && (
+                <div style={{ textAlign:"center", marginTop:10 }}>
+                  <button onClick={() => { addSubmission("biz", {...form}); setDone(true); }} style={{ fontSize:12, color:"rgba(244,241,235,0.4)", background:"none", border:"none", cursor:"pointer", fontFamily:"inherit", textDecoration:"underline" }}>일정 선택 없이 바로 신청하기 →</button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* STEP 3 — 일정 */}
+          {step === 3 && (
+            <div>
+              <h3 style={{ color:C.cream, fontWeight:700, marginBottom:22 }}>희망 일정을 선택하세요 <span style={{ fontSize:12, fontWeight:400, color:"rgba(244,241,235,0.4)" }}>(선택사항)</span></h3>
+              <div style={{ marginBottom:20 }}>
+                <label style={{ display:"block", fontSize:12, fontWeight:700, color:"rgba(244,241,235,0.55)", marginBottom:8, letterSpacing:"0.5px", textTransform:"uppercase" }}>날짜</label>
+                <input type="date" value={form.date} onChange={F("date")} style={{ padding:"11px 14px", borderRadius:8, border:"2px solid rgba(255,255,255,0.13)", background:"rgba(255,255,255,0.05)", color:C.cream, fontSize:14, fontFamily:"inherit", outline:"none" }} />
+              </div>
+              <div style={{ marginBottom:28 }}>
+                <label style={{ display:"block", fontSize:12, fontWeight:700, color:"rgba(244,241,235,0.55)", marginBottom:10, letterSpacing:"0.5px", textTransform:"uppercase" }}>시간</label>
+                <div style={{ display:"grid", gridTemplateColumns:"repeat(4, 1fr)", gap:9 }}>
+                  {TIMES.map(t => (
+                    <button key={t} onClick={() => setForm(f => ({ ...f, time:t }))} style={{ padding:"11px", borderRadius:8, border:`2px solid ${form.time === t ? C.gold : "rgba(255,255,255,0.1)"}`, background:form.time === t ? "rgba(201,168,76,0.14)" : "rgba(255,255,255,0.02)", color:form.time === t ? C.gold : "rgba(244,241,235,0.55)", fontWeight:form.time === t ? 700 : 400, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>{t}</button>
+                  ))}
+                </div>
+              </div>
+              {form.date && form.time && (
+                <div style={{ padding:"14px 18px", background:"rgba(201,168,76,0.08)", border:"1px solid rgba(201,168,76,0.2)", borderRadius:8, marginBottom:22 }}>
+                  <div style={{ fontSize:13, color:C.gold }}>📅 예약 요약: {form.name} 님 ({form.company}) · {form.consultType} · {form.date} {form.time}</div>
+                </div>
+              )}
+              <div style={{ display:"flex", gap:12 }}>
+                <button onClick={() => setStep(2)} style={{ padding:"14px 22px", background:"rgba(255,255,255,0.06)", border:"none", borderRadius:8, color:"rgba(244,241,235,0.65)", fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>← 이전</button>
+                <button onClick={() => { addSubmission("biz", {...form}); setDone(true); }} style={{ flex:1, padding:"14px", background:C.gold, border:"none", borderRadius:8, color:C.navy, fontWeight:800, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>{form.date && form.time ? "예약 확정하기 ✓" : "일정 없이 상담 신청하기 →"}</button>
+              </div>
+              {!form.date && !form.time && (
+                <div style={{ textAlign:"center", fontSize:11, color:"rgba(244,241,235,0.35)", marginTop:10 }}>일정을 선택하지 않으시면 담당 노무사가 연락하여 일정을 조율합니다.</div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── 피해자 구제 ───────────────────────────────────────────────────────────────
+const RELIEF_STEPS = [
+  { step:1, icon:"📝", title:"신청서 접수",   desc:"성명·연락처·피해 내용 제출" },
+  { step:2, icon:"📞", title:"초기 상담",     desc:"노무사 전화 상담 (48h 내)" },
+  { step:3, icon:"🔍", title:"사안 분석",     desc:"증거 검토 · 법적 성립 판단" },
+  { step:4, icon:"⚖️", title:"구제 전략 수립", desc:"진정·조정·소송 등 최적 경로" },
+  { step:5, icon:"🛡️", title:"구제 실행",     desc:"고용노동부·법원 연계 지원" },
+];
+
+const RELIEF_METHODS = [
+  { icon:"📮", title:"고용노동부 진정",        desc:"무료 · 가장 신속", tag:"추천", color:C.green,
+    detail:"사업주의 직장내 괴롭힘 조사 의무 위반 시 과태료 부과 가능. 접수 후 14일 내 조사 착수 의무 있음. 온라인(민원24) 또는 지방관서 직접 접수 가능." },
+  { icon:"⚖️", title:"노동위원회 구제신청",    desc:"부당징계·해고 연계 시", tag:"", color:C.blue,
+    detail:"괴롭힘 피해 후 불이익 처우(징계·해고 등)를 받은 경우 노동위원회에 구제신청. 복직·임금지급·손해배상 명령 가능." },
+  { icon:"💰", title:"민사 손해배상 청구",      desc:"정신적 피해 보상", tag:"", color:C.purple,
+    detail:"민법 제750조 불법행위 손해배상. 정신적 피해에 대한 위자료 청구 가능. 형사소송과 병행 가능. 노무사·변호사 협력 연계 지원." },
+  { icon:"🚨", title:"형사 고소",               desc:"폭행·모욕 등 중대행위", tag:"", color:C.red,
+    detail:"폭행·상해·명예훼손·모욕죄 해당 시 형사 고소 가능. 증거 확보가 중요하며, 노무사와 변호사의 협력으로 진행. 합의·공탁 전략 수립." },
+  { icon:"🤝", title:"노동청 조정·화해",        desc:"빠른 해결 원할 때", tag:"", color:C.teal,
+    detail:"고용노동부 조정 절차를 통해 당사자 간 합의 도출. 평균 처리 기간 2~4주. 조정 성립 시 민사상 화해 효력 발생." },
+];
+
