@@ -41,7 +41,7 @@ export function EvidenceHelper({ onClose }) {
       // max_tokens: 유형 수 × 400토큰, 최소 1500 최대 4000
       const dynamicTokens = Math.min(4000, Math.max(1500, selectedTypes.length * 500));
 
-      const res = await fetch("/api/claude", {
+      const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/claude", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
