@@ -62,7 +62,7 @@ ${resultSummary || "(결과 데이터 없음)"}
 형식: 각 섹션 제목은 【 】로 감싸고, 전문적이면서 의뢰인이 이해하기 쉬운 어조로 작성. 총 600~900자.
 마지막에 "본 검토 리포트는 제한된 정보에 근거한 초기 검토 의견이며, 정식 자문 계약 체결 후 확정 의견이 제공됩니다."를 반드시 포함.`;
 
-      const res = await fetch("/api/claude", {
+      const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/claude", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
