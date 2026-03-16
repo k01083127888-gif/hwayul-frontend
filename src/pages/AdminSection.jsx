@@ -229,7 +229,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
           "attachments에는 고용노동부(https://www.moel.go.kr), 근로복지공단(https://www.comwel.or.kr), 국가법령정보센터(https://www.law.go.kr) 등 관련 공공기관 URL을 1~3개 포함하세요."
         ].join("\n");
         const userMsg = topicInfo.prompt + keywordHint + "\n\n오늘 날짜: " + new Date().toISOString().slice(0,10);
-        const res = await fetch("/api/claude", {
+        const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/claude", {
           method: "POST",
           body: JSON.stringify({
             model: "claude-sonnet-4-20250514",
@@ -1174,7 +1174,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
             const ym = nlAiMonth || "최근";
             const keyword = nlAiKeyword.trim() ? `\n추가 키워드: ${nlAiKeyword}` : "";
             try {
-              const res = await fetch("/api/claude", {
+              const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/claude", {
                 method:"POST",
                 body: JSON.stringify({
                   model:"claude-sonnet-4-20250514",
