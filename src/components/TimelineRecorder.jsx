@@ -57,7 +57,7 @@ export function TimelineRecorder({ onClose }) {
     setAccidentReport("");
     setAccidentError("");
     try {
-      const res = await fetch("/api/claude", {
+      const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/claude", {
         method:"POST",
         body: JSON.stringify({
           model:"claude-sonnet-4-20250514",
@@ -108,7 +108,7 @@ ${buildTimeline()}
     setComplaintReport("");
     setComplaintError("");
     try {
-      const res = await fetch("/api/claude", {
+      const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/claude", {
         method:"POST",
         body: JSON.stringify({
           model:"claude-sonnet-4-20250514",
