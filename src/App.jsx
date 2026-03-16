@@ -25,7 +25,31 @@ export default function App() {
   // 관리자 인증 상태를 전역으로 관리 → AdminSection과 NewFeaturesHub가 공유
   const [isAdmin, setIsAdmin] = useState(false);
   const adminTimerRef = useRef(null);
+// 모바일 뒤로가기 지원
+  const isPopState = useRef(false);
 
+  useEffect(() => {
+    if (isPopState.current) {
+      isPopState.current = false;
+      return;
+    }
+    if (active !== "home") {
+      window.history.pushState({ page: active }, "");
+    }
+  }, [active]);
+
+  useEffect(() => {
+    const handlePopState = (e) => {
+      isPopState.current = true;
+      if (e.state && e.state.page) {
+        setActive(e.state.page);
+      } else {
+        setActive("home");
+      }
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
   // 관리자 자동 로그아웃 (30분 비활동 시)
   useEffect(() => {
     if (!isAdmin) return;
