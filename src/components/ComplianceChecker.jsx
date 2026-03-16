@@ -105,7 +105,7 @@ export function ComplianceChecker({ onClose }) {
     const unchecked = currentItems.filter(i => !checked[i.id]).map(i => `[${i.mandatory ? "필수" : "권장"}] ${i.text}`).join("\n");
     const checkedList = currentItems.filter(i => checked[i.id]).map(i => i.text).join("\n");
     try {
-      const res = await fetch("/api/claude", {
+      const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/claude", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
