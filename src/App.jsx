@@ -8,6 +8,7 @@ import { NewsletterSection } from "./components/NewsletterSection.jsx";
 import { NewFeaturesHub } from "./components/NewFeaturesHub.jsx";
 import { PrivacyPolicyModal } from "./components/common/PrivacyPolicyModal.jsx";
 
+import CasesManager from "./components/CasesManager.jsx";
 // ── 페이지 ────────────────────────────────────────────────────────────────────
 import { HeroSection } from "./pages/HeroSection.jsx";
 import { IntroSection } from "./pages/IntroSection.jsx";
@@ -270,6 +271,7 @@ export default function App() {
         {active === "biz"       && <BizSection />}
         {active === "relief"    && <ReliefSection />}
         {active === "admin"     && <AdminSection setActive={setActive} authed={isAdmin} setAuthed={setIsAdmin} />}
+        {active === "cases"     && <CasesManager />}
       </main>
 
       {active === "home" && <NewsletterSection />}
