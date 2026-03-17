@@ -88,6 +88,12 @@ export async function loadContentsFromDB() {
 
 // 데이터베이스에 콘텐츠 저장
 async function saveContentsToDB(contents) {
+    const bodyByTitle = {};
+    mockNews.forEach(n => {
+        if (contentDetails[n.id]?.content) {
+            bodyByTitle[n.title] = contentDetails[n.id].content;
+        }
+    });
     try {
         await fetch(`${API_BASE}/contents/bulk`, {
             method: "POST",
@@ -100,7 +106,7 @@ async function saveContentsToDB(contents) {
                 summary: c.summary || "",
                 views: c.views || 0,
                 hidden: c.hidden || false,
-                body: c.body || (contentDetails[c.id]?.content) || ""
+                body: c.body || bodyByTitle[c.title] || ""
             }))})
         });
     } catch (e) {
