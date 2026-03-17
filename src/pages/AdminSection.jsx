@@ -260,7 +260,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
 
     const handleSave = () => {
       if (!f.title) return;
-      const savedItem = { ...f, id: item?.id || Date.now(), views: Number(f.views)||0 };
+    const savedItem = { ...f, id: item?.id || Date.now(), views: Number(f.views)||0, body: body || "" };
       contentDetails[savedItem.id] = { ...(contentDetails[savedItem.id] || {}), content: body || "", attachments: attachments.length > 0 ? attachments : undefined };
       saveDetails();
       onSave(savedItem);
