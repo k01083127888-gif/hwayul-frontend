@@ -9,6 +9,7 @@ import { NewFeaturesHub } from "./components/NewFeaturesHub.jsx";
 import { PrivacyPolicyModal } from "./components/common/PrivacyPolicyModal.jsx";
 
 import CasesManager from "./components/CasesManager.jsx";
+import { loadContentsFromDB } from "./utils/store.js";
 // ── 페이지 ────────────────────────────────────────────────────────────────────
 import { HeroSection } from "./pages/HeroSection.jsx";
 import { IntroSection } from "./pages/IntroSection.jsx";
@@ -50,6 +51,9 @@ export default function App() {
     };
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+  useEffect(() => {
+    loadContentsFromDB();
   }, []);
   // 관리자 자동 로그아웃 (30분 비활동 시)
   useEffect(() => {
