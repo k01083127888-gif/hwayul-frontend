@@ -100,7 +100,7 @@ async function saveContentsToDB(contents) {
                 summary: c.summary || "",
                 views: c.views || 0,
                 hidden: c.hidden || false,
-                body: c.body || ""
+                body: c.body || (contentDetails[c.id]?.content) || ""
             }))})
         });
     } catch (e) {
