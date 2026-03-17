@@ -611,10 +611,10 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                                   <div style={{ fontSize:10, fontWeight:700, color:C.gold, marginBottom:4 }}>요약</div>
                                   <div style={{ fontSize:12, color:"#5A5550", lineHeight:1.7 }}>{c.summary || "(요약 없음)"}</div>
                                 </div>
-                                {contentDetails[c.id] ? (
+                                {(contentDetails[c.id] || c.body) ? (
                                   <div style={{ padding:"14px 16px", background:"white", border:"1px solid rgba(10,22,40,0.08)", borderRadius:8 }}>
                                     <div style={{ fontSize:10, fontWeight:700, color:C.teal, marginBottom:6 }}>본문 내용</div>
-                                    <div style={{ fontSize:12.5, color:"#3A3530", lineHeight:1.9, whiteSpace:"pre-wrap" }}>{contentDetails[c.id].content}</div>
+                                    <div style={{ fontSize:12.5, color:"#3A3530", lineHeight:1.9, whiteSpace:"pre-wrap" }}>{contentDetails[c.id]?.content || c.body}</div>
                                     {contentDetails[c.id].related?.length > 0 && (
                                       <div style={{ marginTop:12, paddingTop:10, borderTop:"1px solid rgba(10,22,40,0.06)" }}>
                                         <div style={{ fontSize:10, fontWeight:700, color:C.gray, marginBottom:4 }}>관련 콘텐츠 ID</div>
