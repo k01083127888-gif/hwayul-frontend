@@ -75,10 +75,11 @@ export function AdminSection({ setActive, authed, setAuthed }) {
 
   // 동기화
   useEffect(() => { setMembers(membersState); saveMembers(membersState); }, [membersState]);
-  useEffect(() => { setContents(contentsState); saveContents(contentsState); }, [contentsState]);
+  const isFirstLoad = useRef(true);
+  useEffect(() => { if (isFirstLoad.current) return; setContents(contentsState); saveContents(contentsState); }, [contentsState]);
   useEffect(() => {
     loadContentsFromDB().then(data => {
-      if (data && data.length > 0) setContentsState(data);
+      if (data && data.length > 0) setContentsState(data); isFirstLoad.current = false;
     });
   }, []);
 
