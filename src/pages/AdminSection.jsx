@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import C from "../tokens/colors.js";
-import { _store, _members, _contents, addSubmission, useStore, setMembers, setContents } from "../utils/store.js";
+import { _store, _members, _contents, addSubmission, useStore, setMembers, setContents, loadContentsFromDB } from "../utils/store.js";
 import { saveMembers, saveContents, saveDetails, saveToStorage } from "../utils/storage.js";
 import { contentDetails } from "../data/contentDetails.js";
 import { mockNews } from "../data/mockNews.js";
@@ -76,6 +76,11 @@ export function AdminSection({ setActive, authed, setAuthed }) {
   // 동기화
   useEffect(() => { setMembers(membersState); saveMembers(membersState); }, [membersState]);
   useEffect(() => { setContents(contentsState); saveContents(contentsState); }, [contentsState]);
+  useEffect(() => {
+    loadContentsFromDB().then(data => {
+      if (data && data.length > 0) setContentsState(data);
+    });
+  }, []);
 
   if (!authed) return (
     <section style={{ minHeight:"100vh", background:C.navy, display:"flex", alignItems:"center", justifyContent:"center", padding:32 }}>
