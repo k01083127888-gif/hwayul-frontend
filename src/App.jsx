@@ -22,7 +22,8 @@ import { ReliefSection } from "./pages/ReliefSection.jsx";
 import { AdminSection } from "./pages/AdminSection.jsx";
 
 export default function App() {
-  const [active, setActive] = useState("home");
+  const [active, _setActive] = useState("home");
+  const setActive = (page) => { if (page !== active) window.history.pushState({ page }, ""); _setActive(page); };
   const [showFooterPrivacy, setShowFooterPrivacy] = useState(false);
   // 관리자 인증 상태를 전역으로 관리 → AdminSection과 NewFeaturesHub가 공유
   const [isAdmin, setIsAdmin] = useState(false);
