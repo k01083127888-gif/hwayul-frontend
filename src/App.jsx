@@ -29,7 +29,9 @@ export default function App() {
   const adminTimerRef = useRef(null);
 // 모바일 뒤로가기 지원
   const isPopState = useRef(false);
-
+useEffect(() => {
+    window.history.replaceState({ page: "home" }, "");
+  }, []);
   useEffect(() => {
     if (isPopState.current) {
       isPopState.current = false;
