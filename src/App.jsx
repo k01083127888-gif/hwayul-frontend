@@ -36,11 +36,11 @@ useEffect(() => {
   useEffect(() => {
     if (isPopState.current) {
       isPopState.current = false;
-      return;
+
     }
-    if (active !== "home") {
-      window.history.pushState({ page: active }, "");
-    }
+
+
+
   }, [active]);
 
   useEffect(() => {
