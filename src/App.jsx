@@ -47,9 +47,9 @@ useEffect(() => {
     const handlePopState = (e) => {
       isPopState.current = true;
       if (e.state && e.state.page) {
-        setActive(e.state.page);
+        _setActive(e.state.page);
       } else {
-        setActive("home");
+        _setActive("home");
       }
     };
     window.addEventListener("popstate", handlePopState);
