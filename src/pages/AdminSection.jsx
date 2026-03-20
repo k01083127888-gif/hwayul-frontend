@@ -190,7 +190,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
     const existingDetail = item?.id ? contentDetails[item.id] : null;
     const [f, setF] = useState(item || { type:"news", tag:"", title:"", date:new Date().toISOString().slice(0,10).replace(/-/g,"."), summary:"", views:0 });
     const [body, setBody] = useState(existingDetail?.content || item?.body || "");
-    const [attachments, setAttachments] = useState(existingDetail?.attachments || []);
+    const [attachments, setAttachments] = useState(existingDetail?.attachments || item?.attachments || []);
     const [newUrl, setNewUrl] = useState("");
     const [newLabel, setNewLabel] = useState("");
     const U = k => e => setF(v => ({ ...v, [k]: e.target.value }));
