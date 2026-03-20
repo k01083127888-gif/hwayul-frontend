@@ -106,7 +106,8 @@ async function saveContentsToDB(contents) {
                 summary: c.summary || "",
                 views: c.views || 0,
                 hidden: c.hidden || false,
-                body: c.body || bodyByTitle[c.title] || ""
+                body: c.body || bodyByTitle[c.title] || "",
+attachments: c.attachments || []
             }))})
         });
     } catch (e) {
