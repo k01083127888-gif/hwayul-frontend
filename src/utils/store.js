@@ -60,14 +60,15 @@ export let _contents = (() => {
     return [...mockNews];
 })();
 
+let _dbReady = false;
+export function setDbReady() { _dbReady = true; }
 export function setContents(val) {
     _contents = val;
     // localStorage에도 저장 (백업)
     try { localStorage.setItem(CONTENTS_KEY, JSON.stringify(val)); } catch {}
-    // 데이터베이스에도 저장
-    saveContentsToDB(val);
+    // DB 로드 완료 후에만 데이터베이스에 저장
+    if (_dbReady) saveContentsToDB(val);
 }
-
 // 데이터베이스에서 콘텐츠 불러오기
 export async function loadContentsFromDB() {
     try {
@@ -77,6 +78,7 @@ export async function loadContentsFromDB() {
             if (data.length > 0) {
                 _contents = data;
                 try { localStorage.setItem(CONTENTS_KEY, JSON.stringify(data)); } catch {}
+                _dbReady = true;
                 return data;
             }
         }
