@@ -67,7 +67,7 @@ export function setContents(val) {
     // localStorage에도 저장 (백업)
     try { localStorage.setItem(CONTENTS_KEY, JSON.stringify(val)); } catch {}
     // DB 로드 완료 후에만 데이터베이스에 저장
-    if (_dbReady) saveContentsToDB(val);
+    // DB 저장은 handleSave에서 직접 호출
 }
 // 데이터베이스에서 콘텐츠 불러오기
 export async function loadContentsFromDB() {
@@ -89,7 +89,7 @@ export async function loadContentsFromDB() {
 }
 
 // 데이터베이스에 콘텐츠 저장
-async function saveContentsToDB(contents) {
+export async function saveContentsToDB(contents) {
     const bodyByTitle = {};
     mockNews.forEach(n => {
         if (contentDetails[n.id]?.content) {
