@@ -6,7 +6,7 @@ export function ContentDetailView({ item, onBack }) {
   const typeIcon  = { news:"📰", video:"▶", resource:"📎" };
   const typeColor = { news:C.teal, video:C.red, resource:C.gold };
   const typeLabel = { news:"뉴스·판례", video:"교육영상", resource:"자료·서식" };
-  const detail = contentDetails[item.id];
+  const detail = contentDetails[item.id] || { content: item.body, attachments: item.attachments };
   const relatedItems = detail?.related?.map(rid => _contents.find(n => n.id === rid)).filter(Boolean) || [];
 
   return (
