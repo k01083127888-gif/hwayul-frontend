@@ -94,6 +94,19 @@ async function saveContentsToDB(contents) {
             bodyByTitle[n.title] = contentDetails[n.id].content;
         }
     });
+    // DB에서 기존 첨부파일 보존
+    let dbAttachments = {};
+    try {
+        const res = await fetch(`${API_BASE}/contents`);
+        if (res.ok) {
+            const dbData = await res.json();
+            dbData.forEach(d => {
+                if (d.attachments && d.attachments.length > 0) {
+                    dbAttachments[d.title] = d.attachments;
+                }
+            });
+        }
+    } catch(e) {}
     try {
         await fetch(`${API_BASE}/contents/bulk`, {
             method: "POST",
@@ -107,7 +120,7 @@ async function saveContentsToDB(contents) {
                 views: c.views || 0,
                 hidden: c.hidden || false,
                 body: c.body || bodyByTitle[c.title] || "",
-attachments: c.attachments || []
+                attachments: (c.attachments && c.attachments.length > 0) ? c.attachments : (dbAttachments[c.title] || [])
             }))})
         });
     } catch (e) {
