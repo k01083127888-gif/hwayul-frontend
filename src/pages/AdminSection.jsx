@@ -594,7 +594,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                       </td>
                       <td style={{ ...tdStyle, textAlign:"right", whiteSpace:"nowrap" }}>
                         <button onClick={() => setContentPreview(contentPreview?.id===c.id ? null : c)} style={{ padding:"5px 12px", borderRadius:6, border:"1px solid rgba(13,115,119,0.3)", background:contentPreview?.id===c.id?"rgba(13,115,119,0.12)":"rgba(13,115,119,0.05)", color:C.teal, fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit", marginRight:6 }}>{contentPreview?.id===c.id?"접기":"상세"}</button>
-                        <button onClick={() => setEditContent(c); setTimeout(() => window.scrollTo({top:0, behavior:"smooth"}), 300)}} style=...{{ ...btnPrimary, padding:"5px 12px", marginRight:6 }}>수정</button>
+                        <button onClick={() => setEditContent(c); setTimeout(() => { window.scrollTo(0,0); document.documentElement.scrollTop=0; document.body.scrollTop=0; }, 100)}} style=...{{ ...btnPrimary, padding:"5px 12px", marginRight:6 }}>수정</button>
                         <button onClick={() => {
                           const updated = { ...c, hidden: !c.hidden };
                           setContentsState(v => v.map(x => x.id === c.id ? updated : x));
