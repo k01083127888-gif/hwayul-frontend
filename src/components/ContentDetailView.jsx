@@ -48,7 +48,7 @@ export function ContentDetailView({ item, onBack }) {
         {/* 본문 */}
         <div style={{ background:"white", borderRadius:16, padding:36, boxShadow:"0 4px 24px rgba(10,22,40,0.08)", border:"1px solid rgba(10,22,40,0.06)", marginBottom:28 }}>
           <div style={{ fontSize:10, letterSpacing:"2px", color:C.teal, fontWeight:700, textTransform:"uppercase", marginBottom:16 }}>CONTENT DETAIL</div>
-          {detail?.content.split("\n\n").map((para, i) => (
+          {(detail?.content || detail?.body)?.split("\n\n").map((para, i) => (
             <p key={i} style={{ fontSize:14, color:"#3A3530", lineHeight:1.9, marginBottom:16, whiteSpace:"pre-wrap" }}>{para}</p>
           ))}
         </div>
