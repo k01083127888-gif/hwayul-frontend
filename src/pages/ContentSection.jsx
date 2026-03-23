@@ -9,8 +9,8 @@ export function ContentSection() {
   const [filter, setFilter] = useState("all");
   const [showAll, setShowAll] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-  const typeIcon  = { news:"📰", video:"▶", resource:"📎" };
-  const typeColor = { news:C.teal, video:C.red, resource:C.gold };
+  const typeIcon  = { news:"📰", video:"▶", resource:"📎", column:"✏️" };
+  const typeColor = { news:C.teal, video:C.red, resource:C.gold, column:C.purple };
   const SANJAE_TAGS = ["산재통계","산재사례","판례"];
   const visibleNews = _contents.filter(n => !n.hidden);
   const allFiltered = filter === "all" ? visibleNews : filter === "sanjae" ? visibleNews.filter(n => SANJAE_TAGS.includes(n.tag)) : visibleNews.filter(n => n.type === filter);
@@ -39,7 +39,7 @@ export function ContentSection() {
         <p style={{ color:C.gray, marginBottom:32 }}>산업재해 판례·산재 승인 사례·뉴스·교육영상·서식자료를 한 곳에서 확인하세요.</p>
 
         <div style={{ display:"flex", gap:8, marginBottom:32, flexWrap:"wrap" }}>
-          {[{ id:"all", label:"전체" }, { id:"sanjae", label:"⚖️ 산업재해·판례" }, { id:"news", label:"📰 뉴스·정책" }, { id:"video", label:"▶ 교육영상" }, { id:"resource", label:"📎 자료·서식" }].map(f => (
+          {[{ id:"all", label:"전체" }, { id:"sanjae", label:"⚖️ 산업재해·판례" }, { id:"news", label:"📰 뉴스·정책" }, { id:"video", label:"▶ 교육영상" }, { id:"resource", label:"📎 자료" }, { id:"column", label:"✏️ 칼럼" }].map(f => (
             <button key={f.id} onClick={() => { setFilter(f.id); setShowAll(false); }} style={{
               padding:"8px 20px", borderRadius:100,
               border:`2px solid ${filter === f.id ? (f.id === "sanjae" ? C.teal : C.navy) : "rgba(10,22,40,0.15)"}`,
