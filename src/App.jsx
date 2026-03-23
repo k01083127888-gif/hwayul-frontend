@@ -44,12 +44,14 @@ useEffect(() => {
   }, [active]);
 
   useEffect(() => {
-    const handlePopState = (e) => {
+   const handlePopState = (e) => {
       isPopState.current = true;
       if (e.state && e.state.page) {
-        _setActive(e.state.page);
-      } else {
-        _setActive("home");
+        if (e.state.page !== "contentDetail") {
+          _setActive(e.state.page);
+        }
+      }
+    };
       }
     };
     window.addEventListener("popstate", handlePopState);
