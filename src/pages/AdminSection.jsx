@@ -240,7 +240,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
         const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/claude", {
           method: "POST",
           body: JSON.stringify({
-            model: "claude-sonnet-4-20250514",
+            model: "claude-sonnet-4-5",
             max_tokens: 1500,
             system: sysPrompt,
             messages: [{ role: "user", content: userMsg }],
@@ -1185,7 +1185,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
               const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/claude", {
                 method:"POST",
                 body: JSON.stringify({
-                  model:"claude-sonnet-4-20250514",
+                  model:"claude-sonnet-4-5",
                   max_tokens:2000,
                   tools:[{ type:"web_search_20250305", name:"web_search" }],
                   system:`당신은 직장내 괴롭힘·노동법 전문 노무사 사무소(화율인사이드)의 뉴스레터 편집장입니다.
