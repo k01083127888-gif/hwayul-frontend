@@ -57,7 +57,7 @@ export function ContentSection() {
             <article key={item.id} style={{ background:"white", borderRadius:12, padding:26, cursor:"pointer", border:"1px solid rgba(10,22,40,0.07)", boxShadow:"0 2px 10px rgba(10,22,40,0.05)", transition:"all 0.25s" }}
               onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 12px 36px rgba(10,22,40,0.11)"; }}
               onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 2px 10px rgba(10,22,40,0.05)"; }}
-              onClick={() => { setSelectedItem(item); window.history.pushState({page:"contentDetail"}, ""); window.scrollTo({ top:0, behavior:"smooth" });
+              onClick={() => { setSelectedItem(item); window.history.pushState({page:"contentDetail"}, ""); window.scrollTo({ top:0, behavior:"smooth" }); }}
             >
               <div style={{ display:"flex", justifyContent:"space-between", marginBottom:12 }}>
                 <span style={{ padding:"3px 10px", borderRadius:4, background:typeColor[item.type]+"18", color:typeColor[item.type], fontSize:11, fontWeight:700 }}>
