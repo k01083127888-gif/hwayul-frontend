@@ -148,12 +148,29 @@ ${resultSummary || "(결과 데이터 없음)"}
         </div>
         <div style={{ display:"flex", gap:8 }}>
           {data.resultHtml && <button onClick={() => onViewResult(data.resultHtml)} style={{ padding:"6px 14px", borderRadius:6, background:"rgba(41,128,185,0.2)", border:"1px solid rgba(41,128,185,0.3)", color:"#5DADE2", fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit" }}>📄 첨부 결과지 보기</button>}
-          <button onClick={() => {
+          <button onClick={async () => {
+            // 1) DB에 이메일 내용 저장
+            try {
+              await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/sent-emails", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  submission_id: data.data?.id || "",
+                  submission_type: data.type || "",
+                  recipient_email: data.to || "",
+                  recipient_name: data.name || "",
+                  email_type_label: typeLabel,
+                  greeting, body, closing
+                })
+              });
+            } catch(e) { console.error("이메일 저장 실패:", e); }
+            // 2) 기존 로직: 상태 변경 + localStorage 저장
             setSent(true); setShowPreview(false);
             if (data.data) {
               data.data.status = data.type === "report-email" ? "발송완료" : "완료";
             }
             _store.listeners.forEach(fn=>fn()); saveToStorage(_store.submissions);
+            if (data.onEmailSaved) data.onEmailSaved();
           }} style={{ padding:"6px 16px", borderRadius:6, background:"#1A7A4A", border:"none", color:"white", fontWeight:700, fontSize:12, cursor:"pointer", fontFamily:"inherit" }}>✉️ 발송하기</button>
           <button onClick={() => setShowPreview(false)} style={{ padding:"6px 14px", borderRadius:6, background:"rgba(255,255,255,0.1)", border:"1px solid rgba(255,255,255,0.15)", color:"#F4F1EB", fontWeight:700, fontSize:12, cursor:"pointer", fontFamily:"inherit" }}>← 수정하기</button>
         </div>
