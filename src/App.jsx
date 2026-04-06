@@ -23,8 +23,19 @@ import { AdminSection } from "./pages/AdminSection.jsx";
 import { DifferentiationSection } from "./pages/DifferentiationSection.jsx";
 
 export default function App() {
-  const [active, _setActive] = useState("home");
-  const setActive = (page) => { window.history.pushState({ page }, ""); _setActive(page); };
+  // URL ↔ 페이지 매핑
+  const pageToPath = { home:"/", intro:"/intro", content:"/content", checklist:"/checklist", culture:"/culture", report:"/report", biz:"/biz", relief:"/relief", admin:"/admin", cases:"/cases" };
+  const pathToPage = Object.fromEntries(Object.entries(pageToPath).map(([k,v])=>[v,k]));
+
+  // 현재 URL에서 초기 페이지 결정
+  const getPageFromURL = () => pathToPage[window.location.pathname] || "home";
+
+  const [active, _setActive] = useState(getPageFromURL);
+  const setActive = (page) => {
+    const path = pageToPath[page] || "/";
+    window.history.pushState({ page }, "", path);
+    _setActive(page);
+  };
   const [showFooterPrivacy, setShowFooterPrivacy] = useState(false);
   // 관리자 인증 상태를 전역으로 관리 → AdminSection과 NewFeaturesHub가 공유
   const [isAdmin, setIsAdmin] = useState(false);
@@ -32,16 +43,13 @@ export default function App() {
 // 모바일 뒤로가기 지원
   const isPopState = useRef(false);
 useEffect(() => {
-    window.history.replaceState({ page: "home" }, "");
+    const path = pageToPath[getPageFromURL()] || "/";
+    window.history.replaceState({ page: getPageFromURL() }, "", path);
   }, []);
   useEffect(() => {
     if (isPopState.current) {
       isPopState.current = false;
-
     }
-
-
-
   }, [active]);
 
   useEffect(() => {
@@ -51,6 +59,9 @@ useEffect(() => {
         if (e.state.page !== "contentDetail") {
           _setActive(e.state.page);
         }
+      } else {
+        // URL에서 페이지 결정 (뒤로가기로 외부에서 돌아왔을 때)
+        _setActive(getPageFromURL());
       }
     };
     window.addEventListener("popstate", handlePopState);
