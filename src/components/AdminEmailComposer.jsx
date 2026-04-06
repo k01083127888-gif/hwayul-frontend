@@ -149,7 +149,33 @@ ${resultSummary || "(결과 데이터 없음)"}
         <div style={{ display:"flex", gap:8 }}>
           {data.resultHtml && <button onClick={() => onViewResult(data.resultHtml)} style={{ padding:"6px 14px", borderRadius:6, background:"rgba(41,128,185,0.2)", border:"1px solid rgba(41,128,185,0.3)", color:"#5DADE2", fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit" }}>📄 첨부 결과지 보기</button>}
           <button onClick={async () => {
-            // 1) DB에 이메일 내용 저장
+            // 1) 실제 이메일 발송 (Resend)
+            if (data.to) {
+              try {
+                const subjectMap = {
+                  "report":"[화율인사이드] 익명 제보 검토 결과 안내",
+                  "biz":"[화율인사이드] 기업 상담 회신",
+                  "relief":"[화율인사이드] 피해자 구제 검토 결과 안내",
+                  "review":"[화율인사이드] 노무사 검토 리포트",
+                  "report-email":"[화율인사이드] 진단 결과지 발송",
+                  "consulting":"[화율인사이드] 전화상담 안내",
+                  "lecture":"[화율인사이드] 강의 요청 회신",
+                  "advisory":"[화율인사이드] 자문 요청 회신",
+                };
+                const sendRes = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/send-email", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    to: data.to,
+                    subject: subjectMap[data.type] || "[화율인사이드] 안내 메일",
+                    html: emailHtml
+                  })
+                });
+                const sendResult = await sendRes.json();
+                if (!sendRes.ok) console.error("이메일 발송 실패:", sendResult.error);
+              } catch(e) { console.error("이메일 발송 오류:", e); }
+            }
+            // 2) DB에 이메일 내용 저장
             try {
               await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/sent-emails", {
                 method: "POST",
@@ -164,7 +190,7 @@ ${resultSummary || "(결과 데이터 없음)"}
                 })
               });
             } catch(e) { console.error("이메일 저장 실패:", e); }
-            // 2) 기존 로직: 상태 변경 + localStorage 저장
+            // 3) 기존 로직: 상태 변경 + localStorage 저장
             setSent(true); setShowPreview(false);
             if (data.data) {
               data.data.status = data.type === "report-email" ? "발송완료" : "완료";
