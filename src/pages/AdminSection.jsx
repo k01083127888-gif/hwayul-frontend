@@ -430,6 +430,17 @@ export function AdminSection({ setActive, authed, setAuthed }) {
 
           return (
           <div>
+            {/* ── 데이터 내보내기 ── */}
+            <div style={{ display:"flex", justifyContent:"flex-end", marginBottom:12 }}>
+              <button onClick={() => {
+                const a = document.createElement("a");
+                a.href = "https://hwayul-backend-production-96cf.up.railway.app/api/export-excel";
+                a.download = "hwayul_data.xlsx";
+                a.click();
+              }} style={{ padding:"10px 20px", borderRadius:8, background:"linear-gradient(135deg,#0D7377,#4ECDC4)", border:"none", color:"white", fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"inherit", display:"flex", alignItems:"center", gap:8 }}>
+                📥 전체 데이터 엑셀 다운로드
+              </button>
+            </div>
             {/* ── 핵심 KPI ── */}
             <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12, marginBottom:20 }}>
               {[
