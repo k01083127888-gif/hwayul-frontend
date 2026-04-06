@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import C from "../tokens/colors.js";
-import { _store, _members, _contents, addSubmission, useStore, setMembers, setContents, loadContentsFromDB, saveContentsToDB } from "../utils/store.js";
+import { _store, _members, _contents, addSubmission, useStore, setMembers, setContents, loadContentsFromDB, saveContentsToDB, updateSubmissionStatus, loadSubmissionsFromDB, syncSubmissionsToDB } from "../utils/store.js";
 import { saveMembers, saveContents, saveDetails, saveToStorage } from "../utils/storage.js";
 import { contentDetails } from "../data/contentDetails.js";
 import { mockNews } from "../data/mockNews.js";
@@ -94,6 +94,11 @@ export function AdminSection({ setActive, authed, setAuthed }) {
       if (data && data.length > 0) { isFromDB.current = true; setContentsState(data); }
       isFirstLoad.current = false;
     });
+  }, []);
+
+  // 접수 데이터 DB 동기화 및 로드
+  useEffect(() => {
+    syncSubmissionsToDB().then(() => loadSubmissionsFromDB());
   }, []);
 
   if (!authed) return (
@@ -792,7 +797,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                       <td style={tdStyle}>{r.type||"-"}</td>
                       <td style={tdStyle}>{r.org||"-"}</td>
                       <td style={{ ...tdStyle, maxWidth:250, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{r.content?.slice(0,50)||"-"}</td>
-                      <td style={tdStyle}><select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}><option>신규</option><option>진행중</option><option>완료</option></select></td>
+                      <td style={tdStyle}><select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;updateSubmissionStatus(r.id,e.target.value);_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}><option>신규</option><option>진행중</option><option>완료</option></select></td>
                       <td style={{ ...tdStyle, textAlign:"right" }}>
                         <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 12px", marginRight:6 }}>상세보기</button>
                         <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"제보자", type:"report", data:r, greeting:`안녕하세요, 화율인사이드입니다.\n\n접수하신 제보 건에 대한 검토 결과를 안내드립니다.`, body:"" })} style={{ padding:"5px 12px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
@@ -861,7 +866,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                       <td style={tdStyle}>{r.phone||"-"}</td>
                       <td style={tdStyle}>{r.email||"-"}</td>
                       <td style={tdStyle}>{r.consultType||"-"}</td>
-                      <td style={tdStyle}><select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}><option>신규</option><option>진행중</option><option>완료</option></select></td>
+                      <td style={tdStyle}><select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;updateSubmissionStatus(r.id,e.target.value);_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}><option>신규</option><option>진행중</option><option>완료</option></select></td>
                       <td style={{ ...tdStyle, textAlign:"right" }}>
                         <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 12px", marginRight:6 }}>상세보기</button>
                         <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:"biz", data:r, greeting:`${r.name||""} 님 (${r.company||""}) 안녕하세요,\n화율인사이드입니다.\n\n요청하신 ${r.consultType||"기업 상담"} 건에 대해 안내드립니다.`, body:"" })} style={{ padding:"5px 12px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
@@ -923,7 +928,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                       <td style={tdStyle}>{r.phone||"-"}</td>
                       <td style={tdStyle}>{r.email||"-"}</td>
                       <td style={tdStyle}>{r.urgency==="emergency"?"🚨 긴급":r.urgency==="urgent"?"⚡ 빠른":"일반"}</td>
-                      <td style={tdStyle}><select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}><option>신규</option><option>진행중</option><option>완료</option></select></td>
+                      <td style={tdStyle}><select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;updateSubmissionStatus(r.id,e.target.value);_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}><option>신규</option><option>진행중</option><option>완료</option></select></td>
                       <td style={{ ...tdStyle, textAlign:"right" }}>
                         <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 12px", marginRight:6 }}>상세보기</button>
                         <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:"relief", data:r, greeting:`${r.name||""} 님 안녕하세요,\n화율인사이드입니다.\n\n신청하신 피해자 구제 건에 대한 검토 결과를 안내드립니다.`, body:"" })} style={{ padding:"5px 12px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
@@ -1055,7 +1060,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                       <td style={tdStyle}>{r.userType==="corporate"?"🏢 기업":"👤 개인"}</td>
                       <td style={tdStyle}>{r.type==="checklist"?"괴롭힘":"조직문화"}</td>
                       <td style={{ ...tdStyle, maxWidth:180, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{r.detail?.slice(0,30)||"-"}</td>
-                      <td style={tdStyle}><select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}><option>신규</option><option>진행중</option><option>완료</option></select></td>
+                      <td style={tdStyle}><select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;updateSubmissionStatus(r.id,e.target.value);_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}><option>신규</option><option>진행중</option><option>완료</option></select></td>
                       <td style={{ ...tdStyle, textAlign:"right", whiteSpace:"nowrap" }}>
                         <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 10px", marginRight:4, fontSize:10 }}>상세</button>
                         {r.resultHtml && <button onClick={()=>setViewResultHtml(r.resultHtml)} style={{ padding:"5px 10px", borderRadius:6, background:"rgba(41,128,185,0.1)", border:"1px solid rgba(41,128,185,0.2)", color:"#2980B9", fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit", marginRight:4 }}>결과지</button>}
@@ -1148,7 +1153,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                               : <span style={{ fontSize:11, color:C.gray }}>없음</span>}
                           </td>
                           <td style={tdStyle}>
-                            <select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}>
+                            <select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;updateSubmissionStatus(r.id,e.target.value);_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}>
                               <option>신규</option><option>진행중</option><option>완료</option>
                             </select>
                           </td>
@@ -1193,7 +1198,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                           <td style={tdStyle}>{r.phone||"-"}</td>
                           <td style={{ ...tdStyle, maxWidth:150, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{r.detail?.slice(0,25)||"-"}</td>
                           <td style={tdStyle}>
-                            <select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}>
+                            <select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;updateSubmissionStatus(r.id,e.target.value);_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}>
                               <option>신규</option><option>진행중</option><option>완료</option>
                             </select>
                           </td>
