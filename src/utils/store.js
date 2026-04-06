@@ -24,14 +24,78 @@ export function useStore() {
 }
 
 export function addSubmission(type, data) {
-    _store.submissions[type].push({
+    const newItem = {
         ...data,
         id: Date.now().toString(36) + Math.random().toString(36).substr(2, 4),
         submittedAt: new Date().toISOString(),
-        status: "신규",
-    });
+        status: data.status || "신규",
+    };
+    _store.submissions[type].push(newItem);
     saveToStorage(_store.submissions);
     _store.listeners.forEach(fn => fn());
+    // DB에도 저장 (비동기, 실패해도 localStorage에는 이미 저장됨)
+    fetch(`${API_BASE}/submissions`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ submission_id: newItem.id, type, status: newItem.status, data: newItem, submitted_at: newItem.submittedAt })
+    }).catch(e => console.log("DB 저장 실패(무시):", e.message));
+}
+
+// 접수 데이터 상태 변경 → DB 반영
+export function updateSubmissionStatus(submissionId, newStatus) {
+    fetch(`${API_BASE}/submissions/${submissionId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus })
+    }).catch(e => console.log("상태 DB 반영 실패:", e.message));
+}
+
+// DB에서 접수 데이터 불러오기
+export async function loadSubmissionsFromDB() {
+    try {
+        const res = await fetch(`${API_BASE}/submissions`);
+        if (res.ok) {
+            const dbData = await res.json();
+            // DB에 데이터가 있으면 DB를 우선으로 사용
+            const hasData = Object.values(dbData).some(arr => arr.length > 0);
+            if (hasData) {
+                _store.submissions = dbData;
+                saveToStorage(dbData); // localStorage 백업도 갱신
+                _store.listeners.forEach(fn => fn());
+                return dbData;
+            }
+        }
+    } catch (e) {
+        console.log("DB 접수 로드 실패, localStorage 사용:", e.message);
+    }
+    return _store.submissions;
+}
+
+// localStorage → DB 일괄 동기화 (첫 마이그레이션)
+export async function syncSubmissionsToDB() {
+    try {
+        const local = loadFromStorage();
+        const hasLocal = Object.values(local).some(arr => arr.length > 0);
+        if (!hasLocal) return; // localStorage에 데이터 없으면 스킵
+
+        // DB에 이미 데이터가 있는지 확인
+        const res = await fetch(`${API_BASE}/submissions`);
+        if (res.ok) {
+            const dbData = await res.json();
+            const dbCount = Object.values(dbData).reduce((sum, arr) => sum + arr.length, 0);
+            if (dbCount > 0) return; // DB에 이미 있으면 스킵 (중복 방지)
+        }
+
+        // DB가 비어있고 localStorage에 데이터가 있으면 → 동기화
+        await fetch(`${API_BASE}/submissions/sync`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ submissions: local })
+        });
+        console.log("✅ localStorage → DB 동기화 완료!");
+    } catch (e) {
+        console.log("동기화 실패(무시):", e.message);
+    }
 }
 
 // — 진단 중간저장 상태
