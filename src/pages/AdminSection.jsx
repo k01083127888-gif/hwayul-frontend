@@ -63,6 +63,17 @@ export function AdminSection({ setActive, authed, setAuthed }) {
   const [nlAiMonth, setNlAiMonth] = useState(() => {
     const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
   });
+  // 발송 이메일 이력 상태
+  const [emailHistory, setEmailHistory] = useState(null); // { submissionId, emails:[] }
+  const fetchEmailHistory = async (submissionId) => {
+    try {
+      const res = await fetch(`https://hwayul-backend-production-96cf.up.railway.app/api/sent-emails?submission_id=${submissionId}`);
+      if (res.ok) {
+        const emails = await res.json();
+        setEmailHistory({ submissionId, emails });
+      }
+    } catch(e) { console.error("이메일 이력 조회 실패:", e); }
+  };
 
   // 결과지 iframe 로딩
   useEffect(() => {
@@ -680,7 +691,38 @@ export function AdminSection({ setActive, authed, setAuthed }) {
 
         {/* ── 이메일 작성 오버레이 ── */}
         {emailCompose && (
-          <AdminEmailComposer data={emailCompose} onClose={() => setEmailCompose(null)} onViewResult={html => setViewResultHtml(html)} />
+          <AdminEmailComposer data={{...emailCompose, onEmailSaved: () => { if(emailCompose.data?.id) fetchEmailHistory(emailCompose.data.id); }}} onClose={() => setEmailCompose(null)} onViewResult={html => setViewResultHtml(html)} />
+        )}
+
+        {/* ── 발송 이메일 이력 오버레이 ── */}
+        {emailHistory && (
+          <div style={{ position:"fixed", inset:0, zIndex:9998, background:"rgba(10,22,40,0.7)", backdropFilter:"blur(6px)", display:"flex", alignItems:"center", justifyContent:"center", padding:32 }} onClick={() => setEmailHistory(null)}>
+            <div onClick={e => e.stopPropagation()} style={{ background:"white", borderRadius:16, padding:32, maxWidth:720, width:"100%", maxHeight:"85vh", overflow:"auto", boxShadow:"0 24px 80px rgba(10,22,40,0.25)" }}>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
+                <h3 style={{ fontSize:17, fontWeight:800, color:C.navy }}>📬 발송 이메일 이력 ({emailHistory.emails.length}건)</h3>
+                <button onClick={() => setEmailHistory(null)} style={{ background:"none", border:"none", fontSize:20, color:C.gray, cursor:"pointer" }}>✕</button>
+              </div>
+              {emailHistory.emails.length === 0
+                ? <div style={{ textAlign:"center", padding:48, color:C.gray }}>📭 발송된 이메일이 없습니다.</div>
+                : emailHistory.emails.map((em, idx) => (
+                  <div key={em.id||idx} style={{ marginBottom:16, border:"1px solid rgba(10,22,40,0.08)", borderRadius:12, overflow:"hidden" }}>
+                    <div style={{ padding:"14px 18px", background:"rgba(13,115,119,0.04)", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                      <div>
+                        <span style={{ fontSize:10, padding:"2px 8px", borderRadius:100, background:"rgba(13,115,119,0.12)", color:C.teal, fontWeight:700, marginRight:8 }}>{em.email_type_label||em.submission_type||"이메일"}</span>
+                        <span style={{ fontSize:11, color:C.gray }}>수신: {em.recipient_name} ({em.recipient_email})</span>
+                      </div>
+                      <span style={{ fontSize:11, color:C.gray }}>{new Date(em.sent_at).toLocaleString("ko-KR")}</span>
+                    </div>
+                    <div style={{ padding:"16px 18px" }}>
+                      {em.greeting && <div style={{ fontSize:13, color:"#5A4A30", lineHeight:1.75, marginBottom:12, paddingBottom:12, borderBottom:"1px solid rgba(10,22,40,0.06)", whiteSpace:"pre-wrap" }}>{em.greeting}</div>}
+                      <div style={{ fontSize:13, color:C.navy, lineHeight:1.85, whiteSpace:"pre-wrap", marginBottom:em.closing?12:0 }}>{em.body}</div>
+                      {em.closing && <div style={{ fontSize:12, color:C.gray, lineHeight:1.75, paddingTop:12, borderTop:"1px solid rgba(10,22,40,0.06)", whiteSpace:"pre-wrap" }}>{em.closing}</div>}
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
         )}
 
         {/* ── 상세보기 오버레이 ── */}
@@ -754,6 +796,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                       <td style={{ ...tdStyle, textAlign:"right" }}>
                         <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 12px", marginRight:6 }}>상세보기</button>
                         <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"제보자", type:"report", data:r, greeting:`안녕하세요, 화율인사이드입니다.\n\n접수하신 제보 건에 대한 검토 결과를 안내드립니다.`, body:"" })} style={{ padding:"5px 12px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
+                        <button onClick={()=>fetchEmailHistory(r.id)} style={{ padding:"5px 10px", borderRadius:6, background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", color:C.teal, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit", marginLeft:4 }}>📬 이력</button>
                       </td>
                     </tr>
                   ))}</tbody>
@@ -822,6 +865,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                       <td style={{ ...tdStyle, textAlign:"right" }}>
                         <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 12px", marginRight:6 }}>상세보기</button>
                         <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:"biz", data:r, greeting:`${r.name||""} 님 (${r.company||""}) 안녕하세요,\n화율인사이드입니다.\n\n요청하신 ${r.consultType||"기업 상담"} 건에 대해 안내드립니다.`, body:"" })} style={{ padding:"5px 12px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
+                        <button onClick={()=>fetchEmailHistory(r.id)} style={{ padding:"5px 10px", borderRadius:6, background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", color:C.teal, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit", marginLeft:4 }}>📬 이력</button>
                       </td>
                     </tr>
                   ))}</tbody>
@@ -883,6 +927,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                       <td style={{ ...tdStyle, textAlign:"right" }}>
                         <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 12px", marginRight:6 }}>상세보기</button>
                         <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:"relief", data:r, greeting:`${r.name||""} 님 안녕하세요,\n화율인사이드입니다.\n\n신청하신 피해자 구제 건에 대한 검토 결과를 안내드립니다.`, body:"" })} style={{ padding:"5px 12px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
+                        <button onClick={()=>fetchEmailHistory(r.id)} style={{ padding:"5px 10px", borderRadius:6, background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", color:C.teal, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit", marginLeft:4 }}>📬 이력</button>
                       </td>
                     </tr>
                   ))}</tbody>
@@ -1015,6 +1060,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                         <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 10px", marginRight:4, fontSize:10 }}>상세</button>
                         {r.resultHtml && <button onClick={()=>setViewResultHtml(r.resultHtml)} style={{ padding:"5px 10px", borderRadius:6, background:"rgba(41,128,185,0.1)", border:"1px solid rgba(41,128,185,0.2)", color:"#2980B9", fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit", marginRight:4 }}>결과지</button>}
                         <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:"review", data:r, resultHtml:r.resultHtml||"", autoGenerate:true, greeting:`${r.name||""} 님 안녕하세요,\n화율인사이드입니다.\n\n요청하신 ${r.type==="checklist"?"직장내 괴롭힘 진단":"조직문화 진단"} 전문 노무사 검토 리포트를 보내드립니다.`, body:"" })} style={{ padding:"5px 10px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit" }}>📋 검토리포트 작성</button>
+                        <button onClick={()=>fetchEmailHistory(r.id)} style={{ padding:"5px 10px", borderRadius:6, background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", color:C.teal, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit", marginLeft:4 }}>📬 이력</button>
                       </td>
                     </tr>
                   ))}</tbody>
@@ -1109,6 +1155,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                           <td style={{ ...tdStyle, textAlign:"right", whiteSpace:"nowrap" }}>
                             <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 10px", marginRight:4, fontSize:10 }}>상세</button>
                             <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:"consulting", data:r, greeting:`${r.name||""} 님 안녕하세요,\n화율인사이드입니다.\n\n전화상담 예약을 확인하였습니다.${r.prefDate?"\n희망일: "+r.prefDate:""} ${r.prefTime?"/ "+r.prefTime:""}`, body:"" })} style={{ padding:"5px 10px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
+                            <button onClick={()=>fetchEmailHistory(r.id)} style={{ padding:"5px 8px", borderRadius:6, background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", color:C.teal, fontWeight:700, fontSize:9, cursor:"pointer", fontFamily:"inherit", marginLeft:4 }}>📬 이력</button>
                           </td>
                         </tr>
                       ))}</tbody>
@@ -1153,6 +1200,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                           <td style={{ ...tdStyle, textAlign:"right", whiteSpace:"nowrap" }}>
                             <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 10px", marginRight:4, fontSize:10 }}>상세</button>
                             <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:r._type, data:r, greeting:`${r.name||""} 님 (${r.company||""}) 안녕하세요,\n화율인사이드입니다.\n\n요청하신 ${bizTypeLabel[r._type].slice(2)} 건에 대해 안내드립니다.`, body:"" })} style={{ padding:"5px 10px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
+                            <button onClick={()=>fetchEmailHistory(r.id)} style={{ padding:"5px 8px", borderRadius:6, background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", color:C.teal, fontWeight:700, fontSize:9, cursor:"pointer", fontFamily:"inherit", marginLeft:4 }}>📬 이력</button>
                           </td>
                         </tr>
                       ))}</tbody>
