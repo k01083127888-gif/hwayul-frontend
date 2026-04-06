@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import C from "../tokens/colors.js";
-import { addSubmission, _store } from "../utils/store.js";
+import { addSubmission, _store, updateSubmissionStatus } from "../utils/store.js";
 import { saveToStorage } from "../utils/storage.js";
 
 export function AdminEmailComposer({ data, onClose, onViewResult }) {
@@ -168,6 +168,7 @@ ${resultSummary || "(결과 데이터 없음)"}
             setSent(true); setShowPreview(false);
             if (data.data) {
               data.data.status = data.type === "report-email" ? "발송완료" : "완료";
+              if (data.data.id) updateSubmissionStatus(data.data.id, data.data.status);
             }
             _store.listeners.forEach(fn=>fn()); saveToStorage(_store.submissions);
             if (data.onEmailSaved) data.onEmailSaved();
