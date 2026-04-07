@@ -9,9 +9,10 @@ import { PrivacyPolicyModal } from "../components/common/PrivacyPolicyModal.jsx"
 
 // ── ReportSection ─────────────────────────────────────────────────────────────────
 export function ReportSection() {
-  const [form, setForm] = useState({ type:"", content:"", org:"", date:"" });
+  const [form, setForm] = useState({ type:"", content:"", org:"", date:"", email:"" });
   const [done, setDone] = useState(false);
   const F = k => e => setForm(f => ({ ...f, [k]: e.target.value }));
+  const emailInvalid = form.email && !isValidEmail(form.email);
 
   return (
     <section style={{ padding:"80px 32px", background:"#F0EDE6", minHeight:"100vh" }}>
@@ -44,12 +45,18 @@ export function ReportSection() {
                 <input type="month" value={form.date} onChange={F("date")} style={{ width:"100%", padding:"11px 14px", borderRadius:8, border:`2px solid ${C.grayLight}`, fontSize:14, fontFamily:"inherit", outline:"none", boxSizing:"border-box" }} />
               </div>
             </div>
-            <div style={{ marginBottom:28 }}>
+            <div style={{ marginBottom:22 }}>
               <label style={{ display:"block", fontSize:12, fontWeight:700, color:C.gray, marginBottom:6, letterSpacing:"0.5px", textTransform:"uppercase" }}>상황 내용 <span style={{ color:C.red }}>*</span></label>
               <textarea value={form.content} onChange={F("content")} placeholder="언제, 어디서, 어떤 행위가 있었는지, 얼마나 반복됐는지 최대한 구체적으로 작성해 주세요." rows={6} style={{ width:"100%", padding:"13px 14px", borderRadius:8, border:`2px solid ${C.grayLight}`, fontSize:14, fontFamily:"inherit", outline:"none", resize:"vertical", lineHeight:1.7, boxSizing:"border-box" }} />
               <div style={{ textAlign:"right", fontSize:12, color:C.gray, marginTop:4 }}>{form.content.length}자</div>
             </div>
-            <button onClick={() => { if(form.content) { addSubmission("reports", {...form}); setDone(true); } }} disabled={!form.content} style={{ width:"100%", padding:"15px", background:form.content ? C.teal : "#ccc", border:"none", borderRadius:8, color:"white", fontWeight:800, fontSize:15, cursor:form.content ? "pointer" : "not-allowed", fontFamily:"inherit" }}>
+            <div style={{ marginBottom:28, padding:"16px 18px", background:"rgba(13,115,119,0.05)", borderRadius:10, border:"1px dashed rgba(13,115,119,0.25)" }}>
+              <label style={{ display:"block", fontSize:12, fontWeight:700, color:C.teal, marginBottom:6, letterSpacing:"0.3px" }}>📧 회신 받기 원하시면 이메일을 남겨주세요 (선택)</label>
+              <input type="email" value={form.email} onChange={F("email")} placeholder="example@email.com" style={{ width:"100%", padding:"11px 14px", borderRadius:8, border:`2px solid ${emailInvalid ? C.red : C.grayLight}`, fontSize:14, fontFamily:"inherit", outline:"none", boxSizing:"border-box" }} />
+              {emailInvalid && <div style={{ fontSize:11, color:C.red, marginTop:6 }}>올바른 이메일 형식이 아닙니다</div>}
+              <div style={{ fontSize:11, color:C.gray, marginTop:6, lineHeight:1.6 }}>※ 이메일을 남기지 않으셔도 익명 제보는 정상 접수됩니다. 이메일은 회신 목적으로만 사용되며, 별도로 보관됩니다.</div>
+            </div>
+            <button onClick={() => { if(form.content && !emailInvalid) { addSubmission("reports", {...form}); setDone(true); } }} disabled={!form.content || emailInvalid} style={{ width:"100%", padding:"15px", background:(form.content && !emailInvalid) ? C.teal : "#ccc", border:"none", borderRadius:8, color:"white", fontWeight:800, fontSize:15, cursor:(form.content && !emailInvalid) ? "pointer" : "not-allowed", fontFamily:"inherit" }}>
               🔒 익명으로 제출하기 →
             </button>
           </div>
@@ -58,7 +65,7 @@ export function ReportSection() {
             <div style={{ fontSize:52, marginBottom:18 }}>✅</div>
             <h3 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"1.4rem", fontWeight:800, color:C.navy, marginBottom:10 }}>제보가 접수되었습니다</h3>
             <p style={{ color:C.gray, lineHeight:1.8, marginBottom:28 }}>담당 노무사가 영업일 기준 2일 이내 검토 후<br/>익명 채널로 안내드립니다.</p>
-            <button onClick={() => { setForm({ type:"", content:"", org:"", date:"" }); setDone(false); }} style={{ padding:"12px 30px", borderRadius:8, border:`2px solid ${C.navy}`, background:"transparent", color:C.navy, fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>새 제보 작성</button>
+            <button onClick={() => { setForm({ type:"", content:"", org:"", date:"", email:"" }); setDone(false); }} style={{ padding:"12px 30px", borderRadius:8, border:`2px solid ${C.navy}`, background:"transparent", color:C.navy, fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>새 제보 작성</button>
           </div>
         )}
       </div>
