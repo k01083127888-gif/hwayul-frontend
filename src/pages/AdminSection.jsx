@@ -801,17 +801,18 @@ export function AdminSection({ setActive, authed, setAuthed }) {
               <h3 style={{ fontSize:15, fontWeight:800, color:C.navy, marginBottom:14 }}>📩 익명 제보 접수 내역 ({d.length}건)</h3>
               {d.length === 0 ? <div style={{ textAlign:"center", padding:48, color:C.gray }}>📭 접수된 내역이 없습니다.</div> : (
                 <table style={{ width:"100%", borderCollapse:"collapse" }}>
-                  <thead><tr>{["접수일시","유형","소속","내용(요약)","상태",""].map(h=><th key={h} style={thStyle}>{h}</th>)}</tr></thead>
+                  <thead><tr>{["접수일시","유형","소속","내용(요약)","이메일","상태",""].map(h=><th key={h} style={thStyle}>{h}</th>)}</tr></thead>
                   <tbody>{d.map((r,i)=>(
                     <tr key={r.id} style={{ background:i%2===0?"transparent":"rgba(10,22,40,0.015)" }}>
                       <td style={tdStyle}>{new Date(r.submittedAt).toLocaleString("ko-KR")}</td>
                       <td style={tdStyle}>{r.type||"-"}</td>
                       <td style={tdStyle}>{r.org||"-"}</td>
                       <td style={{ ...tdStyle, maxWidth:250, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{r.content?.slice(0,50)||"-"}</td>
+                      <td style={{ ...tdStyle, fontSize:11 }}>{r.email ? <span style={{ color:C.teal }}>📧 {r.email}</span> : <span style={{ color:C.gray }}>익명</span>}</td>
                       <td style={tdStyle}><select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;updateSubmissionStatus(r.id,e.target.value);_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}><option>신규</option><option>진행중</option><option>완료</option></select></td>
                       <td style={{ ...tdStyle, textAlign:"right" }}>
                         <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 12px", marginRight:6 }}>상세보기</button>
-                        <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"제보자", type:"report", data:r, greeting:`안녕하세요, 화율인사이드입니다.\n\n접수하신 제보 건에 대한 검토 결과를 안내드립니다.`, body:"" })} style={{ padding:"5px 12px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
+                        <button onClick={()=>r.email && setEmailCompose({ to:r.email||"", name:"제보자", type:"report", data:r, greeting:`안녕하세요, 화율인사이드입니다.\n\n접수하신 제보 건에 대한 검토 결과를 안내드립니다.`, body:"" })} disabled={!r.email} title={r.email ? "이메일 회신" : "이메일 미등록 (회신 불가)"} style={{ padding:"5px 12px", borderRadius:6, background:r.email ? C.gold : "rgba(10,22,40,0.08)", border:"none", color:r.email ? C.navy : C.gray, fontWeight:700, fontSize:11, cursor:r.email ? "pointer" : "not-allowed", fontFamily:"inherit" }}>📧 이메일</button>
                         <button onClick={()=>fetchEmailHistory(r.id)} style={{ padding:"5px 10px", borderRadius:6, background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", color:C.teal, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit", marginLeft:4 }}>📬 이력</button>
                       </td>
                     </tr>
