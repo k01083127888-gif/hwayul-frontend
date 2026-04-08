@@ -27,9 +27,23 @@ export function HeroSection({ setActive }) {
           <span style={{ color:C.tealLight, whiteSpace:"nowrap" }}>예방부터 해결까지 함께합니다</span>
         </h1>
 
-        <p style={{ fontSize:"clamp(0.95rem, 2vw, 1.1rem)", color:"rgba(244,241,235,0.62)", lineHeight:1.85, marginBottom:52, maxWidth:580, margin:"0 auto 52px" }}>
+        <p style={{ fontSize:"clamp(0.95rem, 2vw, 1.1rem)", color:"rgba(244,241,235,0.62)", lineHeight:1.85, marginBottom:18, maxWidth:580, margin:"0 auto 18px" }}>
           직장내 괴롭힘 예방대응 & 조직문화 전문 플랫폼<br />
           피해 근로자의 권리 회복, 기업의 리스크 관리 — 전문 노무사가 함께합니다.
+        </p>
+
+        {/* ★ NEW: 차별화 한 줄 ★ */}
+        <p style={{
+          fontSize:"clamp(0.95rem, 2vw, 1.1rem)",
+          color:C.gold,
+          fontWeight:600,
+          lineHeight:1.7,
+          marginBottom:52,
+          maxWidth:640,
+          margin:"0 auto 52px",
+          letterSpacing:"-0.3px",
+        }}>
+          "1,000건+의 판례를 학습한 AI가 20년 전문가의 시선으로 답변합니다"
         </p>
 
         {/* 4개 핵심 CTA */}
