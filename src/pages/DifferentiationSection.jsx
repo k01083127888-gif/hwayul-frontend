@@ -47,18 +47,65 @@ export function DifferentiationSection({ setActive }) {
           fontSize: "clamp(13px, 2vw, 16px)",
           color: "rgba(244,241,235,0.55)",
           lineHeight: 1.8,
-          marginBottom: 40,
+          marginBottom: 32,
         }}>
           <strong style={{ color: "rgba(244,241,235,0.8)" }}>일반 AI</strong>에 물어보면 "일반적인 답"이 나옵니다.<br />
           화율인사이드는 <strong style={{ color: "rgba(244,241,235,0.8)" }}>실제 판결문을 근거로</strong> 답합니다.
         </p>
+
+        {/* ★ NEW: 강화 카피 박스 ★ */}
+        <div style={{
+          background: "rgba(201,168,76,0.06)",
+          border: `1px solid rgba(201,168,76,0.3)`,
+          borderRadius: 14,
+          padding: "26px 24px",
+          maxWidth: 760,
+          marginLeft: "auto",
+          marginRight: "auto",
+          marginBottom: 40,
+        }}>
+          <div style={{
+            fontFamily: "'Noto Serif KR', serif",
+            fontSize: "clamp(15px, 2.2vw, 19px)",
+            fontWeight: 700,
+            color: "#fff",
+            lineHeight: 1.6,
+            marginBottom: 18,
+          }}>
+            "일반 AI가 모르는 <span style={{ color: C.gold }}>1,000건+의 진짜 판례</span>,<br />
+            <span style={{ color: C.gold }}>20년 노무 전문가</span>가 직접 분석했습니다"
+          </div>
+          <div className="form-grid-2" style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "10px 24px",
+            maxWidth: 580,
+            margin: "0 auto",
+            textAlign: "left",
+          }}>
+            {[
+              { strong: "1,000건+의 실제 법원 판례", desc: "사건번호까지 인용해서 답변" },
+              { strong: "20년 경력 노무사가 직접 분석", desc: "단순 데이터가 아닌 전문가의 해석" },
+              { strong: "직장 내 괴롭힘 특화", desc: "폭언·해고·산재·성희롱 모든 분야 커버" },
+              { strong: "사실관계 기반 매칭", desc: "당신의 상황과 가장 비슷한 판례를 찾아줌" },
+            ].map((item, i) => (
+              <div key={i} style={{ fontSize: 12, lineHeight: 1.5 }}>
+                <span style={{ color: C.gold, marginRight: 6 }}>✓</span>
+                <span style={{ color: "rgba(244,241,235,0.85)", fontWeight: 600 }}>{item.strong}</span>
+                <div style={{ color: "rgba(244,241,235,0.4)", fontSize: 11, marginLeft: 16, marginTop: 2 }}>
+                  {item.desc}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* 3개 카드 */}
         <div className="hero-cta-grid" style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: 18,
-          marginBottom: 40,
+          marginBottom: 48,
           maxWidth: 900,
           marginLeft: "auto",
           marginRight: "auto",
@@ -124,98 +171,67 @@ export function DifferentiationSection({ setActive }) {
           marginBottom: 16,
         }}>일반 AI vs 화율인사이드</div>
 
-        {/* 비교 테이블 */}
-        <div className="content-grid-2col" style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 16,
-          maxWidth: 750,
+        {/* ★ NEW: 5행 비교표 ★ */}
+        <div style={{
+          maxWidth: 820,
           marginLeft: "auto",
           marginRight: "auto",
-          marginBottom: 32,
-          textAlign: "left",
+          marginBottom: 40,
+          background: "rgba(255,255,255,0.02)",
+          border: `1px solid rgba(201,168,76,0.25)`,
+          borderRadius: 14,
+          overflow: "hidden",
         }}>
-          {/* 일반 AI */}
+          {/* 헤더 행 */}
           <div style={{
-            background: "rgba(255,255,255,0.02)",
-            border: "1px solid rgba(255,255,255,0.04)",
-            borderRadius: 12,
-            padding: "20px 22px",
+            display: "grid",
+            gridTemplateColumns: "1.3fr 1fr 1.5fr",
+            background: "rgba(201,168,76,0.1)",
+            padding: "14px 18px",
+            fontSize: 13,
+            fontWeight: 700,
+            textAlign: "center",
           }}>
-            <div style={{
-              fontSize: 13,
-              fontWeight: 700,
-              color: "rgba(244,241,235,0.35)",
-              marginBottom: 14,
-            }}>● 일반 AI</div>
-            {[
-              "일반적인 법률 지식으로 답변",
-              "한국 판례를 모르거나 부정확",
-              "현장 경험 없는 교과서적 답변",
-              "\"변호사와 상담하세요\"로 끝남",
-            ].map((t, i) => (
-              <div key={i} style={{
-                fontSize: 13,
-                color: "rgba(244,241,235,0.35)",
-                lineHeight: 2.2,
-                paddingLeft: 16,
-                position: "relative",
-              }}>
-                <span style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 10,
-                  width: 6,
-                  height: 6,
-                  borderRadius: "50%",
-                  background: "rgba(244,241,235,0.15)",
-                  display: "inline-block",
-                }} />
-                {t}
-              </div>
-            ))}
+            <div style={{ color: C.gold, textAlign: "left" }}>구분</div>
+            <div style={{ color: "rgba(244,241,235,0.5)" }}>일반 AI</div>
+            <div style={{ color: C.gold }}>화율인사이드 AI</div>
           </div>
 
-          {/* 화율인사이드 */}
-          <div style={{
-            background: "rgba(201,168,76,0.05)",
-            border: `1px solid rgba(201,168,76,0.18)`,
-            borderRadius: 12,
-            padding: "20px 22px",
-          }}>
-            <div style={{
+          {/* 데이터 행 */}
+          {[
+            { label: "답변 근거", general: "일반 상식", hwayul: "실제 법원 판례 1,000건+", icon: false },
+            { label: "사건번호 인용", general: "✕", hwayul: "✓ 정확한 사건번호", icon: true },
+            { label: "전문가 분석", general: "✕", hwayul: "✓ 20년 경력 노무사", icon: true },
+            { label: "직장내 괴롭힘 특화", general: "✕", hwayul: "✓ 전문 플랫폼", icon: true },
+            { label: "한국 노동법", general: "일반 정보", hwayul: "판례 기반 정확한 답변", icon: false },
+          ].map((row, i) => (
+            <div key={i} style={{
+              display: "grid",
+              gridTemplateColumns: "1.3fr 1fr 1.5fr",
+              padding: "14px 18px",
               fontSize: 13,
-              fontWeight: 700,
-              color: C.gold,
-              marginBottom: 14,
-            }}>★ 화율인사이드</div>
-            {[
-              "1,000건+ 실제 판례 기반 답변",
-              "한국 법원 판결문 직접 분석",
-              "20년 노무사 현장 경험 반영",
-              "구체적 대응 방향 + 판례 근거 제시",
-            ].map((t, i) => (
-              <div key={i} style={{
-                fontSize: 13,
-                color: "rgba(244,241,235,0.65)",
-                lineHeight: 2.2,
-                paddingLeft: 16,
-                position: "relative",
-              }}>
-                <span style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 10,
-                  width: 6,
-                  height: 6,
-                  borderRadius: "50%",
-                  background: C.gold,
-                  display: "inline-block",
-                }} />
-                {t}
+              borderTop: "1px solid rgba(201,168,76,0.1)",
+              textAlign: "center",
+              alignItems: "center",
+            }}>
+              <div style={{ color: "rgba(244,241,235,0.85)", textAlign: "left", fontWeight: 600 }}>
+                {row.label}
               </div>
-            ))}
-          </div>
+              <div style={{
+                color: row.icon ? "#e57373" : "rgba(244,241,235,0.4)",
+                fontSize: row.icon ? 16 : 13,
+                fontWeight: row.icon ? 700 : 400,
+              }}>
+                {row.general}
+              </div>
+              <div style={{
+                color: row.icon ? "#7fc99e" : "rgba(244,241,235,0.85)",
+                fontWeight: 600,
+              }}>
+                {row.hwayul}
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* CTA 버튼 */}
