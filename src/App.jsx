@@ -50,6 +50,8 @@ useEffect(() => {
     if (isPopState.current) {
       isPopState.current = false;
     }
+    // 페이지 전환 시 스크롤 맨 위로 (모바일 UX)
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, [active]);
 
   useEffect(() => {
