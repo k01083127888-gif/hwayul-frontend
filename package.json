@@ -22,7 +22,9 @@
   "homepage": "https://github.com/k01083127888-gif/hwayul-frontend#readme",
   "dependencies": {
     "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react-dom": "^19.2.4",
+    "react-quill-new": "^3.3.3",
+    "quill": "^2.0.3"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.0.0",
