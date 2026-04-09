@@ -81,6 +81,8 @@ export function CultureSection() {
 
   // 중간저장
   useEffect(() => { const d = { answers, orgInfo, showResult }; _savedCulture = d; saveCulture(d); }, [answers, orgInfo, showResult]);
+  // 결과 화면 전환 시 스크롤 맨 위로 (모바일 UX)
+  useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, [showResult]);
 
   const totalQ = cultureCategories.reduce((a, c) => a + c.items.length, 0);
   const answeredQ = Object.keys(answers).length;
