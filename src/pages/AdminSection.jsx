@@ -11,6 +11,9 @@ import { AdminEmailComposer } from "../components/AdminEmailComposer.jsx";
 import { SectionTag } from "../components/common/FormElements.jsx";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
+import { Quill } from "react-quill-new";
+import ResizeModule from "quill-resize-image";
+Quill.register("modules/resize", ResizeModule);
 
 // ── 관리자 섹션 ─────────────────────────────────────────────────────────────
 export function AdminSection({ setActive, authed, setAuthed }) {
@@ -345,6 +348,14 @@ export function AdminSection({ setActive, authed, setAuthed }) {
           ["clean"],
         ],
         handlers: { image: imageHandler },
+      },
+      resize: {
+        locale: {
+          center: "가운데",
+          floatLeft: "왼쪽",
+          floatRight: "오른쪽",
+          restore: "원래대로",
+        },
       },
     };
     const handleSave = () => {
