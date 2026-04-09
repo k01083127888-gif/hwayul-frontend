@@ -289,6 +289,14 @@ export function AdminSection({ setActive, authed, setAuthed }) {
     const CLOUDINARY_PRESET = "hwayul_unsigned";
 
     const imageHandler = () => {
+      // 파일 선택창을 열기 전에 에디터 인스턴스와 커서 위치를 미리 확보한다
+      const quill = quillRef.current?.getEditor?.() || quillRef.current;
+      if (!quill || !quill.insertEmbed) {
+        alert("에디터를 찾을 수 없습니다. 페이지를 새로고침 후 다시 시도해주세요.");
+        return;
+      }
+      const savedRange = quill.getSelection(true) || { index: quill.getLength() - 1, length: 0 };
+
       const input = document.createElement("input");
       input.setAttribute("type", "file");
       input.setAttribute("accept", "image/*");
@@ -296,9 +304,10 @@ export function AdminSection({ setActive, authed, setAuthed }) {
       input.onchange = async () => {
         const file = input.files[0];
         if (!file) return;
-        const quill = quillRef.current?.getEditor();
-        const range = quill?.getSelection(true);
-        if (range) quill.insertText(range.index, "⏳ 이미지 업로드 중...", { italic: true });
+
+        // 업로드 중 표시
+        quill.insertText(savedRange.index, "⏳ 이미지 업로드 중...\n", { italic: true });
+
         try {
           const formData = new FormData();
           formData.append("file", file);
@@ -308,15 +317,24 @@ export function AdminSection({ setActive, authed, setAuthed }) {
             body: formData,
           });
           const data = await res.json();
-          if (range) quill.deleteText(range.index, "⏳ 이미지 업로드 중...".length);
+
+          // 업로드 중 표시 제거
+          quill.deleteText(savedRange.index, "⏳ 이미지 업로드 중...\n".length);
+
           if (data.secure_url) {
-            quill.insertEmbed(range.index, "image", data.secure_url);
-            quill.setSelection(range.index + 1);
+            quill.insertEmbed(savedRange.index, "image", data.secure_url);
+            quill.insertText(savedRange.index + 1, "\n");
+            // 안전하게 포커스를 다시 맞춘다
+            setTimeout(() => {
+              try { quill.setSelection(savedRange.index + 2, 0); } catch (e) {}
+            }, 50);
           } else {
+            console.error("Cloudinary 응답:", data);
             alert("이미지 업로드 실패: " + (data.error?.message || "알 수 없는 오류"));
           }
         } catch (err) {
-          if (range) quill.deleteText(range.index, "⏳ 이미지 업로드 중...".length);
+          console.error("업로드 오류:", err);
+          try { quill.deleteText(savedRange.index, "⏳ 이미지 업로드 중...\n".length); } catch (e) {}
           alert("이미지 업로드 오류: " + err.message);
         }
       };
