@@ -51,7 +51,17 @@ export function ContentDetailView({ item, onBack }) {
          <div
             className="hwayul-content-body"
             style={{ fontSize:14, color:"#3A3530", lineHeight:1.9 }}
-            dangerouslySetInnerHTML={{ __html: detail?.content || detail?.body || "" }}
+            dangerouslySetInnerHTML={{ __html: (() => {
+              const raw = detail?.content || detail?.body || "";
+              // 이미 HTML 태그가 있으면 그대로 사용 (새 콘텐츠), 없으면 줄바꿈을 <p>로 변환 (구 콘텐츠 호환)
+              if (/<\/?(p|div|img|br|h[1-6]|ul|ol|li|blockquote|iframe)/i.test(raw)) {
+                return raw;
+              }
+              return raw
+                .split(/\n\n+/)
+                .map(p => `<p>${p.replace(/\n/g, "<br/>")}</p>`)
+                .join("");
+            })() }}
           />
           <style>{`
             .hwayul-content-body p { margin: 0 0 16px 0; }
