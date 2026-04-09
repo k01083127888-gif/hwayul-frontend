@@ -351,25 +351,28 @@ export function AdminSection({ setActive, authed, setAuthed }) {
       },
     };
     
-    // 이미지 클릭 → 크기 조절
+    // 이미지 클릭 → 크기 조절 (document 레벨 이벤트 위임)
     useEffect(() => {
-      const quill = quillRef.current?.getEditor?.() || quillRef.current;
-      if (!quill?.root) return;
       const handleImageClick = (e) => {
-        if (e.target?.tagName === "IMG") {
-          e.preventDefault();
-          const current = e.target.style.width || "100%";
-          const size = window.prompt("이미지 크기를 입력하세요.\n예: 50% / 70% / 100% / 300px", current);
-          if (size && size.trim()) {
-            e.target.style.width = size.trim();
-            e.target.style.height = "auto";
-            e.target.style.maxWidth = "100%";
-            setBody(quill.root.innerHTML);
-          }
+        // 에디터 영역 안의 이미지만 대상으로
+        const target = e.target;
+        if (target?.tagName !== "IMG") return;
+        const editor = target.closest(".ql-editor");
+        if (!editor) return;
+        e.preventDefault();
+        e.stopPropagation();
+        const current = target.style.width || "100%";
+        const size = window.prompt("이미지 크기를 입력하세요.\n예: 50% / 70% / 100% / 300px", current);
+        if (size && size.trim()) {
+          target.style.width = size.trim();
+          target.style.height = "auto";
+          target.style.maxWidth = "100%";
+          const quill = quillRef.current?.getEditor?.() || quillRef.current;
+          if (quill?.root) setBody(quill.root.innerHTML);
         }
       };
-      quill.root.addEventListener("click", handleImageClick);
-      return () => quill.root.removeEventListener("click", handleImageClick);
+      document.addEventListener("click", handleImageClick, true);
+      return () => document.removeEventListener("click", handleImageClick, true);
     }, []);
     const handleSave = () => {
       if (!f.title) return;
