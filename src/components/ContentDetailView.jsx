@@ -48,9 +48,25 @@ export function ContentDetailView({ item, onBack }) {
         {/* 본문 */}
         <div style={{ background:"white", borderRadius:16, padding:36, boxShadow:"0 4px 24px rgba(10,22,40,0.08)", border:"1px solid rgba(10,22,40,0.06)", marginBottom:28 }}>
           <div style={{ fontSize:10, letterSpacing:"2px", color:C.teal, fontWeight:700, textTransform:"uppercase", marginBottom:16 }}>CONTENT DETAIL</div>
-          {(detail?.content || detail?.body)?.split("\n\n").map((para, i) => (
-            <p key={i} style={{ fontSize:14, color:"#3A3530", lineHeight:1.9, marginBottom:16, whiteSpace:"pre-wrap" }}>{para}</p>
-          ))}
+         <div
+            className="hwayul-content-body"
+            style={{ fontSize:14, color:"#3A3530", lineHeight:1.9 }}
+            dangerouslySetInnerHTML={{ __html: detail?.content || detail?.body || "" }}
+          />
+          <style>{`
+            .hwayul-content-body p { margin: 0 0 16px 0; }
+            .hwayul-content-body img { max-width: 100%; height: auto; border-radius: 10px; margin: 16px 0; display: block; }
+            .hwayul-content-body iframe { max-width: 100%; width: 100%; aspect-ratio: 16/9; border-radius: 10px; margin: 16px 0; border: none; }
+            .hwayul-content-body .ql-video { max-width: 100%; width: 100%; aspect-ratio: 16/9; border-radius: 10px; margin: 16px 0; border: none; display: block; }
+            .hwayul-content-body h1 { font-size: 22px; font-weight: 800; margin: 24px 0 12px 0; color: #0A1628; }
+            .hwayul-content-body h2 { font-size: 19px; font-weight: 800; margin: 22px 0 12px 0; color: #0A1628; }
+            .hwayul-content-body h3 { font-size: 16px; font-weight: 700; margin: 20px 0 10px 0; color: #0A1628; }
+            .hwayul-content-body ul, .hwayul-content-body ol { margin: 0 0 16px 0; padding-left: 24px; }
+            .hwayul-content-body li { margin-bottom: 6px; }
+            .hwayul-content-body blockquote { border-left: 4px solid #0D7377; padding: 8px 16px; margin: 16px 0; background: rgba(13,115,119,0.05); color: #3A3530; }
+            .hwayul-content-body a { color: #0D7377; text-decoration: underline; }
+            .hwayul-content-body strong { font-weight: 700; color: #0A1628; }
+          `}</style>
         </div>
 
         {/* 첨부파일 */}
