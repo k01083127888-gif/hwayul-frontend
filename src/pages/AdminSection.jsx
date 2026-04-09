@@ -375,25 +375,57 @@ export function AdminSection({ setActive, authed, setAuthed }) {
       },
     };
     
-    // 이미지 클릭 → 크기 조절 (document 레벨 이벤트 위임)
+    // 이미지 클릭 → 크기 조절 + 정렬
     useEffect(() => {
       const handleImageClick = (e) => {
-        // 에디터 영역 안의 이미지만 대상으로
         const target = e.target;
         if (target?.tagName !== "IMG") return;
         const editor = target.closest(".ql-editor");
         if (!editor) return;
         e.preventDefault();
         e.stopPropagation();
-        const current = target.style.width || "100%";
-        const size = window.prompt("이미지 크기를 입력하세요.\n예: 50% / 70% / 100% / 300px", current);
-        if (size && size.trim()) {
-          target.style.width = size.trim();
-          target.style.height = "auto";
-          target.style.maxWidth = "100%";
-          const quill = quillRef.current?.getEditor?.() || quillRef.current;
-          if (quill?.root) setBody(quill.root.innerHTML);
+
+        const currentWidth = target.style.width || "100%";
+        const input = window.prompt(
+          "이미지 크기와 정렬을 입력하세요.\n\n" +
+          "✔ 크기: 50% / 70% / 100% / 300px\n" +
+          "✔ 정렬: left / center / right\n" +
+          "✔ 크기+정렬 동시: 50% center\n" +
+          "✔ 원래대로: reset",
+          currentWidth
+        );
+        if (!input || !input.trim()) return;
+        const tokens = input.trim().toLowerCase().split(/\s+/);
+
+        // reset 처리
+        if (tokens.includes("reset")) {
+          target.removeAttribute("style");
+          target.removeAttribute("width");
+          target.removeAttribute("height");
+        } else {
+          tokens.forEach(tok => {
+            if (tok === "left") {
+              target.style.float = "left";
+              target.style.display = "";
+              target.style.margin = "0 16px 8px 0";
+            } else if (tok === "right") {
+              target.style.float = "right";
+              target.style.display = "";
+              target.style.margin = "0 0 8px 16px";
+            } else if (tok === "center") {
+              target.style.float = "";
+              target.style.display = "block";
+              target.style.margin = "16px auto";
+            } else if (/^\d+(%|px)$/.test(tok)) {
+              target.style.width = tok;
+              target.style.height = "auto";
+              target.style.maxWidth = "100%";
+            }
+          });
         }
+
+        const quill = quillRef.current?.getEditor?.() || quillRef.current;
+        if (quill?.root) setBody(quill.root.innerHTML);
       };
       document.addEventListener("click", handleImageClick, true);
       return () => document.removeEventListener("click", handleImageClick, true);
