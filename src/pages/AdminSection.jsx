@@ -13,7 +13,31 @@ import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { Quill } from "react-quill-new";
 import ResizeModule from "quill-resize-image";
-Quill.register("modules/resize", ResizeModule);
+// Quill 이미지 포맷 확장 — width, height, style 속성 보존
+const BaseImageFormat = Quill.import("formats/image");
+const ImageFormatAttributesList = ["alt", "height", "width", "style"];
+class ImageFormat extends BaseImageFormat {
+  static formats(domNode) {
+    return ImageFormatAttributesList.reduce((formats, attribute) => {
+      if (domNode.hasAttribute(attribute)) {
+        formats[attribute] = domNode.getAttribute(attribute);
+      }
+      return formats;
+    }, {});
+  }
+  format(name, value) {
+    if (ImageFormatAttributesList.indexOf(name) > -1) {
+      if (value) {
+        this.domNode.setAttribute(name, value);
+      } else {
+        this.domNode.removeAttribute(name);
+      }
+    } else {
+      super.format(name, value);
+    }
+  }
+}
+Quill.register(ImageFormat, true);
 
 // ── 관리자 섹션 ─────────────────────────────────────────────────────────────
 export function AdminSection({ setActive, authed, setAuthed }) {
