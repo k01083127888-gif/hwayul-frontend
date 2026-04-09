@@ -9,6 +9,8 @@ import { isValidEmail } from "../utils/validators.js";
 import { StatCard, BarChart, MiniTrend, StatusPie, getMonthly, StatSection, NlHistoryCard, hashPw, checkAdminPw, ADMIN_MAX_ATTEMPTS, LOCKOUT_KEY } from "../components/AdminStats.jsx";
 import { AdminEmailComposer } from "../components/AdminEmailComposer.jsx";
 import { SectionTag } from "../components/common/FormElements.jsx";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 
 // ── 관리자 섹션 ─────────────────────────────────────────────────────────────
 export function AdminSection({ setActive, authed, setAuthed }) {
@@ -281,7 +283,59 @@ export function AdminSection({ setActive, authed, setAuthed }) {
       setAiLoading(false);
       setAiGenerated(true);
     };
+// ── Cloudinary 이미지 업로드 + Quill 에디터 설정 ──
+    const quillRef = useRef(null);
+    const CLOUDINARY_CLOUD = "drx8qy9ck";
+    const CLOUDINARY_PRESET = "hwayul_unsigned";
 
+    const imageHandler = () => {
+      const input = document.createElement("input");
+      input.setAttribute("type", "file");
+      input.setAttribute("accept", "image/*");
+      input.click();
+      input.onchange = async () => {
+        const file = input.files[0];
+        if (!file) return;
+        const quill = quillRef.current?.getEditor();
+        const range = quill?.getSelection(true);
+        if (range) quill.insertText(range.index, "⏳ 이미지 업로드 중...", { italic: true });
+        try {
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("upload_preset", CLOUDINARY_PRESET);
+          const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, {
+            method: "POST",
+            body: formData,
+          });
+          const data = await res.json();
+          if (range) quill.deleteText(range.index, "⏳ 이미지 업로드 중...".length);
+          if (data.secure_url) {
+            quill.insertEmbed(range.index, "image", data.secure_url);
+            quill.setSelection(range.index + 1);
+          } else {
+            alert("이미지 업로드 실패: " + (data.error?.message || "알 수 없는 오류"));
+          }
+        } catch (err) {
+          if (range) quill.deleteText(range.index, "⏳ 이미지 업로드 중...".length);
+          alert("이미지 업로드 오류: " + err.message);
+        }
+      };
+    };
+
+    const quillModules = {
+      toolbar: {
+        container: [
+          [{ header: [1, 2, 3, false] }],
+          ["bold", "italic", "underline", "strike"],
+          [{ color: [] }, { background: [] }],
+          [{ list: "ordered" }, { list: "bullet" }],
+          ["blockquote"],
+          ["link", "image", "video"],
+          ["clean"],
+        ],
+        handlers: { image: imageHandler },
+      },
+    };
     const handleSave = () => {
       if (!f.title) return;
     const savedItem = { ...f, id: item?.id || Date.now(), views: Number(f.views)||0, body: body || "", attachments: attachments.length > 0 ? attachments : [] };
@@ -331,7 +385,17 @@ export function AdminSection({ setActive, authed, setAuthed }) {
               </div>
             </div>
           )}
-          <textarea value={body} onChange={e => setBody(e.target.value)} rows={12} placeholder="콘텐츠 본문을 입력하세요." style={{ ...inputStyle, resize:"vertical", lineHeight:1.8, fontSize:13 }} />
+          <div style={{ background:"white", borderRadius:6, border:"2px solid rgba(10,22,40,0.1)" }}>
+            <ReactQuill
+              ref={quillRef}
+              theme="snow"
+              value={body}
+              onChange={setBody}
+              modules={quillModules}
+              placeholder="콘텐츠 본문을 입력하세요. 이미지와 유튜브 영상을 바로 삽입할 수 있어요."
+              style={{ minHeight: 300, fontSize: 13 }}
+            />
+          </div>
         </div>
         {/* ── 첨부파일 관리 ── */}
         <div style={{ marginBottom:16, padding:"16px 18px", background:"rgba(10,22,40,0.02)", border:"1px solid rgba(10,22,40,0.08)", borderRadius:10 }}>
