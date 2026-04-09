@@ -23,6 +23,8 @@ export function ChecklistSection({ setActive }) {
 
   // 중간저장: 상태 변경 시마다 저장
   useEffect(() => { const d = { step, prereq, behavior, impact, continuity }; saveChecklist(d); }, [step, prereq, behavior, impact, continuity]);
+  // 단계 변경 시 스크롤 맨 위로 (모바일 UX 개선)
+  useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, [step]);
   const pct = step === 4 ? 100 : Math.round(step / 4 * 100);
   const result = step === 4 ? calcResult(prereq, behavior, impact, continuity) : null;
   const reset = () => { setPrereq({}); setBehavior({}); setImpact({}); setContinuity(null); setStep(0); setExOpen(null); saveChecklist(null); };
