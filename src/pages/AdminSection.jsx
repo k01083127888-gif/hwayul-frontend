@@ -349,15 +349,28 @@ export function AdminSection({ setActive, authed, setAuthed }) {
         ],
         handlers: { image: imageHandler },
       },
-      resize: {
-        locale: {
-          center: "가운데",
-          floatLeft: "왼쪽",
-          floatRight: "오른쪽",
-          restore: "원래대로",
-        },
-      },
     };
+    
+    // 이미지 클릭 → 크기 조절
+    useEffect(() => {
+      const quill = quillRef.current?.getEditor?.() || quillRef.current;
+      if (!quill?.root) return;
+      const handleImageClick = (e) => {
+        if (e.target?.tagName === "IMG") {
+          e.preventDefault();
+          const current = e.target.style.width || "100%";
+          const size = window.prompt("이미지 크기를 입력하세요.\n예: 50% / 70% / 100% / 300px", current);
+          if (size && size.trim()) {
+            e.target.style.width = size.trim();
+            e.target.style.height = "auto";
+            e.target.style.maxWidth = "100%";
+            setBody(quill.root.innerHTML);
+          }
+        }
+      };
+      quill.root.addEventListener("click", handleImageClick);
+      return () => quill.root.removeEventListener("click", handleImageClick);
+    }, []);
     const handleSave = () => {
       if (!f.title) return;
     const savedItem = { ...f, id: item?.id || Date.now(), views: Number(f.views)||0, body: body || "", attachments: attachments.length > 0 ? attachments : [] };
