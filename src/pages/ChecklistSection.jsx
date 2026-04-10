@@ -45,16 +45,16 @@ export function ChecklistSection({ setActive }) {
         </div>
 
         {/* 스텝 표시 */}
-        <div style={{ display:"flex", justifyContent:"center", alignItems:"center", gap:0, marginBottom:36 }}>
+        <div style={{ display:"flex", justifyContent:"center", alignItems:"center", gap:0, marginBottom:36, padding:"0 8px", flexWrap:"nowrap", maxWidth:"100%", overflow:"hidden" }}>
           {STEPS.map((s, i) => (
-            <div key={i} style={{ display:"flex", alignItems:"center" }}>
+            <div key={i} style={{ display:"flex", alignItems:"center", flexShrink:0 }}>
               <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:5 }}>
-                <div style={{ width:30, height:30, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", background:step > i ? C.gold : step === i ? "rgba(201,168,76,0.25)" : "rgba(255,255,255,0.07)", border:`2px solid ${step >= i ? C.gold : "rgba(255,255,255,0.1)"}`, color:step > i ? C.navy : step === i ? C.gold : "rgba(255,255,255,0.3)", fontWeight:800, fontSize:12 }}>
+                <div style={{ width:28, height:28, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", background:step > i ? C.gold : step === i ? "rgba(201,168,76,0.25)" : "rgba(255,255,255,0.07)", border:`2px solid ${step >= i ? C.gold : "rgba(255,255,255,0.1)"}`, color:step > i ? C.navy : step === i ? C.gold : "rgba(255,255,255,0.3)", fontWeight:800, fontSize:11 }}>
                   {step > i ? "✓" : i + 1}
                 </div>
-                <span style={{ fontSize:9, color:step === i ? C.gold : "rgba(244,241,235,0.28)", whiteSpace:"nowrap" }}>{s}</span>
+                <span style={{ fontSize:8, color:step === i ? C.gold : "rgba(244,241,235,0.28)", whiteSpace:"nowrap" }}>{s}</span>
               </div>
-              {i < 4 && <div style={{ width:60, height:2, background:step > i ? C.gold : "rgba(255,255,255,0.08)", margin:"0 6px", marginBottom:18 }} />}
+              {i < 4 && <div style={{ width:"clamp(12px, 5vw, 60px)", height:2, background:step > i ? C.gold : "rgba(255,255,255,0.08)", margin:"0 4px", marginBottom:18, flexShrink:1 }} />}
             </div>
           ))}
         </div>
