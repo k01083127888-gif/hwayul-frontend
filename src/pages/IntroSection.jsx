@@ -143,32 +143,52 @@ export function IntroSection() {
           </div>
         </div>
 
-        {/* 구성원 소개 */}
-        <div>
-          <SectionTag>OUR TEAM</SectionTag>
-          <h2 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"clamp(1.5rem, 2.5vw, 2rem)", fontWeight:900, color:C.navy, marginTop:10, marginBottom:32, letterSpacing:"-0.5px" }}>
-            전문가를 소개합니다
+        {/* 인사말 */}
+        <div style={{ background:"rgba(255,255,255,0.5)", borderRadius:20, padding:"56px 48px", border:"1px solid rgba(10,22,40,0.06)" }}>
+          <div style={{ textAlign:"center", marginBottom:14 }}>
+            <span style={{ fontSize:11, letterSpacing:"3px", color:C.teal, fontWeight:700, textTransform:"uppercase" }}>Greetings &amp; Introduction</span>
+          </div>
+          <h2 style={{ textAlign:"center", fontFamily:"'Noto Serif KR', serif", fontSize:"clamp(1.5rem, 2.5vw, 2rem)", fontWeight:500, lineHeight:1.45, margin:"0 0 8px 0", color:C.navy }}>
+            "Where the Workplace Heals."
           </h2>
+          <p style={{ textAlign:"center", fontSize:15, color:"#5A5550", margin:"0 0 40px 0" }}>일터의 상처가 치유되는 곳</p>
+          <div style={{ width:48, height:2, background:C.gold, margin:"0 auto 40px auto" }} />
 
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(240px, 1fr))", gap:20 }}>
-            {members.map(m => (
-              <div key={m.name} onClick={() => { setSelectedMember(m); window.scrollTo({ top:0, behavior:"smooth" }); }} style={{ background:"white", borderRadius:16, overflow:"hidden", boxShadow:"0 4px 20px rgba(10,22,40,0.08)", border:"1px solid rgba(10,22,40,0.06)", transition:"all 0.25s", cursor:"pointer" }}
-                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-5px)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(10,22,40,0.14)"; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 4px 20px rgba(10,22,40,0.08)"; }}
-              >
-                <div style={{ height:6, background:`linear-gradient(90deg, ${C.teal}, ${C.gold})` }} />
-                <div style={{ padding:24 }}>
-                  <div style={{ width:56, height:56, borderRadius:14, background:`linear-gradient(135deg, ${C.navyMid}, ${C.navyLight})`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:26, marginBottom:14 }}>{m.icon}</div>
-                  <div style={{ fontFamily:"'Noto Serif KR', serif", fontSize:18, fontWeight:900, color:C.navy, marginBottom:4 }}>{m.name}</div>
-                  <div style={{ fontSize:12, color:C.teal, fontWeight:700, marginBottom:2 }}>{m.title}</div>
-                  <div style={{ fontSize:11, color:C.gold, fontWeight:600, marginBottom:12 }}>{m.exp} · {m.spec}</div>
-                  <p style={{ fontSize:12, color:C.gray, lineHeight:1.7, borderTop:"1px solid rgba(10,22,40,0.08)", paddingTop:12 }}>{m.bio}</p>
-                  <div style={{ marginTop:14, textAlign:"center" }}>
-                    <span style={{ fontSize:12, color:C.teal, fontWeight:700 }}>프로필 보기 →</span>
-                  </div>
-                </div>
+          <div style={{ maxWidth:780, margin:"0 auto", fontSize:15, lineHeight:1.95, color:"#3A3530" }}>
+            <p style={{ marginBottom:18 }}>노무사로 일하면서 가장 안타까웠던 건, 직장 내 괴롭힘의 피해가 결코 가볍지 않다는 사실이었습니다. 어떤 분들은 공황장애나 우울증을 평생의 짐으로 안고 살아가시고, 어떤 분들은 직장을 떠나서도 그 트라우마에서 벗어나지 못합니다. 반대로 가해자로 지목된 분의 인생도 한순간에 무너집니다. <strong style={{ color:C.navy }}>누구의 삶도 가벼운 사건이 아닙니다.</strong></p>
+
+            <p style={{ marginBottom:32 }}>그런데도 권리구제는 여전히 부족합니다. 큰마음 먹고 진정을 넣어도 돌아오는 답은 "회사에 자체 조사를 명령했습니다"라는 한 줄뿐인 경우가 많습니다. <strong style={{ color:C.navy }}>피해자도, 억울한 가해자도, 제대로 보호받지 못합니다.</strong></p>
+
+            <div style={{ width:36, height:1, background:"rgba(10,22,40,0.2)", margin:"0 auto 32px auto" }} />
+
+            <p style={{ marginBottom:32 }}>문제는 이것이 개인의 일로 끝나지 않는다는 점입니다. 괴롭힘이 일상화된 조직에서는 침묵이 자리를 잡고, 솔직한 의견이 사라지며, 핵심 인재들이 조용히 회사를 떠납니다. <strong style={{ color:C.navy }}>저희가 지난 20년 가까이 현장에서 직접 보고 들은 것은 분명합니다. 건강한 조직문화를 가진 회사가 그렇지 않은 회사보다 생산성도, 이직률도, 위기 대응력도 압도적으로 앞선다는 것입니다.</strong> 조직문화는 추상적인 가치가 아닙니다. 그것은 곧 회사의 미래입니다.</p>
+
+            <div style={{ width:36, height:1, background:"rgba(10,22,40,0.2)", margin:"0 auto 32px auto" }} />
+
+            <p style={{ marginBottom:18 }}>화율인사이드는 바로 이 두 가지 현실 위에서 태어났습니다. <strong style={{ color:C.navy }}>제도가 닿지 못해 무너지는 개인을 위해, 그리고 자신도 모르는 사이에 무너져가는 조직을 위해.</strong></p>
+
+            <p style={{ marginBottom:18 }}>저희 두 사람의 길은 서로 달랐습니다. <strong style={{ color:C.navy }}>한 사람은 오랜 시간 피해자 곁에서 직접 구제 절차를 진행해왔고, 또 한 사람은 기업의 조직문화 개선 프로젝트를 이끌어왔습니다.</strong> 피해자의 눈물과 기업의 고민을 양쪽에서 마주해온 두 시선이 만나는 자리, 그곳이 화율인사이드입니다.</p>
+
+            <p style={{ marginBottom:18 }}>저희는 직접 분석한 1,000건 이상의 실제 판례를 데이터베이스로 구축했습니다. 일반 AI가 그럴듯한 말을 만들어낼 때, 화율인사이드는 실제 사건번호와 법원의 판단을 근거로 답합니다.</p>
+
+            <p style={{ marginBottom:18 }}>저희는 화율인사이드가 단순한 챗봇이 아니라, <strong style={{ color:C.navy }}>누군가의 일터가 무너지기 전에 닿을 수 있는 첫 번째 손</strong>이 되기를 원합니다. 정확한 분석으로, 그리고 끝까지 외면하지 않는 끈기로, 피해자와 기업 곁에 있겠습니다.</p>
+
+            <p style={{ marginBottom:8 }}>여러분의 일터가 더 건강해지는 그날까지, 화율인사이드는 곁에 있겠습니다. <strong style={{ color:C.navy }}>저희가 먼저 손을 내밀겠습니다.</strong></p>
+          </div>
+
+          <div style={{ maxWidth:780, margin:"48px auto 0 auto", paddingTop:28, borderTop:"1px solid rgba(10,22,40,0.12)" }}>
+            <div style={{ fontSize:11, letterSpacing:"2px", color:C.teal, fontWeight:700, marginBottom:14, textTransform:"uppercase" }}>화율인사이드 공동대표</div>
+            <div style={{ display:"flex", alignItems:"flex-end", gap:32, flexWrap:"wrap" }}>
+              <div>
+                <div style={{ fontFamily:"'Noto Serif KR', serif", fontSize:26, fontWeight:500, color:C.navy, letterSpacing:"4px" }}>김 재 정</div>
+                <div style={{ fontSize:12, color:"#5A5550", marginTop:4, letterSpacing:"1px" }}>노무사</div>
               </div>
-            ))}
+              <div style={{ fontSize:20, color:C.gold, paddingBottom:6 }}>·</div>
+              <div>
+                <div style={{ fontFamily:"'Noto Serif KR', serif", fontSize:26, fontWeight:500, color:C.navy, letterSpacing:"4px" }}>강 설 희</div>
+                <div style={{ fontSize:12, color:"#5A5550", marginTop:4, letterSpacing:"1px" }}>노무사</div>
+              </div>
+            </div>
           </div>
         </div>
 
