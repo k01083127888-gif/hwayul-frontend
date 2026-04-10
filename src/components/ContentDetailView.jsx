@@ -48,35 +48,17 @@ export function ContentDetailView({ item, onBack }) {
         {/* 본문 */}
         <div style={{ background:"white", borderRadius:16, padding:36, boxShadow:"0 4px 24px rgba(10,22,40,0.08)", border:"1px solid rgba(10,22,40,0.06)", marginBottom:28 }}>
           <div style={{ fontSize:10, letterSpacing:"2px", color:C.teal, fontWeight:700, textTransform:"uppercase", marginBottom:16 }}>CONTENT DETAIL</div>
-         <div
-            className="hwayul-content-body"
-            style={{ fontSize:14, color:"#3A3530", lineHeight:1.9 }}
-            dangerouslySetInnerHTML={{ __html: (() => {
-              const raw = detail?.content || detail?.body || "";
-              // 이미 HTML 태그가 있으면 그대로 사용 (새 콘텐츠), 없으면 줄바꿈을 <p>로 변환 (구 콘텐츠 호환)
-              if (/<\/?(p|div|img|br|h[1-6]|ul|ol|li|blockquote|iframe)/i.test(raw)) {
-                return raw;
-              }
-              return raw
-                .split(/\n\n+/)
-                .map(p => `<p>${p.replace(/\n/g, "<br/>")}</p>`)
-                .join("");
-            })() }}
-          />
-          <style>{`
-            .hwayul-content-body p { margin: 0 0 16px 0; }
-            .hwayul-content-body img { max-width: 100%; height: auto; border-radius: 10px; margin: 16px 0; display: block; }
-            .hwayul-content-body iframe { max-width: 100%; width: 100%; aspect-ratio: 16/9; border-radius: 10px; margin: 16px 0; border: none; }
-            .hwayul-content-body .ql-video { max-width: 100%; width: 100%; aspect-ratio: 16/9; border-radius: 10px; margin: 16px 0; border: none; display: block; }
-            .hwayul-content-body h1 { font-size: 22px; font-weight: 800; margin: 24px 0 12px 0; color: #0A1628; }
-            .hwayul-content-body h2 { font-size: 19px; font-weight: 800; margin: 22px 0 12px 0; color: #0A1628; }
-            .hwayul-content-body h3 { font-size: 16px; font-weight: 700; margin: 20px 0 10px 0; color: #0A1628; }
-            .hwayul-content-body ul, .hwayul-content-body ol { margin: 0 0 16px 0; padding-left: 24px; }
-            .hwayul-content-body li { margin-bottom: 6px; }
-            .hwayul-content-body blockquote { border-left: 4px solid #0D7377; padding: 8px 16px; margin: 16px 0; background: rgba(13,115,119,0.05); color: #3A3530; }
-            .hwayul-content-body a { color: #0D7377; text-decoration: underline; }
-            .hwayul-content-body strong { font-weight: 700; color: #0A1628; }
-          `}</style>
+          {(() => {
+            const bodyText = detail?.content || detail?.body || "";
+            // HTML 태그 자동 감지: <태그> 형태가 있으면 HTML로 렌더링
+            const hasHtml = /<(h[1-6]|p|div|br|strong|em|ul|ol|li|table|span)[\s>]/i.test(bodyText);
+            if (hasHtml) {
+              return <div style={{ fontSize:14, color:"#3A3530", lineHeight:1.9 }} dangerouslySetInnerHTML={{ __html: bodyText }} />;
+            }
+            return bodyText.split("\n\n").map((para, i) => (
+              <p key={i} style={{ fontSize:14, color:"#3A3530", lineHeight:1.9, marginBottom:16, whiteSpace:"pre-wrap" }}>{para}</p>
+            ));
+          })()}
         </div>
 
         {/* 첨부파일 */}
