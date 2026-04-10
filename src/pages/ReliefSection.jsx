@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import C from "../tokens/colors.js";
 import { addSubmission } from "../utils/store.js";
 import { isValidEmail, isValidPhone } from "../utils/validators.js";
@@ -35,6 +35,13 @@ export function ReliefSection() {
   const [openMethod, setOpenMethod] = useState(null);
   const [errors, setErrors] = useState({});
   const [showPrivacy, setShowPrivacy] = useState(false);
+  // 모바일 감지 (768px 이하)
+  const [isMobile, setIsMobile] = useState(typeof window !== "undefined" && window.innerWidth <= 768);
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
   const F = k => e => setForm(f => ({ ...f, [k]: e.target.value }));
 
   const validateRelief = () => {
@@ -101,7 +108,7 @@ export function ReliefSection() {
           </div>
         </div>
 
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:32, alignItems:"start" }}>
+        <div style={{ display:"grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 24 : 32, alignItems:"start" }}>
 
           {/* 좌: 구제 방법 */}
           <div>
