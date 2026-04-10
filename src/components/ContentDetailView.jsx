@@ -50,10 +50,9 @@ export function ContentDetailView({ item, onBack }) {
           <div style={{ fontSize:10, letterSpacing:"2px", color:C.teal, fontWeight:700, textTransform:"uppercase", marginBottom:16 }}>CONTENT DETAIL</div>
           {(() => {
             const bodyText = detail?.content || detail?.body || "";
-            // HTML 태그 자동 감지: <태그> 형태가 있으면 HTML로 렌더링
-            const hasHtml = /<(h[1-6]|p|div|br|strong|em|ul|ol|li|table|span)[\s>]/i.test(bodyText);
-            if (hasHtml) {
-              return <div style={{ fontSize:14, color:"#3A3530", lineHeight:1.9 }} dangerouslySetInnerHTML={{ __html: bodyText }} />;
+            // HTML 태그가 하나라도 있으면 HTML로 렌더링
+            if (bodyText.includes("<") && bodyText.includes(">")) {
+              return <div className="hwayul-content-body" style={{ fontSize:14, color:"#3A3530", lineHeight:1.9 }} dangerouslySetInnerHTML={{ __html: bodyText }} />;
             }
             return bodyText.split("\n\n").map((para, i) => (
               <p key={i} style={{ fontSize:14, color:"#3A3530", lineHeight:1.9, marginBottom:16, whiteSpace:"pre-wrap" }}>{para}</p>
