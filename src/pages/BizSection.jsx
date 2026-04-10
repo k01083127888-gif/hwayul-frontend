@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import C from "../tokens/colors.js";
 import { addSubmission } from "../utils/store.js";
 import { isValidEmail, isValidPhone } from "../utils/validators.js";
@@ -15,6 +15,12 @@ export function BizSection() {
   const [done, setDone] = useState(false);
   const [errors, setErrors] = useState({});
   const [showPrivacy, setShowPrivacy] = useState(false);
+  const [isMobile, setIsMobile] = useState(typeof window !== "undefined" && window.innerWidth <= 768);
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   const TIMES = ["09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00"];
   const TYPES = ["직장내 괴롭힘 예방교육 컨설팅", "사건처리 프로세스 구축", "조직문화 진단 및 개선", "취업규칙·내부규정 정비", "고충처리위원회 운영 지원", "기타 HR 컴플라이언스"];
@@ -83,7 +89,7 @@ export function BizSection() {
               <div style={{ padding:"12px 16px", background:"rgba(192,57,43,0.12)", border:"1px solid rgba(192,57,43,0.3)", borderRadius:8, marginBottom:28 }}>
                 <span style={{ fontSize:13, color:"#FF8A80" }}>⚠️ <strong>성명, 연락처, 이메일은 필수 입력 항목입니다.</strong> 담당 노무사가 직접 연락드립니다.</span>
               </div>
-              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16, marginBottom:16 }}>
+              <div style={{ display:"grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap:16, marginBottom:16 }}>
                 <DarkInput label="성명" value={form.name} onChange={F("name")} placeholder="홍길동" required />
                 <DarkInput label="직책·직급" value={form.position} onChange={F("position")} placeholder="인사팀장, HR담당자 등" />
                 <DarkInput label="연락처" value={form.phone} onChange={F("phone")} placeholder="010-0000-0000" type="tel" required />
@@ -91,7 +97,7 @@ export function BizSection() {
                 <DarkInput label="회사명" value={form.company} onChange={F("company")} placeholder="(주)예시기업" required />
                 <div>
                   <label style={{ display:"block", fontSize:12, fontWeight:700, color:"rgba(244,241,235,0.55)", marginBottom:6, letterSpacing:"0.5px", textTransform:"uppercase" }}>사업장 규모</label>
-                  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
+                  <div style={{ display:"grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap:8 }}>
                     {SIZES.map(s => (
                       <button key={s} onClick={() => setForm(f => ({ ...f, size:s }))} style={{ padding:"9px", borderRadius:7, border:`2px solid ${form.size === s ? C.gold : "rgba(255,255,255,0.1)"}`, background:form.size === s ? "rgba(201,168,76,0.12)" : "rgba(255,255,255,0.02)", color:form.size === s ? C.gold : "rgba(244,241,235,0.55)", fontWeight:form.size === s ? 700 : 400, fontSize:12, cursor:"pointer", fontFamily:"inherit", transition:"all 0.2s" }}>{s}</button>
                     ))}
@@ -147,7 +153,7 @@ export function BizSection() {
               </div>
               <div style={{ marginBottom:28 }}>
                 <label style={{ display:"block", fontSize:12, fontWeight:700, color:"rgba(244,241,235,0.55)", marginBottom:10, letterSpacing:"0.5px", textTransform:"uppercase" }}>시간</label>
-                <div style={{ display:"grid", gridTemplateColumns:"repeat(4, 1fr)", gap:9 }}>
+                <div style={{ display:"grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap:9 }}>
                   {TIMES.map(t => (
                     <button key={t} onClick={() => setForm(f => ({ ...f, time:t }))} style={{ padding:"11px", borderRadius:8, border:`2px solid ${form.time === t ? C.gold : "rgba(255,255,255,0.1)"}`, background:form.time === t ? "rgba(201,168,76,0.14)" : "rgba(255,255,255,0.02)", color:form.time === t ? C.gold : "rgba(244,241,235,0.55)", fontWeight:form.time === t ? 700 : 400, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>{t}</button>
                   ))}
