@@ -143,6 +143,7 @@ useEffect(() => {
         @media (max-width: 768px) {
           .nav-tabs-desktop { display: none !important; }
           .nav-hamburger { display: flex !important; }
+          .side-panel-desktop { display: none !important; }
         }
         @media (min-width: 769px) {
           .nav-hamburger { display: none !important; }
