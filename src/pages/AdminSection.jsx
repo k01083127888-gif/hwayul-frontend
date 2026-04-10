@@ -701,7 +701,17 @@ export function AdminSection({ setActive, authed, setAuthed }) {
           <div style={{ position:"fixed", inset:0, zIndex:10000, background:"rgba(10,22,40,0.9)", backdropFilter:"blur(8px)", display:"flex", flexDirection:"column" }}>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"12px 24px", background:C.navy, borderBottom:"1px solid rgba(201,168,76,0.2)" }}>
               <span style={{ fontSize:14, fontWeight:700, color:C.cream }}>📄 진단 결과지 미리보기</span>
-              <button onClick={() => setViewResultHtml(null)} style={{ padding:"6px 16px", borderRadius:6, background:"rgba(255,255,255,0.1)", border:"1px solid rgba(255,255,255,0.15)", color:C.cream, fontWeight:700, fontSize:12, cursor:"pointer", fontFamily:"inherit" }}>✕ 닫기</button>
+              <div style={{ display:"flex", gap:8 }}>
+                <button onClick={() => {
+                  if (resultIframeRef.current) {
+                    try {
+                      resultIframeRef.current.contentWindow.focus();
+                      resultIframeRef.current.contentWindow.print();
+                    } catch(e) { window.print(); }
+                  }
+                }} style={{ padding:"6px 16px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:12, cursor:"pointer", fontFamily:"inherit" }}>🖨️ 인쇄 / PDF 저장</button>
+                <button onClick={() => setViewResultHtml(null)} style={{ padding:"6px 16px", borderRadius:6, background:"rgba(255,255,255,0.1)", border:"1px solid rgba(255,255,255,0.15)", color:C.cream, fontWeight:700, fontSize:12, cursor:"pointer", fontFamily:"inherit" }}>✕ 닫기</button>
+              </div>
             </div>
             <div style={{ flex:1, display:"flex", justifyContent:"center", padding:20, overflow:"auto" }}>
               <div style={{ width:"100%", maxWidth:860, background:"white", borderRadius:12, overflow:"hidden", boxShadow:"0 8px 40px rgba(0,0,0,0.3)" }}>
