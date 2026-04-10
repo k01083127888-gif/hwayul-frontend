@@ -150,6 +150,14 @@ export function SideRequestPanel() {
           </div>
         )}
       </div>
+      {/* 모바일 플로팅 버튼 - 챗봇 위쪽에 배치 */}
+      <div className="side-panel-mobile" style={{ display:"none", position:"fixed", right:16, bottom:90, zIndex:90, flexDirection:"column", gap:10 }}>
+        {Object.entries(PANELS).map(([key, p]) => (
+          <button key={key} onClick={() => setOpen(key)} title={p.label} style={{ width:48, height:48, borderRadius:"50%", background:p.color, border:"3px solid white", boxShadow:"0 4px 14px rgba(0,0,0,0.3)", fontSize:20, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>
+            {p.icon}
+          </button>
+        ))}
+      </div>
       {/* 모달 */}
       {renderModal()}
     </>
