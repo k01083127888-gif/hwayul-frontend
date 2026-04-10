@@ -280,7 +280,7 @@ useEffect(() => {
       `}</style>
 
       <PrivacyPolicyModal isOpen={showFooterPrivacy} onClose={() => setShowFooterPrivacy(false)} />
-      <SideRequestPanel />
+      {active === "home" && <SideRequestPanel />}
       <NewFeaturesHub isAdmin={isAdmin} />
       <Nav active={active} setActive={setActive} />
 
