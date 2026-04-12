@@ -16,6 +16,7 @@ export function ReportForm({ type, resultData, dark = false, resultHtml = "", ge
   const F = k => e => setForm(f => ({ ...f, [k]: typeof e === "string" ? e : e.target.value }));
 
   const isValid = form.email && form.name && form.consent && isValidEmail(form.email);
+  const price = type === "checklist" ? "99,000" : "330,000";
 
   const validateReport = () => {
     const e = {};
@@ -76,7 +77,6 @@ export function ReportForm({ type, resultData, dark = false, resultHtml = "", ge
   }
 
   const label = type === "checklist" ? "직장내 괴롭힘 진단" : "조직문화(괴롭힘 위험도) 진단";
-  const price = type === "checklist" ? "99,000" : "330,000";
   const cardBg = dark ? "rgba(255,255,255,0.04)" : "white";
   const cardBorder = dark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(10,22,40,0.08)";
   const titleColor = dark ? C.cream : C.navy;
