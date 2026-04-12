@@ -8,6 +8,7 @@ import { _defaultMembers } from "../data/memberData.js";
 import { isValidEmail } from "../utils/validators.js";
 import { StatCard, BarChart, MiniTrend, StatusPie, getMonthly, StatSection, NlHistoryCard, hashPw, checkAdminPw, ADMIN_MAX_ATTEMPTS, LOCKOUT_KEY } from "../components/AdminStats.jsx";
 import { AdminEmailComposer } from "../components/AdminEmailComposer.jsx";
+import { ReportWriter } from "../components/ReportWriter.jsx";
 import { SectionTag } from "../components/common/FormElements.jsx";
 
 // ── 관리자 섹션 ─────────────────────────────────────────────────────────────
@@ -50,6 +51,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
   const [viewDetail, setViewDetail] = useState(null);
   const [emailCompose, setEmailCompose] = useState(null);
   const [viewResultHtml, setViewResultHtml] = useState(null);
+  const [reportWrite, setReportWrite] = useState(null);
   const resultIframeRef = useRef(null);
   const [nlMode, setNlMode] = useState("list"); // list | compose | preview | history
   const [nlForm, setNlForm] = useState({ title:"", greeting:"안녕하세요, 화율인사이드입니다.", body:"", closing:"감사합니다.\n\n화율인사이드\n대표 노무사 김재정\nhwayulinside@gmail.com" });
@@ -726,6 +728,11 @@ export function AdminSection({ setActive, authed, setAuthed }) {
           <AdminEmailComposer data={{...emailCompose, onEmailSaved: () => { if(emailCompose.data?.id) fetchEmailHistory(emailCompose.data.id); }}} onClose={() => setEmailCompose(null)} onViewResult={html => setViewResultHtml(html)} />
         )}
 
+        {/* ── 리포트 작성기 오버레이 ── */}
+        {reportWrite && (
+          <ReportWriter request={reportWrite} onClose={() => setReportWrite(null)} />
+        )}
+
         {/* ── 발송 이메일 이력 오버레이 ── */}
         {emailHistory && (
           <div style={{ position:"fixed", inset:0, zIndex:9998, background:"rgba(10,22,40,0.7)", backdropFilter:"blur(6px)", display:"flex", alignItems:"center", justifyContent:"center", padding:32 }} onClick={() => setEmailHistory(null)}>
@@ -1092,7 +1099,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                       <td style={{ ...tdStyle, textAlign:"right", whiteSpace:"nowrap" }}>
                         <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 10px", marginRight:4, fontSize:10 }}>상세</button>
                         {r.resultHtml && <button onClick={()=>setViewResultHtml(r.resultHtml)} style={{ padding:"5px 10px", borderRadius:6, background:"rgba(41,128,185,0.1)", border:"1px solid rgba(41,128,185,0.2)", color:"#2980B9", fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit", marginRight:4 }}>결과지</button>}
-                        <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:"review", data:r, resultHtml:r.resultHtml||"", autoGenerate:true, greeting:`${r.name||""} 님 안녕하세요,\n화율인사이드입니다.\n\n요청하신 ${r.type==="checklist"?"직장내 괴롭힘 진단":"조직문화 진단"} 전문 노무사 검토 리포트를 보내드립니다.`, body:"" })} style={{ padding:"5px 10px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit" }}>📋 검토리포트 작성</button>
+                        <button onClick={()=>setReportWrite(r)} style={{ padding:"5px 10px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit" }}>📋 검토리포트 작성</button>
                         <button onClick={()=>fetchEmailHistory(r.id)} style={{ padding:"5px 10px", borderRadius:6, background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", color:C.teal, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit", marginLeft:4 }}>📬 이력</button>
                       </td>
                     </tr>
