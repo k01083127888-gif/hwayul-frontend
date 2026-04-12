@@ -5,7 +5,7 @@ import { saveToStorage } from "../utils/storage.js";
 
 // ── 노무사 검토 리포트 작성기 (관리자 전용) ──────────────────────────────────
 export function ReportWriter({ request, onClose }) {
-  const [report, setReport] = useState({ summary:"", analysis:"", risks:"", recommendations:"", evidence:"", conclusion:"" });
+  const [report, setReport] = useState({ summary:"", analysis:"", risks:"", recommendations:"", section5:"", conclusion:"" });
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState("");
   const [emailMode, setEmailMode] = useState(false);
@@ -56,10 +56,10 @@ ${resultSummary || "(결과 데이터 없음)"}
 2. 심층 분석 — ${r.type==="checklist"?"근로기준법 제76조의2, 제76조의3 등 관련 법령 기반 구체적 분석 (법 조항 번호 포함)":"직장내 괴롭힘 예방 의무(근로기준법 제76조의2) 기반 조직문화 위험 요인 분석"}
 3. 핵심 리스크 — ${r.type==="checklist"?"법적 성립 가능성, 증거 부족 위험, 2차 피해 가능성 등":"괴롭힘 발생 가능성, 신고 체계 미비, 관리자 인식 부족 등"} 구체적 리스크 항목
 4. 대응 권고 — 우선순위별 구체적 실행 과제 (즉시/단기/중기, 누가 무엇을 언제까지)
-5. 증거 수집·보전 가이드 — ${r.type==="checklist"?"피해 입증을 위한 증거 수집 방법, 보관 요령, 유의사항":"조직 진단 근거 자료 확보, 직원 면담 기록 방법"}
+5. ${r.type==="checklist"?"증거 수집·보전 가이드 — 피해 입증을 위한 증거 수집 방법, 보관 요령, 유의사항":"맞춤 교육·예방 프로그램 — 진단 결과에 따른 교육 대상, 프로그램 내용, 실시 시기 추천"}
 6. 결론 — 종합 평가, 향후 재진단 또는 추가 조치 권고
 
-각 섹션을 ===구분자=== 로 구분하세요. 순서: 종합소견===심층분석===핵심리스크===대응권고===증거가이드===결론`;
+각 섹션을 ===구분자=== 로 구분하세요. 순서: 종합소견===심층분석===핵심리스크===대응권고===${r.type==="checklist"?"증거가이드":"교육추천"}===결론`;
 
       const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/claude", {
         method:"POST",
@@ -73,7 +73,7 @@ ${resultSummary || "(결과 데이터 없음)"}
       const parts = text.split("===").map(s => s.trim()).filter(Boolean);
       setReport({
         summary: parts[0] || "", analysis: parts[1] || "", risks: parts[2] || "",
-        recommendations: parts[3] || "", evidence: parts[4] || "", conclusion: parts[5] || ""
+        recommendations: parts[3] || "", section5: parts[4] || "", conclusion: parts[5] || ""
       });
     } catch (err) {
       setAiError("AI 생성 오류: " + err.message);
@@ -97,7 +97,7 @@ h2{color:#0D7377;margin-top:32px;font-size:16px;border-left:4px solid #C9A84C;pa
 <h2>2. 심층 분석</h2><div class="section">${report.analysis}</div>
 <h2>3. 핵심 리스크</h2><div class="section">${report.risks}</div>
 <h2>4. 대응 권고</h2><div class="section">${report.recommendations}</div>
-<h2>5. 증거 수집·보전 가이드</h2><div class="section">${report.evidence}</div>
+<h2>5. ${r.type==="checklist"?"증거 수집·보전 가이드":"맞춤 교육·예방 프로그램"}</h2><div class="section">${report.section5}</div>
 <h2>6. 결론</h2><div class="section">${report.conclusion}</div>
 <div class="footer">
 화율인사이드 | hwayulinside@gmail.com | 02-2088-1767<br/>
@@ -264,7 +264,7 @@ h2{color:#0D7377;margin-top:32px;font-size:16px;border-left:4px solid #C9A84C;pa
         <div><label style={lbl}>2. 심층 분석 ({r.type==="checklist"?"근로기준법 기반":"조직문화 위험 요인"})</label><textarea value={report.analysis} onChange={R("analysis")} rows={5} style={txArea} placeholder="구체적 문제점, 관련 법 조항, 위반 가능성..." /></div>
         <div><label style={lbl}>3. 핵심 리스크</label><textarea value={report.risks} onChange={R("risks")} rows={4} style={txArea} placeholder={r.type==="checklist"?"법적 성립 가능성, 증거 부족 위험, 2차 피해 가능성...":"괴롭힘 발생 가능성, 신고 체계 미비, 관리자 인식 부족..."} /></div>
         <div><label style={lbl}>4. 대응 권고 (우선순위별)</label><textarea value={report.recommendations} onChange={R("recommendations")} rows={5} style={txArea} placeholder="누가, 무엇을, 언제까지 해야 하는지..." /></div>
-        <div><label style={lbl}>5. 증거 수집·보전 가이드</label><textarea value={report.evidence} onChange={R("evidence")} rows={3} style={txArea} placeholder={r.type==="checklist"?"피해 입증을 위한 증거 수집 방법, 보관 요령...":"조직 진단 근거 자료 확보, 직원 면담 기록 방법..."} /></div>
+        <div><label style={lbl}>5. {r.type==="checklist"?"증거 수집·보전 가이드":"맞춤 교육·예방 프로그램"}</label><textarea value={report.section5} onChange={R("section5")} rows={3} style={txArea} placeholder={r.type==="checklist"?"피해 입증을 위한 증거 수집 방법, 보관 요령...":"교육 대상, 프로그램 내용, 실시 시기 추천..."} /></div>
         <div><label style={lbl}>6. 결론</label><textarea value={report.conclusion} onChange={R("conclusion")} rows={3} style={txArea} placeholder="종합 평가, 재진단 권고 시기..." /></div>
       </div>
     </div></div>
