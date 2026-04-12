@@ -52,14 +52,14 @@ export function ReportForm({ type, resultData, dark = false, resultHtml = "", ge
     return (
       <div style={{ padding:32, background:bg, border:`2px solid ${border}`, borderRadius:16, textAlign:"center" }}>
         <div style={{ fontSize:48, marginBottom:16 }}>✅</div>
-        <h4 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:18, fontWeight:800, color:dark ? C.cream : C.navy, marginBottom:10 }}>검토 리포트 요청이 접수되었습니다</h4>
+        <h4 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:18, fontWeight:800, color:dark ? C.cream : C.navy, marginBottom:10 }}>검토 리포트 신청이 접수되었습니다</h4>
         <div style={{ display:"inline-block", padding:"10px 20px", background:dark?"rgba(201,168,76,0.1)":"rgba(13,115,119,0.08)", border:`1px solid ${dark?"rgba(201,168,76,0.3)":"rgba(13,115,119,0.25)"}`, borderRadius:10, marginBottom:14 }}>
-          <div style={{ fontSize:13, fontWeight:800, color:dark?C.gold:C.teal }}>📋 노무사 검토 리포트 요청 접수</div>
+          <div style={{ fontSize:13, fontWeight:800, color:dark?C.gold:C.teal }}>📋 노무사 검토 리포트 신청 접수 ({price}원)</div>
           <div style={{ fontSize:12, color:dark?"rgba(244,241,235,0.6)":"#5A4A30", marginTop:3 }}>{form.email}</div>
         </div>
         <p style={{ fontSize:13, color:textColor, lineHeight:1.85, marginBottom:10 }}>
-          진단결과지는 즉시 발송되었으며,<br/>
-          전문 노무사가 진단 결과를 검토한 뒤<br/>
+          결제 안내가 이메일로 발송되었습니다.<br/>
+          결제 확인 후 전문 노무사가 진단 결과를 검토하여<br/>
           <strong style={{ color:dark?C.gold:"#A0720A" }}>맞춤형 검토 의견서를 영업일 2일 이내 이메일로 보내드립니다.</strong>
         </p>
         <div style={{ padding:"10px 14px", background:dark?"rgba(255,255,255,0.04)":"rgba(10,22,40,0.03)", borderRadius:8, fontSize:11, color:dark?"rgba(244,241,235,0.4)":C.gray, lineHeight:1.7 }}>
@@ -76,6 +76,7 @@ export function ReportForm({ type, resultData, dark = false, resultHtml = "", ge
   }
 
   const label = type === "checklist" ? "직장내 괴롭힘 진단" : "조직문화(괴롭힘 위험도) 진단";
+  const price = type === "checklist" ? "99,000" : "330,000";
   const cardBg = dark ? "rgba(255,255,255,0.04)" : "white";
   const cardBorder = dark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(10,22,40,0.08)";
   const titleColor = dark ? C.cream : C.navy;
@@ -88,8 +89,12 @@ export function ReportForm({ type, resultData, dark = false, resultHtml = "", ge
       <div style={{ display:"flex", alignItems:"flex-start", gap:16, marginBottom:24 }}>
         <div style={{ width:52, height:52, borderRadius:14, background:dark ? "rgba(201,168,76,0.12)" : `${C.teal}12`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:24, flexShrink:0 }}>📄</div>
         <div>
-          <div style={{ fontSize:10, letterSpacing:"2px", color:tagColor, fontWeight:700, textTransform:"uppercase", marginBottom:4 }}>DETAILED REPORT</div>
-          <h4 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:17, fontWeight:800, color:titleColor, marginBottom:6 }}>전문 노무사 검토 리포트 받기</h4>
+          <div style={{ fontSize:10, letterSpacing:"2px", color:tagColor, fontWeight:700, textTransform:"uppercase", marginBottom:4 }}>EXPERT REVIEW</div>
+          <h4 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:17, fontWeight:800, color:titleColor, marginBottom:6 }}>전문 노무사 검토 리포트 받기 <span style={{ fontSize:12, fontWeight:600, color:dark ? C.gold : C.teal }}>(유료)</span></h4>
+          <div style={{ display:"inline-flex", alignItems:"baseline", gap:6, padding:"6px 14px", background:dark ? "rgba(201,168,76,0.12)" : "rgba(13,115,119,0.08)", borderRadius:8, marginBottom:8 }}>
+            <span style={{ fontSize:22, fontWeight:900, color:dark ? C.gold : C.teal }}>{price}원</span>
+            <span style={{ fontSize:11, color:dark ? "rgba(244,241,235,0.5)" : C.gray }}>(VAT 포함)</span>
+          </div>
           <p style={{ fontSize:13, color:descColor, lineHeight:1.7, margin:0 }}>
             진단 결과를 바탕으로 전문 노무사가 작성한 <strong style={{ color:titleColor }}>맞춤형 상세 리포트</strong>를 이메일로 받아보세요. {type === "checklist" ? "법적 판단 근거, 증거 수집 가이드, 구제 절차 안내가 포함됩니다." : "조직별 위험 요인 분석, 우선순위 개선 과제, 법적 의무사항이 포함됩니다."}
           </p>
@@ -245,9 +250,10 @@ export function ReportForm({ type, resultData, dark = false, resultHtml = "", ge
         border:"none", color:isValid ? (dark ? C.navy : "white") : (dark ? "rgba(255,255,255,0.45)" : C.gray),
         fontWeight:800, fontSize:15, cursor:"pointer", fontFamily:"inherit", transition:"all 0.2s",
       }}>
-        📄 {label} 상세 리포트 받기
+        📄 노무사 검토 리포트 신청 ({price}원)
       </button>
-      <div style={{ textAlign:"center", fontSize:11, color:dark ? "rgba(244,241,235,0.25)" : "rgba(10,22,40,0.25)", marginTop:10, lineHeight:1.6 }}>
+      <div style={{ textAlign:"center", fontSize:11, color:dark ? "rgba(244,241,235,0.35)" : "rgba(10,22,40,0.35)", marginTop:10, lineHeight:1.7 }}>
+        * 신청 후 결제 안내가 이메일로 발송됩니다<br/>
         입력하신 정보는 노무사법 제37조에 따라 비밀이 유지됩니다
       </div>
       <PrivacyPolicyModal isOpen={showPrivacy} onClose={() => setShowPrivacy(false)} dark={dark} />

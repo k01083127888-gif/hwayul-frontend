@@ -49,8 +49,8 @@ export function HeroSection({ setActive }) {
         {/* 4개 핵심 CTA */}
         <div className="hero-cta-grid" style={{ display:"grid", gridTemplateColumns:"repeat(4, 1fr)", gap:14, maxWidth:860, margin:"0 auto 64px" }}>
           {[
-            { id:"checklist", icon:"🔍", title:"무료 진단 시작하기",  desc:"직장내 괴롭힘 여부를 지금 바로 확인하세요", bg:C.gold, tc:C.navy, border:"none" },
-            { id:"culture",   icon:"🏛️", title:"조직문화 진단",       desc:"괴롭힘 발생 위험을 사전에 점검하세요", bg:"transparent", tc:C.cream, border:`2px solid rgba(13,115,119,0.5)` },
+            { id:"checklist", icon:"🔍", title:"괴롭힘 자가진단",  desc:"직장내 괴롭힘 여부를 지금 바로 확인하세요", bg:C.gold, tc:C.navy, border:"none", badge:"무료 자가진단" },
+            { id:"culture",   icon:"🏛️", title:"조직문화 진단",       desc:"괴롭힘 발생 위험을 사전에 점검하세요", bg:"transparent", tc:C.cream, border:`2px solid rgba(13,115,119,0.5)`, badge:"무료 자가진단" },
             { id:"biz",       icon:"🏢", title:"기업 상담",           desc:"기업 HR 담당자를 위한 전문 컨설팅", bg:"transparent", tc:C.cream, border:`2px solid rgba(201,168,76,0.5)` },
             { id:"relief",    icon:"🛡️", title:"피해자 구제",          desc:"법적 구제 절차를 안내받으세요", bg:"rgba(192,57,43,0.18)", tc:"#FF8A80", border:`2px solid rgba(192,57,43,0.4)` },
           ].map(cta => (
@@ -62,6 +62,7 @@ export function HeroSection({ setActive }) {
               onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.filter = "brightness(1.1)"; }}
               onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.filter = ""; }}
             >
+              {cta.badge && <div style={{ fontSize:10, fontWeight:700, color:"#fff", background:C.teal, borderRadius:20, padding:"2px 10px", display:"inline-block", marginBottom:6 }}>{cta.badge}</div>}
               <div style={{ fontSize:30, marginBottom:10 }}>{cta.icon}</div>
               <div style={{ fontWeight:800, fontSize:15, marginBottom:6 }}>{cta.title}</div>
               <div style={{ fontSize:12, opacity:0.72, lineHeight:1.5 }}>{cta.desc}</div>

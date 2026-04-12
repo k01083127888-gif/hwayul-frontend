@@ -286,6 +286,18 @@ export function CultureSection() {
             </div>
           </div>
 
+          {/* 자가진단 무료 / 노무사 검토 유료 안내 */}
+          <div style={{ display:"flex", gap:12, marginBottom:20 }}>
+            <div style={{ flex:1, padding:"14px 16px", background:"rgba(13,115,119,0.06)", border:"1px solid rgba(13,115,119,0.2)", borderRadius:10, textAlign:"center" }}>
+              <div style={{ fontSize:11, color:C.gray, marginBottom:4 }}>자가진단 결과</div>
+              <div style={{ fontSize:16, fontWeight:800, color:C.teal }}>무료</div>
+            </div>
+            <div style={{ flex:1, padding:"14px 16px", background:"rgba(201,168,76,0.06)", border:"1px solid rgba(201,168,76,0.25)", borderRadius:10, textAlign:"center" }}>
+              <div style={{ fontSize:11, color:C.gray, marginBottom:4 }}>노무사 검토 리포트</div>
+              <div style={{ fontSize:16, fontWeight:800, color:"#A0720A" }}>330,000원 <span style={{ fontSize:10, fontWeight:400 }}>(VAT 포함)</span></div>
+            </div>
+          </div>
+
           {/* ── 무료 상담 연결 ── */}
           <FreeConsultBanner variant="light" context="culture" getResultHtml={() => generateCulturePrintHtml(totalRisk, catResults, highRiskItems, answers, orgInfo, getRiskGrade)} />
 

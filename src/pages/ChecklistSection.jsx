@@ -311,6 +311,18 @@ export function ChecklistSection({ setActive }) {
               </div>
             </div>
 
+            {/* 자가진단 무료 안내 */}
+            <div style={{ display:"flex", gap:12, marginBottom:20 }}>
+              <div style={{ flex:1, padding:"14px 16px", background:"rgba(13,115,119,0.1)", border:"1px solid rgba(13,115,119,0.3)", borderRadius:10, textAlign:"center" }}>
+                <div style={{ fontSize:11, color:"rgba(244,241,235,0.5)", marginBottom:4 }}>자가진단 결과</div>
+                <div style={{ fontSize:16, fontWeight:800, color:C.tealLight }}>무료</div>
+              </div>
+              <div style={{ flex:1, padding:"14px 16px", background:"rgba(201,168,76,0.1)", border:"1px solid rgba(201,168,76,0.3)", borderRadius:10, textAlign:"center" }}>
+                <div style={{ fontSize:11, color:"rgba(244,241,235,0.5)", marginBottom:4 }}>노무사 검토 리포트</div>
+                <div style={{ fontSize:16, fontWeight:800, color:C.gold }}>99,000원 <span style={{ fontSize:10, fontWeight:400 }}>(VAT 포함)</span></div>
+              </div>
+            </div>
+
             {/* 결과지 보기 */}
             <div style={{ padding:"18px", background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", borderRadius:12, display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20 }}>
               <div>
