@@ -18,7 +18,7 @@ export function HeroSection({ setActive }) {
       textAlign:"center", padding:"120px 32px 80px", position:"relative", overflow:"hidden",
     }}>
       {/* 서울 야간 위성 사진 (NASA 퍼블릭 도메인) */}
-      <div className="hero-bg-satellite" style={{ position:"absolute", inset:0, backgroundImage:"url('/seoul-satellite.jpg')", backgroundSize:"cover", backgroundPosition:"center 75%", opacity:0.45 }} />
+      <div className="hero-bg-satellite" style={{ position:"absolute", inset:0, backgroundImage:"url('/seoul-satellite.jpg')", backgroundSize:"cover", backgroundPosition:"center 75%", opacity:0.45, backgroundColor:"#071225" }} />
       <style>{`
         @media (max-width: 768px) {
           .hero-bg-satellite { background-position: 60% 85% !important; }
