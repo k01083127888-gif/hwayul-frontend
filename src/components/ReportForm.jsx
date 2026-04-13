@@ -95,9 +95,13 @@ export function ReportForm({ type, resultData, dark = false, resultHtml = "", ge
             <span style={{ fontSize:22, fontWeight:900, color:dark ? C.gold : C.teal }}>{price}원</span>
             <span style={{ fontSize:11, color:dark ? "rgba(244,241,235,0.5)" : C.gray }}>(VAT 포함)</span>
           </div>
-          <p style={{ fontSize:13, color:descColor, lineHeight:1.7, margin:0 }}>
+          <p style={{ fontSize:13, color:descColor, lineHeight:1.7, margin:"0 0 8px 0" }}>
             진단 결과를 바탕으로 전문 노무사가 작성한 <strong style={{ color:titleColor }}>맞춤형 상세 리포트</strong>를 이메일로 받아보세요. {type === "checklist" ? "법적 판단 근거, 증거 수집 가이드, 구제 절차 안내가 포함됩니다." : "조직별 위험 요인 분석, 우선순위 개선 과제, 법적 의무사항이 포함됩니다."}
           </p>
+          <div style={{ fontSize:12, color:descColor, lineHeight:2, margin:0 }}>
+            <div>✔ 공인노무사가 1시간 이상 직접 검수하여 작성합니다</div>
+            <div>✔ 신청일 기준 7일 이내 발송</div>
+          </div>
         </div>
       </div>
 
