@@ -20,15 +20,15 @@ export function HeroSection({ setActive }) {
       <div style={{ position:"absolute", top:"12%", right:"6%", width:440, height:440, background:`radial-gradient(circle, rgba(13,115,119,0.13) 0%, transparent 70%)`, borderRadius:"50%" }} />
       <div style={{ position:"absolute", bottom:"8%", left:"4%", width:320, height:320, background:`radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%)`, borderRadius:"50%" }} />
       {/* 추상 기하학 패턴 배경 */}
-      <div style={{ position:"absolute", inset:0, opacity:0.04, backgroundImage:`
+      <div style={{ position:"absolute", inset:0, opacity:0.12, backgroundImage:`
         linear-gradient(30deg, rgba(255,255,255,0.5) 1px, transparent 1px),
         linear-gradient(150deg, rgba(255,255,255,0.5) 1px, transparent 1px),
         linear-gradient(270deg, rgba(255,255,255,0.3) 1px, transparent 1px)
       `, backgroundSize:"80px 140px, 80px 140px, 80px 140px" }} />
       {/* 큰 다이아몬드 장식 */}
-      <div style={{ position:"absolute", top:"15%", left:"8%", width:200, height:200, border:"1px solid rgba(13,115,119,0.08)", transform:"rotate(45deg)", borderRadius:4 }} />
-      <div style={{ position:"absolute", bottom:"12%", right:"10%", width:280, height:280, border:"1px solid rgba(201,168,76,0.06)", transform:"rotate(45deg)", borderRadius:4 }} />
-      <div style={{ position:"absolute", top:"40%", right:"3%", width:120, height:120, border:"1px solid rgba(255,255,255,0.04)", transform:"rotate(45deg)", borderRadius:4 }} />
+      <div style={{ position:"absolute", top:"15%", left:"8%", width:200, height:200, border:"1.5px solid rgba(13,115,119,0.18)", transform:"rotate(45deg)", borderRadius:4 }} />
+      <div style={{ position:"absolute", bottom:"12%", right:"10%", width:280, height:280, border:"1.5px solid rgba(201,168,76,0.14)", transform:"rotate(45deg)", borderRadius:4 }} />
+      <div style={{ position:"absolute", top:"40%", right:"3%", width:120, height:120, border:"1.5px solid rgba(255,255,255,0.1)", transform:"rotate(45deg)", borderRadius:4 }} />
       {/* 원래 도트 패턴 유지 */}
       <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize:"48px 48px" }} />
 
