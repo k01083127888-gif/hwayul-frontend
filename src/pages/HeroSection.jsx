@@ -18,7 +18,12 @@ export function HeroSection({ setActive }) {
       textAlign:"center", padding:"120px 32px 80px", position:"relative", overflow:"hidden",
     }}>
       {/* 서울 야간 위성 사진 (NASA 퍼블릭 도메인) */}
-      <div style={{ position:"absolute", inset:0, backgroundImage:"url('/seoul-satellite.jpg')", backgroundSize:"cover", backgroundPosition:"center 75%", opacity:0.45 }} />
+      <div className="hero-bg-satellite" style={{ position:"absolute", inset:0, backgroundImage:"url('/seoul-satellite.jpg')", backgroundSize:"cover", backgroundPosition:"center 75%", opacity:0.45 }} />
+      <style>{`
+        @media (max-width: 768px) {
+          .hero-bg-satellite { background-position: 30% 70% !important; }
+        }
+      `}</style>
       {/* 그라데이션 오버레이 */}
       <div style={{ position:"absolute", inset:0, background:`linear-gradient(180deg, ${C.navy}88 0%, ${C.navy}44 40%, ${C.navy}99 100%)` }} />
       <div style={{ position:"absolute", top:"12%", right:"6%", width:440, height:440, background:`radial-gradient(circle, rgba(13,115,119,0.13) 0%, transparent 70%)`, borderRadius:"50%" }} />
