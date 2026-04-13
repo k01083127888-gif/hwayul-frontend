@@ -266,6 +266,18 @@ export function CultureSection() {
             )}
           </div>
 
+          {/* 자가진단 무료 / 노무사 검토 유료 안내 */}
+          <div style={{ display:"flex", gap:12, marginBottom:20 }}>
+            <div style={{ flex:1, padding:"14px 16px", background:"rgba(13,115,119,0.06)", border:"1px solid rgba(13,115,119,0.2)", borderRadius:10, textAlign:"center" }}>
+              <div style={{ fontSize:11, color:C.gray, marginBottom:4 }}>자가진단 결과</div>
+              <div style={{ fontSize:16, fontWeight:800, color:C.teal }}>무료</div>
+            </div>
+            <div style={{ flex:1, padding:"14px 16px", background:"rgba(201,168,76,0.06)", border:"1px solid rgba(201,168,76,0.25)", borderRadius:10, textAlign:"center" }}>
+              <div style={{ fontSize:11, color:C.gray, marginBottom:4 }}>노무사 검토 리포트</div>
+              <div style={{ fontSize:16, fontWeight:800, color:"#A0720A" }}>330,000원 <span style={{ fontSize:10, fontWeight:400 }}>(VAT 포함)</span></div>
+            </div>
+          </div>
+
           {/* 결과지 보기 */}
           <div style={{ padding:"18px", background:"rgba(41,128,185,0.08)", border:"1px solid rgba(41,128,185,0.18)", borderRadius:12, display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20 }}>
             <div>
@@ -283,18 +295,6 @@ export function CultureSection() {
               이 결과는 일반적 기준에 따른 <strong>자가 진단</strong>입니다. 조직문화 위험도는 응답자의 인식과 실제 발생 가능성이 다를 수 있으며,
               <strong style={{ color:"#A0720A" }}> 동일한 점수라도 산업군·조직 규모·구조에 따라 전혀 다른 대응 전략이 필요합니다.</strong><br /><br />
               특히 고위험 영역은 내부 조사만으로는 원인 파악에 한계가 있으며, 전문가의 현장 진단이 필요한 경우가 많습니다.
-            </div>
-          </div>
-
-          {/* 자가진단 무료 / 노무사 검토 유료 안내 */}
-          <div style={{ display:"flex", gap:12, marginBottom:20 }}>
-            <div style={{ flex:1, padding:"14px 16px", background:"rgba(13,115,119,0.06)", border:"1px solid rgba(13,115,119,0.2)", borderRadius:10, textAlign:"center" }}>
-              <div style={{ fontSize:11, color:C.gray, marginBottom:4 }}>자가진단 결과</div>
-              <div style={{ fontSize:16, fontWeight:800, color:C.teal }}>무료</div>
-            </div>
-            <div style={{ flex:1, padding:"14px 16px", background:"rgba(201,168,76,0.06)", border:"1px solid rgba(201,168,76,0.25)", borderRadius:10, textAlign:"center" }}>
-              <div style={{ fontSize:11, color:C.gray, marginBottom:4 }}>노무사 검토 리포트</div>
-              <div style={{ fontSize:16, fontWeight:800, color:"#A0720A" }}>330,000원 <span style={{ fontSize:10, fontWeight:400 }}>(VAT 포함)</span></div>
             </div>
           </div>
 
