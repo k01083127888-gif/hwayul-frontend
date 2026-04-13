@@ -2,18 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import C from "../tokens/colors.js";
 
 export function AIChatBot({ onClose, isAdmin = false }) {
-  const welcomeMsg = isAdmin
-    ? "🔓 관리자 모드 — 제한 없는 전문 상담 모드입니다.\n\n사건 전략 수립, 증거 평가, 신청 가능성 판단 등 실무 수준의 구체적 조언을 제공합니다. 의뢰인에게 노출되지 않는 내용도 확인할 수 있습니다."
-    : "안녕하세요. 저는 화율인사이드 AI 상담 도우미입니다.\n\n직장내 괴롭힘 여부 판단, 산재 신청 절차 등 궁금한 점을 편하게 질문해 주세요.\n\n⚠️ 본 AI 상담은 일반적인 안내용이며 법적 효력이 없습니다. 구체적인 사건 전략은 전문 노무사 상담을 권장합니다.";
-
-  const [messages, setMessages] = useState([
-    { role:"assistant", text: welcomeMsg }
-  ]);
+  // ── 역할 선택 상태 ──
+  const [role, setRole] = useState(isAdmin ? "admin" : null);  // null이면 역할 선택 화면
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  // 공개 모드: 일정 횟수 답변 후 상담 유도 표시
   const [replyCount, setReplyCount] = useState(0);
   const [showCTA, setShowCTA] = useState(false);
+  const [showDisclaimer, setShowDisclaimer] = useState(false); // 피지목인 면책 고지
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -21,36 +17,164 @@ export function AIChatBot({ onClose, isAdmin = false }) {
     bottomRef.current?.scrollIntoView({ behavior:"smooth" });
   }, [messages, loading]);
 
-  // 일반 사용자용 시스템 프롬프트 — 마지노선 설정
-  const publicSystemPrompt = `당신은 '화율인사이드' 플랫폼의 직장내 괴롭힘 안내 AI입니다. 한국 노동법(근로기준법 제76조의2) 기반으로 일반적인 정보를 안내합니다.
+  // ── 역할별 설정 ──
+  const roleConfig = {
+    victim: {
+      icon: "😟",
+      label: "피해 상담",
+      headerColor: C.teal,
+      welcomeMsg: "안녕하세요. 힘든 상황 속에서 찾아주셔서 감사합니다.\n\n당신의 잘못이 아닙니다. 직장내 괴롭힘 여부 판단, 대응 방법, 구제 절차 등 궁금한 점을 편하게 말씀해 주세요.\n\n⚠️ 본 AI 상담은 일반적인 안내용이며 법적 효력이 없습니다.",
+      quickQ: ["이게 직장내 괴롭힘인가요?", "증거는 어떻게 모아야 하나요?", "회사에 신고하면 불이익이 있나요?", "산재 신청이 가능할까요?"],
+    },
+    accused: {
+      icon: "😰",
+      label: "피지목인 상담",
+      headerColor: "#E67E22",
+      welcomeMsg: "안녕하세요. 어려운 상황에서 찾아주셨군요.\n\n괴롭힘 지목을 받으셨다면 불안하고 억울한 마음이 크실 겁니다. 이 상담은 판단하지 않습니다. 당신도 적정한 절차를 받을 권리가 있습니다.\n\n조사 과정, 소명 기회, 대응 방법 등을 안내해 드리겠습니다.",
+      quickQ: ["조사 과정은 어떻게 진행되나요?", "소명 기회는 어떻게 주어지나요?", "정당한 업무지시였는데 괴롭힘으로 신고됐어요", "징계를 받게 되면 어떻게 대응하나요?"],
+    },
+    hr: {
+      icon: "🏢",
+      label: "회사 담당자 상담",
+      headerColor: "#2980B9",
+      welcomeMsg: "안녕하세요. 사내 괴롭힘 사건 처리를 담당하고 계시군요.\n\n법적 의무사항, 조사 절차, 처리 기한, 이중 피해 방지 등 실무에 필요한 정보를 안내해 드리겠습니다.\n\n⚠️ 본 AI 상담은 일반적인 안내용이며 법적 효력이 없습니다.",
+      quickQ: ["신고 접수 후 법적 조사 기한은?", "가해자·피해자 분리 조치 방법은?", "조사위원회 구성은 어떻게 하나요?", "2차 피해 방지 의무는 무엇인가요?"],
+    },
+    general: {
+      icon: "🤔",
+      label: "일반 상담",
+      headerColor: C.teal,
+      welcomeMsg: "안녕하세요. 화율인사이드 AI 상담 도우미입니다.\n\n괴롭힘에 해당하는지 아닌지 판단이 어려우신가요? 상황을 말씀해 주시면 일반적인 기준에서 안내해 드리겠습니다.\n\n⚠️ 본 AI 상담은 일반적인 안내용이며 법적 효력이 없습니다.",
+      quickQ: ["이런 상황이 괴롭힘에 해당하나요?", "상사의 업무지시와 괴롭힘의 차이는?", "동료 간 갈등도 괴롭힘인가요?", "어떤 절차를 밟아야 하나요?"],
+    },
+    admin: {
+      icon: "🔓",
+      label: "관리자",
+      headerColor: C.gold,
+      welcomeMsg: "🔓 관리자 모드 — 제한 없는 전문 상담 모드입니다.\n\n사건 전략 수립, 증거 평가, 신청 가능성 판단 등 실무 수준의 구체적 조언을 제공합니다.",
+      quickQ: ["증거 가치를 평가해 주세요", "산재 승인 전략은?", "형사 병행이 유리한가요?", "내용증명 발송 타이밍은?"],
+    },
+  };
+
+  // ── 역할별 시스템 프롬프트 ──
+  const systemPrompts = {
+    victim: `당신은 '화율인사이드' 플랫폼의 직장내 괴롭힘 피해자 전문 상담 AI입니다. 한국 노동법(근로기준법 제76조의2) 기반으로 안내합니다.
+
+톤과 태도:
+- 공감 우선. "당신 잘못이 아닙니다"라는 메시지를 자연스럽게 전달
+- 따뜻하고 안전한 분위기 유지
+- 피해자의 감정을 존중하고 심리적 지지 제공
 
 역할:
 - 직장내 괴롭힘 성립 요건(3가지 기준)을 쉽게 설명
-- 일반적인 대응 절차와 신고 기관 안내
-- 산재 신청 절차 개요 설명
-- 피해자 심리적 지지
+- 구제 절차 안내 (사내 신고, 고용노동부 진정, 산재 신청)
+- 증거 수집의 필요성과 일반적 방향 안내
+- 피해자 보호 제도 안내
 
-[최우선 원칙] 정확성 보장 — 반드시 준수:
+[최우선 원칙] 정확성 보장:
 - 확실하지 않은 판례번호, 사건번호, 통계 수치, 법조문 번호는 절대 만들어내지 않는다
 - 모르거나 확신이 없으면 "정확한 내용은 전문 노무사에게 확인이 필요합니다"라고 솔직하게 답한다
 - 존재하지 않는 법률, 판례, 기관, 제도를 언급하지 않는다
-- "~로 알려져 있습니다", "일반적으로 ~입니다" 등 불확실한 표현을 사용한다
 
-엄격한 제한사항 (반드시 준수):
-- 특정 사건의 괴롭힘 성립 여부를 단정하지 않는다. "전문가 검토가 필요합니다"로 마무리
-- 증거 수집 구체적 방법(어디에 저장, 어떻게 제출)은 안내하지 않는다
+엄격한 제한사항:
+- 특정 사건의 괴롭힘 성립 여부를 단정하지 않는다
 - 승소 가능성, 보상 금액, 구체적 전략은 언급하지 않는다
-- 회사나 가해자에 대한 구체적 대응 방법(내용증명, 고소장 등)은 안내하지 않는다
 - 3번째 답변부터는 반드시 마지막에 다음 문구를 추가한다:
   "💡 구체적인 사건 검토와 대응 전략은 전문 노무사 상담이 필요합니다. 화율인사이드에서 무료 전화상담을 예약하실 수 있습니다."
 
 답변 원칙:
 - 200자 이내로 간결하게
 - 따뜻하고 공감하는 어조
-- 법적 조문은 쉬운 말로 풀어서`;
+- 법적 조문은 쉬운 말로 풀어서`,
 
-  // 관리자용 시스템 프롬프트 — 제한 없음
-  const adminSystemPrompt = `당신은 화율인사이드 노무사 사무소의 전문 AI 보조입니다. 한국 노동법, 산업재해보상보험법, 형사법 전반에 걸친 실무 수준의 조언을 제공합니다.
+    accused: `당신은 '화율인사이드' 플랫폼의 직장내 괴롭힘 피지목인(가해자로 지목된 사람) 전문 상담 AI입니다.
+
+톤과 태도 (가장 중요):
+- 판단하지 않는다. "당신도 적정한 절차를 받을 권리가 있습니다"
+- 균형 잡힌 시각 유지: 피지목인 편을 들지도, 비판하지도 않는다
+- 정당한 업무지시였을 가능성도 열어둔다
+- 동시에 "본인의 행동을 돌아볼 필요도 있을 수 있다"는 균형도 자연스럽게 전달
+- 억울한 경우의 구제 방법도 안내
+
+역할:
+- 조사 과정이 어떻게 진행되는지 설명
+- 소명 기회와 진술 전 유의사항 안내
+- 징계 절차와 대응 방법 안내
+- 정당한 업무지시와 괴롭힘의 구분 기준 설명
+- 억울한 지목에 대한 구제 방법 (이의제기, 노동위원회 등)
+
+[최우선 원칙] 정확성 보장:
+- 확실하지 않은 판례번호, 사건번호, 통계 수치, 법조문 번호는 절대 만들어내지 않는다
+- 모르거나 확신이 없으면 "정확한 내용은 전문 노무사에게 확인이 필요합니다"라고 솔직하게 답한다
+
+엄격한 제한사항:
+- 피해자를 비난하거나 폄하하는 방향으로 조언하지 않는다
+- 증거 인멸이나 회유를 암시하는 조언은 절대 하지 않는다
+- 특정 사건의 결과를 단정하지 않는다
+- 3번째 답변부터는 마지막에: "💡 구체적인 사건 검토는 전문 노무사 상담이 필요합니다. 화율인사이드에서 무료 전화상담을 예약하실 수 있습니다."
+
+답변 원칙:
+- 200자 이내로 간결하게
+- 차분하고 객관적인 어조
+- 법적 권리와 절차를 중심으로`,
+
+    hr: `당신은 '화율인사이드' 플랫폼의 기업 HR·경영진·조사 담당자 전문 상담 AI입니다.
+
+톤과 태도:
+- 객관적, 실무 중심
+- 법적 의무와 리스크를 명확하게 전달
+- 감정적 표현 최소화, 체크리스트 형태 선호
+
+역할:
+- 직장내 괴롭힘 금지법 상 사업주 의무 안내
+- 신고 접수 후 조사 절차 및 기한 (접수 후 10일 이내 조사 착수 등)
+- 조사위원회 구성 및 운영 방법
+- 가해자·피해자 분리 조치 방법
+- 2차 피해(보복) 방지 의무
+- 비밀유지 의무
+- 미조치 시 사업주 과태료·법적 리스크
+- 징계 수위 결정 시 고려사항
+
+[최우선 원칙] 정확성 보장:
+- 확실하지 않은 판례번호, 사건번호, 통계 수치, 법조문 번호는 절대 만들어내지 않는다
+- 모르거나 확신이 없으면 "정확한 내용은 전문 노무사에게 확인이 필요합니다"라고 솔직하게 답한다
+
+엄격한 제한사항:
+- 특정 사건의 판단을 내리지 않는다
+- 징계 수위를 직접 권고하지 않는다
+- 3번째 답변부터는 마지막에: "💡 조직 맞춤 컨설팅은 전문 노무사 상담이 필요합니다. 화율인사이드 기업상담을 이용해 주세요."
+
+답변 원칙:
+- 250자 이내로 간결하게
+- 실무 체크리스트 형태 선호
+- 법적 근거 명시 (근로기준법 제76조의2, 제76조의3 등)`,
+
+    general: `당신은 '화율인사이드' 플랫폼의 직장내 괴롭힘 일반 상담 AI입니다. 괴롭힘 해당 여부 판단을 도와줍니다.
+
+톤과 태도:
+- 중립적이고 친절한 안내자
+- 상황을 정리해주고 방향을 제시
+
+역할:
+- 사용자의 상황이 직장내 괴롭힘 3가지 요건에 해당하는지 일반적 기준으로 안내
+- 괴롭힘과 정당한 업무지시의 구분 기준 설명
+- 판단 후 적절한 다음 단계 안내
+- 상황에 따라 피해자/피지목인/HR 상담을 자연스럽게 안내
+
+[최우선 원칙] 정확성 보장:
+- 확실하지 않은 판례번호, 사건번호, 통계 수치, 법조문 번호는 절대 만들어내지 않는다
+- 모르거나 확신이 없으면 "정확한 내용은 전문 노무사에게 확인이 필요합니다"라고 솔직하게 답한다
+
+엄격한 제한사항:
+- 특정 사건의 괴롭힘 성립 여부를 단정하지 않는다
+- 3번째 답변부터는 마지막에: "💡 구체적인 사건 검토는 전문 노무사 상담이 필요합니다. 화율인사이드에서 무료 전화상담을 예약하실 수 있습니다."
+
+답변 원칙:
+- 200자 이내로 간결하게
+- 중립적이고 알기 쉬운 어조
+- 직장내 괴롭힘 3요건을 기준으로 체계적으로`,
+
+    admin: `당신은 화율인사이드 노무사 사무소의 전문 AI 보조입니다. 한국 노동법, 산업재해보상보험법, 형사법 전반에 걸친 실무 수준의 조언을 제공합니다.
 
 [최우선 원칙] 정확성 보장:
 - 판례를 인용할 때는 반드시 확실한 경우에만 판례번호를 기재한다. 불확실하면 "관련 판례가 있는 것으로 보이나 정확한 사건번호는 확인이 필요합니다"라고 표기한다
@@ -72,8 +196,27 @@ export function AIChatBot({ onClose, isAdmin = false }) {
 - 실무 노무사에게 보고하는 수준의 구체성
 - 판례·행정해석 인용 가능 (확실한 경우에만)
 - 전략의 장단점, 리스크 함께 제시
-- 답변 길이 제한 없음`;
+- 답변 길이 제한 없음`,
+  };
 
+  // ── 역할 선택 핸들러 ──
+  const selectRole = (r) => {
+    if (r === "accused") setShowDisclaimer(true);
+    setRole(r);
+    const cfg = roleConfig[r];
+    setMessages([{ role: "assistant", text: cfg.welcomeMsg }]);
+  };
+
+  // ── 뒤로가기 (역할 재선택) ──
+  const goBack = () => {
+    setRole(null);
+    setMessages([]);
+    setReplyCount(0);
+    setShowCTA(false);
+    setShowDisclaimer(false);
+  };
+
+  // ── 메시지 전송 ──
   const send = async () => {
     const q = input.trim();
     if (!q || loading) return;
@@ -82,17 +225,16 @@ export function AIChatBot({ onClose, isAdmin = false }) {
     setLoading(true);
     const newCount = replyCount + 1;
     setReplyCount(newCount);
-    // 공개 모드에서 3번째 답변부터 CTA 표시
-    if (!isAdmin && newCount >= 3) setShowCTA(true);
+    if (role !== "admin" && newCount >= 3) setShowCTA(true);
     try {
       const history = messages.map(m => ({ role: m.role === "assistant" ? "assistant" : "user", content: m.text }));
       const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/claude", {
         method:"POST",
         body: JSON.stringify({
           model:"claude-sonnet-4-20250514",
-          max_tokens: isAdmin ? 1500 : 600,
-          system: isAdmin ? adminSystemPrompt : publicSystemPrompt,
-          messages:[...history, { role:"user", content: isAdmin ? q : `[${newCount}번째 질문] ${q}` }]
+          max_tokens: role === "admin" ? 1500 : (role === "hr" ? 800 : 600),
+          system: systemPrompts[role] || systemPrompts.general,
+          messages:[...history, { role:"user", content: role === "admin" ? q : `[${newCount}번째 질문] ${q}` }]
         })
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -107,25 +249,87 @@ export function AIChatBot({ onClose, isAdmin = false }) {
     setTimeout(() => inputRef.current?.focus(), 100);
   };
 
-  const publicQuickQ  = ["이게 직장내 괴롭힘인가요?", "어떻게 대응해야 하나요?", "산재 신청이 가능할까요?", "회사에 신고하면 불이익이 있나요?"];
-  const adminQuickQ   = ["증거 가치를 평가해 주세요", "산재 승인 전략은?", "형사 병행이 유리한가요?", "내용증명 발송 타이밍은?"];
-  const quickQ = isAdmin ? adminQuickQ : publicQuickQ;
+  const cfg = role ? roleConfig[role] : null;
+  const hdrColor = cfg?.headerColor || C.teal;
+  const isAdminMode = role === "admin";
 
+  // ══════════════════════════════════════════════════════════════
+  // 역할 선택 화면 (role === null)
+  // ══════════════════════════════════════════════════════════════
+  if (!role) {
+    return (
+      <div style={{ position:"fixed", inset:0, zIndex:10100, display:"flex", alignItems:"flex-end", justifyContent:"flex-end", padding:"0 24px 24px", pointerEvents:"none" }}>
+        <div style={{ width:"min(400px, calc(100vw - 32px))", maxHeight:"90vh", background:C.navy, borderRadius:20, boxShadow:"0 24px 80px rgba(10,22,40,0.6)", border:"2px solid rgba(13,115,119,0.35)", display:"flex", flexDirection:"column", pointerEvents:"all", overflow:"hidden" }}>
+          {/* 헤더 */}
+          <div style={{ padding:"16px 20px", background:`linear-gradient(135deg, ${C.navyMid}, ${C.navy})`, borderBottom:"1px solid rgba(201,168,76,0.15)", display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0 }}>
+            <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+              <div style={{ width:36, height:36, borderRadius:"50%", background:`linear-gradient(135deg, ${C.teal}, ${C.tealLight})`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:18 }}>🤖</div>
+              <div>
+                <div style={{ fontSize:14, fontWeight:800, color:C.cream }}>AI 상담 도우미</div>
+                <div style={{ display:"flex", alignItems:"center", gap:5, marginTop:2 }}>
+                  <div style={{ width:6, height:6, borderRadius:"50%", background:C.green }} />
+                  <span style={{ fontSize:10, color:"rgba(244,241,235,0.5)" }}>온라인 · 즉시 응답</span>
+                </div>
+              </div>
+            </div>
+            <button onClick={onClose} style={{ background:"rgba(255,255,255,0.08)", border:"none", width:30, height:30, borderRadius:"50%", cursor:"pointer", color:"rgba(244,241,235,0.6)", fontSize:16, display:"flex", alignItems:"center", justifyContent:"center" }}>✕</button>
+          </div>
+
+          {/* 역할 선택 */}
+          <div style={{ padding:"24px 20px", flex:1, overflowY:"auto" }}>
+            <div style={{ fontSize:15, fontWeight:800, color:C.cream, marginBottom:6 }}>어떤 상황이신가요?</div>
+            <div style={{ fontSize:11, color:"rgba(244,241,235,0.45)", marginBottom:20, lineHeight:1.6 }}>상황에 맞는 전문 상담을 제공해 드립니다.</div>
+
+            <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+              {[
+                { id:"victim",  icon:"😟", title:"직장에서 힘든 일을 겪고 있어요", desc:"괴롭힘·부당한 대우를 경험 중", border:"rgba(13,115,119,0.4)", bg:"rgba(13,115,119,0.08)" },
+                { id:"accused", icon:"😰", title:"제 행동이 문제가 됐어요", desc:"괴롭힘 가해자로 지목되거나 조사받고 계신 경우", border:"rgba(230,126,34,0.4)", bg:"rgba(230,126,34,0.08)" },
+                { id:"hr",      icon:"🏢", title:"회사에서 사건을 다루고 있어요", desc:"HR·경영진·조사 담당자", border:"rgba(41,128,185,0.4)", bg:"rgba(41,128,185,0.08)" },
+                { id:"general", icon:"🤔", title:"잘 모르겠어요 / 일반 상담", desc:"괴롭힘인지 아닌지부터 판단 필요", border:"rgba(201,168,76,0.4)", bg:"rgba(201,168,76,0.08)" },
+              ].map(opt => (
+                <button key={opt.id} onClick={() => selectRole(opt.id)} style={{
+                  padding:"14px 16px", borderRadius:12, background:opt.bg, border:`1.5px solid ${opt.border}`,
+                  cursor:"pointer", fontFamily:"inherit", textAlign:"left", transition:"all 0.2s",
+                  display:"flex", alignItems:"flex-start", gap:12,
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = "translateX(4px)"; e.currentTarget.style.filter = "brightness(1.15)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.filter = ""; }}
+                >
+                  <span style={{ fontSize:22, flexShrink:0, marginTop:1 }}>{opt.icon}</span>
+                  <div>
+                    <div style={{ fontSize:13, fontWeight:700, color:C.cream, marginBottom:3 }}>{opt.title}</div>
+                    <div style={{ fontSize:11, color:"rgba(244,241,235,0.5)", lineHeight:1.5 }}>{opt.desc}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ══════════════════════════════════════════════════════════════
+  // 채팅 화면 (역할 선택 완료)
+  // ══════════════════════════════════════════════════════════════
   return (
     <div style={{ position:"fixed", inset:0, zIndex:10100, display:"flex", alignItems:"flex-end", justifyContent:"flex-end", padding:"0 24px 24px", pointerEvents:"none" }}>
-      <div style={{ width:"min(400px, calc(100vw - 32px))", maxHeight:"90vh", background:C.navy, borderRadius:20, boxShadow:"0 24px 80px rgba(10,22,40,0.6)", border:`2px solid ${isAdmin ? `rgba(201,168,76,0.5)` : "rgba(13,115,119,0.35)"}`, display:"flex", flexDirection:"column", pointerEvents:"all", overflow:"hidden" }}>
+      <div style={{ width:"min(400px, calc(100vw - 32px))", maxHeight:"90vh", background:C.navy, borderRadius:20, boxShadow:"0 24px 80px rgba(10,22,40,0.6)", border:`2px solid ${isAdminMode ? "rgba(201,168,76,0.5)" : `${hdrColor}55`}`, display:"flex", flexDirection:"column", pointerEvents:"all", overflow:"hidden" }}>
         {/* 헤더 */}
-        <div style={{ padding:"16px 20px", background:isAdmin ? `linear-gradient(135deg, #1A1200, #0A0A00)` : `linear-gradient(135deg, ${C.navyMid}, ${C.navy})`, borderBottom:`1px solid ${isAdmin?"rgba(201,168,76,0.25)":"rgba(201,168,76,0.15)"}`, display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0 }}>
+        <div style={{ padding:"16px 20px", background:isAdminMode ? "linear-gradient(135deg, #1A1200, #0A0A00)" : `linear-gradient(135deg, ${C.navyMid}, ${C.navy})`, borderBottom:`1px solid ${isAdminMode ? "rgba(201,168,76,0.25)" : "rgba(201,168,76,0.15)"}`, display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0 }}>
           <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-            <div style={{ width:36, height:36, borderRadius:"50%", background:isAdmin ? `linear-gradient(135deg,${C.gold},#F5C842)` : `linear-gradient(135deg, ${C.teal}, ${C.tealLight})`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:18 }}>{isAdmin ? "🔓" : "🤖"}</div>
+            {!isAdminMode && (
+              <button onClick={goBack} style={{ background:"rgba(255,255,255,0.08)", border:"none", width:28, height:28, borderRadius:"50%", cursor:"pointer", color:"rgba(244,241,235,0.6)", fontSize:14, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>←</button>
+            )}
+            <div style={{ width:36, height:36, borderRadius:"50%", background:isAdminMode ? `linear-gradient(135deg,${C.gold},#F5C842)` : `linear-gradient(135deg, ${hdrColor}, ${hdrColor}CC)`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:18 }}>{cfg.icon}</div>
             <div>
               <div style={{ fontSize:14, fontWeight:800, color:C.cream }}>
-                AI 상담 도우미
-                {isAdmin && <span style={{ marginLeft:8, fontSize:10, padding:"2px 7px", borderRadius:100, background:"rgba(201,168,76,0.2)", color:C.gold, border:"1px solid rgba(201,168,76,0.35)", fontWeight:700 }}>관리자</span>}
+                {cfg.label}
+                {isAdminMode && <span style={{ marginLeft:8, fontSize:10, padding:"2px 7px", borderRadius:100, background:"rgba(201,168,76,0.2)", color:C.gold, border:"1px solid rgba(201,168,76,0.35)", fontWeight:700 }}>관리자</span>}
               </div>
               <div style={{ display:"flex", alignItems:"center", gap:5, marginTop:2 }}>
                 <div style={{ width:6, height:6, borderRadius:"50%", background:C.green }} />
-                <span style={{ fontSize:10, color:"rgba(244,241,235,0.5)" }}>{isAdmin ? "전문 상담 모드 · 제한 없음" : "온라인 · 즉시 응답"}</span>
+                <span style={{ fontSize:10, color:"rgba(244,241,235,0.5)" }}>{isAdminMode ? "전문 상담 모드 · 제한 없음" : "온라인 · 즉시 응답"}</span>
               </div>
             </div>
           </div>
@@ -134,10 +338,21 @@ export function AIChatBot({ onClose, isAdmin = false }) {
 
         {/* 메시지 영역 */}
         <div style={{ flex:1, overflowY:"auto", padding:"16px 16px 8px", display:"flex", flexDirection:"column", gap:12, minHeight:0 }}>
+          {/* 피지목인 면책 고지 */}
+          {showDisclaimer && (
+            <div style={{ padding:"12px 14px", background:"rgba(230,126,34,0.1)", border:"1px solid rgba(230,126,34,0.3)", borderRadius:10, marginBottom:4 }}>
+              <div style={{ fontSize:11, color:"rgba(244,241,235,0.7)", lineHeight:1.7 }}>
+                ⚠️ 본 상담은 일반적 정보 제공이며, <strong style={{ color:C.cream }}>법적 자문이 아닙니다.</strong><br/>
+                본 대화 내용은 분쟁 과정에서 증거로 사용될 수 있으니 <strong style={{ color:C.cream }}>작성에 신중</strong>을 기해주세요.<br/>
+                구체적 사안은 <strong style={{ color:"#E67E22" }}>전문 노무사 검토 리포트(99,000원)</strong>를 권장합니다.
+              </div>
+            </div>
+          )}
+
           {messages.map((m, i) => (
             <div key={i} style={{ display:"flex", justifyContent:m.role==="user"?"flex-end":"flex-start", gap:8, alignItems:"flex-start" }}>
               {m.role==="assistant" && (
-                <div style={{ width:28, height:28, borderRadius:"50%", background:isAdmin ? `linear-gradient(135deg,${C.gold},#F5C842)` : `linear-gradient(135deg,${C.teal},${C.tealLight})`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:13, flexShrink:0, marginTop:2 }}>{isAdmin ? "🔓" : "🤖"}</div>
+                <div style={{ width:28, height:28, borderRadius:"50%", background:isAdminMode ? `linear-gradient(135deg,${C.gold},#F5C842)` : `linear-gradient(135deg,${hdrColor},${hdrColor}CC)`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:13, flexShrink:0, marginTop:2 }}>{cfg.icon}</div>
               )}
               <div style={{
                 maxWidth:"80%", padding:"11px 14px", borderRadius: m.role==="user" ? "16px 4px 16px 16px" : "4px 16px 16px 16px",
@@ -156,15 +371,15 @@ export function AIChatBot({ onClose, isAdmin = false }) {
           ))}
           {loading && (
             <div style={{ display:"flex", gap:8, alignItems:"center" }}>
-              <div style={{ width:28, height:28, borderRadius:"50%", background:isAdmin ? `linear-gradient(135deg,${C.gold},#F5C842)` : `linear-gradient(135deg,${C.teal},${C.tealLight})`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:13 }}>{isAdmin ? "🔓" : "🤖"}</div>
+              <div style={{ width:28, height:28, borderRadius:"50%", background:isAdminMode ? `linear-gradient(135deg,${C.gold},#F5C842)` : `linear-gradient(135deg,${hdrColor},${hdrColor}CC)`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:13 }}>{cfg.icon}</div>
               <div style={{ padding:"11px 16px", background:"rgba(255,255,255,0.06)", borderRadius:"4px 16px 16px 16px", border:"1px solid rgba(255,255,255,0.08)" }}>
                 <span style={{ color:"rgba(244,241,235,0.5)", fontSize:13 }}>···</span>
               </div>
             </div>
           )}
 
-          {/* 공개 모드 인라인 상담 유도 CTA */}
-          {!isAdmin && showCTA && (
+          {/* 상담 유도 CTA */}
+          {!isAdminMode && showCTA && (
             <div style={{ padding:"14px 16px", background:"rgba(201,168,76,0.1)", border:"1px solid rgba(201,168,76,0.3)", borderRadius:12, marginTop:4 }}>
               <div style={{ fontSize:12, fontWeight:800, color:C.gold, marginBottom:5 }}>💡 더 정확한 답변이 필요하신가요?</div>
               <div style={{ fontSize:11, color:"rgba(244,241,235,0.6)", lineHeight:1.65, marginBottom:10 }}>
@@ -173,7 +388,6 @@ export function AIChatBot({ onClose, isAdmin = false }) {
               <button
                 onClick={() => {
                   onClose();
-                  // 기업상담 탭으로 이동하는 이벤트 발생 (App에서 잡음)
                   window.dispatchEvent(new CustomEvent("hwayul-goto", { detail:"biz" }));
                 }}
                 style={{ width:"100%", padding:"10px", borderRadius:8, background:C.gold, border:"none", color:C.navy, fontWeight:800, fontSize:12, cursor:"pointer", fontFamily:"inherit" }}
@@ -189,16 +403,16 @@ export function AIChatBot({ onClose, isAdmin = false }) {
         {/* 빠른 질문 */}
         {messages.length <= 1 && (
           <div style={{ padding:"0 16px 8px", display:"flex", flexWrap:"wrap", gap:6 }}>
-            {quickQ.map(q => (
-              <button key={q} onClick={() => { setInput(q); setTimeout(send, 50); }} style={{ padding:"6px 11px", borderRadius:100, background:isAdmin ? "rgba(201,168,76,0.12)" : "rgba(13,115,119,0.15)", border:`1px solid ${isAdmin ? "rgba(201,168,76,0.3)" : "rgba(13,115,119,0.35)"}`, color:isAdmin ? C.gold : C.tealLight, fontSize:11, fontWeight:600, cursor:"pointer", fontFamily:"inherit" }}>{q}</button>
+            {cfg.quickQ.map(q => (
+              <button key={q} onClick={() => { setInput(q); setTimeout(send, 50); }} style={{ padding:"6px 11px", borderRadius:100, background:isAdminMode ? "rgba(201,168,76,0.12)" : `${hdrColor}20`, border:`1px solid ${isAdminMode ? "rgba(201,168,76,0.3)" : `${hdrColor}55`}`, color:isAdminMode ? C.gold : C.cream, fontSize:11, fontWeight:600, cursor:"pointer", fontFamily:"inherit" }}>{q}</button>
             ))}
           </div>
         )}
 
         {/* 입력창 */}
         <div style={{ padding:"10px 16px 16px", borderTop:"1px solid rgba(255,255,255,0.06)", display:"flex", gap:8, flexShrink:0 }}>
-          <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => { if(e.key==="Enter" && !e.shiftKey) { e.preventDefault(); send(); } }} placeholder={isAdmin ? "실무 질문을 입력하세요..." : "질문을 입력하세요..."} style={{ flex:1, padding:"10px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.1)", background:"rgba(255,255,255,0.05)", color:C.cream, fontSize:13, fontFamily:"inherit", outline:"none" }} />
-          <button onClick={send} disabled={!input.trim()||loading} style={{ width:40, height:40, borderRadius:10, background:input.trim()&&!loading ? (isAdmin ? C.gold : C.teal) : "rgba(255,255,255,0.08)", border:"none", color: isAdmin && input.trim() && !loading ? C.navy : "white", cursor:input.trim()&&!loading?"pointer":"not-allowed", fontSize:16, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>➤</button>
+          <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => { if(e.key==="Enter" && !e.shiftKey) { e.preventDefault(); send(); } }} placeholder={isAdminMode ? "실무 질문을 입력하세요..." : "질문을 입력하세요..."} style={{ flex:1, padding:"10px 14px", borderRadius:10, border:"1px solid rgba(255,255,255,0.1)", background:"rgba(255,255,255,0.05)", color:C.cream, fontSize:13, fontFamily:"inherit", outline:"none" }} />
+          <button onClick={send} disabled={!input.trim()||loading} style={{ width:40, height:40, borderRadius:10, background:input.trim()&&!loading ? (isAdminMode ? C.gold : hdrColor) : "rgba(255,255,255,0.08)", border:"none", color: isAdminMode && input.trim() && !loading ? C.navy : "white", cursor:input.trim()&&!loading?"pointer":"not-allowed", fontSize:16, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>➤</button>
         </div>
       </div>
     </div>
