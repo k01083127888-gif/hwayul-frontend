@@ -64,7 +64,7 @@ export function ReportSection() {
           <div style={{ textAlign:"center", background:"white", borderRadius:16, padding:56, boxShadow:"0 6px 32px rgba(10,22,40,0.08)" }}>
             <div style={{ fontSize:52, marginBottom:18 }}>✅</div>
             <h3 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"1.4rem", fontWeight:800, color:C.navy, marginBottom:10 }}>제보가 접수되었습니다</h3>
-            <p style={{ color:C.gray, lineHeight:1.8, marginBottom:28 }}>담당 노무사가 영업일 기준 2일 이내 검토 후<br/>익명 채널로 안내드립니다.</p>
+            <p style={{ color:C.gray, lineHeight:1.8, marginBottom:28 }}>담당 노무사가 영업일 기준 7일 이내 검토 후<br/>익명 채널로 안내드립니다.</p>
             <button onClick={() => { setForm({ type:"", content:"", org:"", date:"", email:"" }); setDone(false); }} style={{ padding:"12px 30px", borderRadius:8, border:`2px solid ${C.navy}`, background:"transparent", color:C.navy, fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>새 제보 작성</button>
           </div>
         )}
