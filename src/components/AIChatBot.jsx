@@ -1,7 +1,35 @@
 import { useState, useEffect, useRef } from "react";
 import C from "../tokens/colors.js";
 
+const STORAGE_KEY = "hwayul-chat-session";
+
+function loadSession() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const s = JSON.parse(raw);
+    if (s && s.role && Array.isArray(s.messages) && s.messages.length > 1) return s;
+  } catch {}
+  return null;
+}
+
+function saveSession(role, messages, replyCount) {
+  try {
+    if (role && messages.length > 0) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ role, messages, replyCount, savedAt: Date.now() }));
+    }
+  } catch {}
+}
+
+function clearSession() {
+  try { localStorage.removeItem(STORAGE_KEY); } catch {}
+}
+
 export function AIChatBot({ onClose, isAdmin = false }) {
+  // ── 이전 대화 복원 여부 ──
+  const savedSession = useRef(isAdmin ? null : loadSession());
+  const [showResumeScreen, setShowResumeScreen] = useState(!isAdmin && !!savedSession.current);
+
   // ── 역할 선택 상태 ──
   const [role, setRole] = useState(isAdmin ? "admin" : null);  // null이면 역할 선택 화면
   const [messages, setMessages] = useState([]);
@@ -16,6 +44,13 @@ export function AIChatBot({ onClose, isAdmin = false }) {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior:"smooth" });
   }, [messages, loading]);
+
+  // ── 대화 변경 시 localStorage 저장 ──
+  useEffect(() => {
+    if (role && role !== "admin" && messages.length > 1) {
+      saveSession(role, messages, replyCount);
+    }
+  }, [messages, role, replyCount]);
 
   // ── 역할별 설정 ──
   const roleConfig = {
@@ -203,17 +238,40 @@ export function AIChatBot({ onClose, isAdmin = false }) {
   const selectRole = (r) => {
     if (r === "accused") setShowDisclaimer(true);
     setRole(r);
+    setShowResumeScreen(false);
     const cfg = roleConfig[r];
     setMessages([{ role: "assistant", text: cfg.welcomeMsg }]);
   };
 
+  // ── 이전 대화 이어하기 ──
+  const resumeSession = () => {
+    const s = savedSession.current;
+    if (s) {
+      setRole(s.role);
+      setMessages(s.messages);
+      setReplyCount(s.replyCount || 0);
+      if (s.role === "accused") setShowDisclaimer(true);
+      if (s.replyCount >= 3) setShowCTA(true);
+    }
+    setShowResumeScreen(false);
+  };
+
+  // ── 새 대화 시작 ──
+  const startNewSession = () => {
+    clearSession();
+    savedSession.current = null;
+    setShowResumeScreen(false);
+  };
+
   // ── 뒤로가기 (역할 재선택) ──
   const goBack = () => {
+    clearSession();
     setRole(null);
     setMessages([]);
     setReplyCount(0);
     setShowCTA(false);
     setShowDisclaimer(false);
+    setShowResumeScreen(false);
   };
 
   // ── 메시지 전송 ──
@@ -252,6 +310,83 @@ export function AIChatBot({ onClose, isAdmin = false }) {
   const cfg = role ? roleConfig[role] : null;
   const hdrColor = cfg?.headerColor || C.teal;
   const isAdminMode = role === "admin";
+
+  // ══════════════════════════════════════════════════════════════
+  // 이전 대화 복원 화면
+  // ══════════════════════════════════════════════════════════════
+  if (showResumeScreen && savedSession.current) {
+    const s = savedSession.current;
+    const sCfg = roleConfig[s.role];
+    const msgCount = s.messages.filter(m => m.role === "user").length;
+    const timeAgo = (() => {
+      const diff = Date.now() - (s.savedAt || 0);
+      const min = Math.floor(diff / 60000);
+      if (min < 1) return "방금 전";
+      if (min < 60) return `${min}분 전`;
+      const hr = Math.floor(min / 60);
+      if (hr < 24) return `${hr}시간 전`;
+      return `${Math.floor(hr / 24)}일 전`;
+    })();
+
+    return (
+      <div style={{ position:"fixed", inset:0, zIndex:10100, display:"flex", alignItems:"flex-end", justifyContent:"flex-end", padding:"0 24px 24px", pointerEvents:"none" }}>
+        <div style={{ width:"min(400px, calc(100vw - 32px))", maxHeight:"90vh", background:C.navy, borderRadius:20, boxShadow:"0 24px 80px rgba(10,22,40,0.6)", border:"2px solid rgba(13,115,119,0.35)", display:"flex", flexDirection:"column", pointerEvents:"all", overflow:"hidden" }}>
+          {/* 헤더 */}
+          <div style={{ padding:"16px 20px", background:`linear-gradient(135deg, ${C.navyMid}, ${C.navy})`, borderBottom:"1px solid rgba(201,168,76,0.15)", display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0 }}>
+            <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+              <div style={{ width:36, height:36, borderRadius:"50%", background:`linear-gradient(135deg, ${C.teal}, ${C.tealLight})`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:18 }}>🤖</div>
+              <div>
+                <div style={{ fontSize:14, fontWeight:800, color:C.cream }}>AI 상담 도우미</div>
+                <div style={{ display:"flex", alignItems:"center", gap:5, marginTop:2 }}>
+                  <div style={{ width:6, height:6, borderRadius:"50%", background:C.green }} />
+                  <span style={{ fontSize:10, color:"rgba(244,241,235,0.5)" }}>온라인 · 즉시 응답</span>
+                </div>
+              </div>
+            </div>
+            <button onClick={onClose} style={{ background:"rgba(255,255,255,0.08)", border:"none", width:30, height:30, borderRadius:"50%", cursor:"pointer", color:"rgba(244,241,235,0.6)", fontSize:16, display:"flex", alignItems:"center", justifyContent:"center" }}>✕</button>
+          </div>
+
+          {/* 복원 선택 */}
+          <div style={{ padding:"24px 20px", flex:1 }}>
+            <div style={{ fontSize:15, fontWeight:800, color:C.cream, marginBottom:20 }}>이전 대화가 있습니다</div>
+
+            {/* 이전 대화 요약 카드 */}
+            <div style={{ padding:"14px 16px", background:"rgba(13,115,119,0.08)", border:"1.5px solid rgba(13,115,119,0.3)", borderRadius:12, marginBottom:12 }}>
+              <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:8 }}>
+                <span style={{ fontSize:18 }}>{sCfg?.icon}</span>
+                <span style={{ fontSize:13, fontWeight:700, color:C.cream }}>{sCfg?.label}</span>
+                <span style={{ fontSize:10, color:"rgba(244,241,235,0.4)", marginLeft:"auto" }}>{timeAgo}</span>
+              </div>
+              <div style={{ fontSize:11, color:"rgba(244,241,235,0.5)", lineHeight:1.6 }}>
+                질문 {msgCount}개 · 대화 {s.messages.length}개 메시지
+              </div>
+            </div>
+
+            <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+              <button onClick={resumeSession} style={{
+                padding:"14px 16px", borderRadius:12, background:"rgba(13,115,119,0.15)", border:"1.5px solid rgba(13,115,119,0.4)",
+                cursor:"pointer", fontFamily:"inherit", fontSize:13, fontWeight:700, color:C.tealLight, textAlign:"center", transition:"all 0.2s",
+              }}
+                onMouseEnter={e => { e.currentTarget.style.background = "rgba(13,115,119,0.25)"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = "rgba(13,115,119,0.15)"; }}
+              >
+                💬 이전 대화 이어하기
+              </button>
+              <button onClick={startNewSession} style={{
+                padding:"14px 16px", borderRadius:12, background:"rgba(201,168,76,0.08)", border:"1.5px solid rgba(201,168,76,0.3)",
+                cursor:"pointer", fontFamily:"inherit", fontSize:13, fontWeight:700, color:C.gold, textAlign:"center", transition:"all 0.2s",
+              }}
+                onMouseEnter={e => { e.currentTarget.style.background = "rgba(201,168,76,0.15)"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = "rgba(201,168,76,0.08)"; }}
+              >
+                ✨ 새 대화 시작
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // ══════════════════════════════════════════════════════════════
   // 역할 선택 화면 (role === null)
