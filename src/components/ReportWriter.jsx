@@ -52,12 +52,12 @@ ${resultSummary || "(결과 데이터 없음)"}
 [작성 지침]
 반드시 아래 6개 섹션으로 구분하여 작성하세요. 각 섹션은 최소 150자 이상으로 구체적이고 실무적으로 작성합니다.
 
-1. 종합 소견 — 진단 결과의 전체적 의미와 위험 수준 평가
+1. 종합 소견 — ${r.type==="checklist"?"괴롭힘 행위의 심각성, 법적 성립 가능성, 피해자 현재 상태 종합 평가":"조직문화 건강도 수준, 괴롭힘 발생 위험도, 조직 전반의 취약 영역 종합 평가"}
 2. 심층 분석 — ${r.type==="checklist"?"근로기준법 제76조의2, 제76조의3 등 관련 법령 기반 구체적 분석 (법 조항 번호 포함)":"직장내 괴롭힘 예방 의무(근로기준법 제76조의2) 기반 조직문화 위험 요인 분석"}
 3. 핵심 리스크 — ${r.type==="checklist"?"법적 성립 가능성, 증거 부족 위험, 2차 피해 가능성 등":"괴롭힘 발생 가능성, 신고 체계 미비, 관리자 인식 부족 등"} 구체적 리스크 항목
-4. 대응 권고 — 우선순위별 구체적 실행 과제 (즉시/단기/중기, 누가 무엇을 언제까지)
+4. 대응 권고 — ${r.type==="checklist"?"피해자 보호 조치, 신고 절차, 법적 대응 방안을 우선순위별로 (즉시/단기/중기)":"조직 개선 과제, 제도 정비, 교육 계획을 우선순위별로 (즉시/단기/중기, 담당 부서와 기한 포함)"}
 5. ${r.type==="checklist"?"증거 수집·보전 가이드 — 피해 입증을 위한 증거 수집 방법, 보관 요령, 유의사항":"맞춤 교육·예방 프로그램 — 진단 결과에 따른 교육 대상, 프로그램 내용, 실시 시기 추천"}
-6. 결론 — 종합 평가, 향후 재진단 또는 추가 조치 권고
+6. 결론 — ${r.type==="checklist"?"종합 평가, 피해자에게 가장 시급한 조치, 향후 법적 절차 안내":"종합 평가, 조직문화 개선 로드맵, 재진단 권고 시기"}
 
 각 섹션을 ===구분자=== 로 구분하세요. 순서: 종합소견===심층분석===핵심리스크===대응권고===${r.type==="checklist"?"증거가이드":"교육추천"}===결론`;
 
@@ -260,12 +260,12 @@ h2{color:#0D7377;margin-top:32px;font-size:16px;border-left:4px solid #C9A84C;pa
 
       {/* 6개 섹션 입력 */}
       <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
-        <div><label style={lbl}>1. 종합 소견</label><textarea value={report.summary} onChange={R("summary")} rows={4} style={txArea} placeholder="진단 결과의 전체적 의미와 위험 수준 평가..." /></div>
-        <div><label style={lbl}>2. 심층 분석 ({r.type==="checklist"?"근로기준법 기반":"조직문화 위험 요인"})</label><textarea value={report.analysis} onChange={R("analysis")} rows={5} style={txArea} placeholder="구체적 문제점, 관련 법 조항, 위반 가능성..." /></div>
+        <div><label style={lbl}>1. 종합 소견</label><textarea value={report.summary} onChange={R("summary")} rows={4} style={txArea} placeholder={r.type==="checklist"?"괴롭힘 행위의 심각성, 법적 성립 가능성, 피해자 상태 평가...":"조직문화 건강도, 괴롭힘 발생 위험도, 취약 영역 평가..."} /></div>
+        <div><label style={lbl}>2. 심층 분석 ({r.type==="checklist"?"근로기준법 기반":"조직문화 위험 요인"})</label><textarea value={report.analysis} onChange={R("analysis")} rows={5} style={txArea} placeholder={r.type==="checklist"?"근로기준법 제76조의2·3 기반 법적 분석, 행위유형별 위반 가능성...":"리더십·소통·신고체계 등 영역별 위험 요인, 구조적 문제점..."} /></div>
         <div><label style={lbl}>3. 핵심 리스크</label><textarea value={report.risks} onChange={R("risks")} rows={4} style={txArea} placeholder={r.type==="checklist"?"법적 성립 가능성, 증거 부족 위험, 2차 피해 가능성...":"괴롭힘 발생 가능성, 신고 체계 미비, 관리자 인식 부족..."} /></div>
-        <div><label style={lbl}>4. 대응 권고 (우선순위별)</label><textarea value={report.recommendations} onChange={R("recommendations")} rows={5} style={txArea} placeholder="누가, 무엇을, 언제까지 해야 하는지..." /></div>
+        <div><label style={lbl}>4. 대응 권고 ({r.type==="checklist"?"피해자 보호·법적 대응":"조직 개선·제도 정비"})</label><textarea value={report.recommendations} onChange={R("recommendations")} rows={5} style={txArea} placeholder={r.type==="checklist"?"피해자 보호 조치, 신고 절차, 법적 대응 방안 (즉시/단기/중기)...":"조직 개선 과제, 제도 정비, 교육 계획 (즉시/단기/중기)..."} /></div>
         <div><label style={lbl}>5. {r.type==="checklist"?"증거 수집·보전 가이드":"맞춤 교육·예방 프로그램"}</label><textarea value={report.section5} onChange={R("section5")} rows={3} style={txArea} placeholder={r.type==="checklist"?"피해 입증을 위한 증거 수집 방법, 보관 요령...":"교육 대상, 프로그램 내용, 실시 시기 추천..."} /></div>
-        <div><label style={lbl}>6. 결론</label><textarea value={report.conclusion} onChange={R("conclusion")} rows={3} style={txArea} placeholder="종합 평가, 재진단 권고 시기..." /></div>
+        <div><label style={lbl}>6. 결론</label><textarea value={report.conclusion} onChange={R("conclusion")} rows={3} style={txArea} placeholder={r.type==="checklist"?"종합 평가, 시급한 조치, 향후 법적 절차 안내...":"종합 평가, 조직문화 개선 로드맵, 재진단 권고 시기..."} /></div>
       </div>
     </div></div>
   );
