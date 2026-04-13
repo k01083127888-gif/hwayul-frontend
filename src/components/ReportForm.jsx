@@ -9,8 +9,13 @@ import { PrivacyPolicyModal } from "./common/PrivacyPolicyModal.jsx";
 // ── 리포트 받기 공통 컴포넌트 ────────────────────────────────────────────────
 export function ReportForm({ type, resultData, dark = false, resultHtml = "", getResultHtml = null }) {
   // type: "checklist" | "culture"
-  const [form, setForm] = useState({ email:"", name:"", phone:"", userType:"individual", orgName:"", orgSize:"", position:"", consent:false, marketing:false, detail:"" });
-  const [submitted, setSubmitted] = useState(false);
+  const storageKey = `reportSubmitted_${type}`;
+  const savedData = sessionStorage.getItem(storageKey);
+  const [form, setForm] = useState(() => {
+    if (savedData) { try { return JSON.parse(savedData).form; } catch { /* ignore */ } }
+    return { email:"", name:"", phone:"", userType:"individual", orgName:"", orgSize:"", position:"", consent:false, marketing:false, detail:"" };
+  });
+  const [submitted, setSubmitted] = useState(!!savedData);
   const [errors, setErrors] = useState({});
   const [showPrivacy, setShowPrivacy] = useState(false);
   const F = k => e => setForm(f => ({ ...f, [k]: typeof e === "string" ? e : e.target.value }));
@@ -43,6 +48,7 @@ export function ReportForm({ type, resultData, dark = false, resultHtml = "", ge
     addSubmission("resultEmails", { ...payload, status: "발송완료" });
     // 노무사 검토 요청 접수 (관리자 패널에서 검토 후 의견서 발송)
     addSubmission("reviewRequests", { ...payload, status: "신규" });
+    sessionStorage.setItem(storageKey, JSON.stringify({ form }));
     setSubmitted(true);
   };
 
