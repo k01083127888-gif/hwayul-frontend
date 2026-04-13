@@ -21,7 +21,7 @@ export function HeroSection({ setActive }) {
       <div className="hero-bg-satellite" style={{ position:"absolute", inset:0, backgroundImage:"url('/seoul-satellite.jpg')", backgroundSize:"cover", backgroundPosition:"center 75%", opacity:0.45 }} />
       <style>{`
         @media (max-width: 768px) {
-          .hero-bg-satellite { background-position: 30% 70% !important; }
+          .hero-bg-satellite { background-position: 60% 85% !important; }
         }
       `}</style>
       {/* 그라데이션 오버레이 */}
