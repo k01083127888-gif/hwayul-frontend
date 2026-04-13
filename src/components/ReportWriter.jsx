@@ -59,7 +59,15 @@ ${resultSummary || "(결과 데이터 없음)"}
 5. ${r.type==="checklist"?"증거 수집·보전 가이드 — 피해 입증을 위한 증거 수집 방법, 보관 요령, 유의사항":"맞춤 교육·예방 프로그램 — 진단 결과에 따른 교육 대상, 프로그램 내용, 실시 시기 추천"}
 6. 결론 — ${r.type==="checklist"?"종합 평가, 피해자에게 가장 시급한 조치, 향후 법적 절차 안내":"종합 평가, 조직문화 개선 로드맵, 재진단 권고 시기"}
 
-각 섹션을 ===구분자=== 로 구분하세요. 순서: 종합소견===심층분석===핵심리스크===대응권고===${r.type==="checklist"?"증거가이드":"교육추천"}===결론`;
+각 섹션을 아래와 같이 정확히 구분하세요:
+[섹션1] 종합 소견 내용
+[섹션2] 심층 분석 내용
+[섹션3] 핵심 리스크 내용
+[섹션4] 대응 권고 내용
+[섹션5] ${r.type==="checklist"?"증거 수집·보전 가이드":"맞춤 교육·예방 프로그램"} 내용
+[섹션6] 결론 내용
+
+반드시 [섹션1] ~ [섹션6] 태그로 시작하세요. 태그 외에 제목이나 번호를 붙이지 마세요.`;
 
       const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/claude", {
         method:"POST",
@@ -70,10 +78,10 @@ ${resultSummary || "(결과 데이터 없음)"}
       const json = await res.json();
       if (json.error) throw new Error(json.error.message);
       const text = json.content?.[0]?.text || "";
-      const parts = text.split("===").map(s => s.trim()).filter(Boolean);
+      const extract = (n) => { const m = text.match(new RegExp(`\\[섹션${n}\\]\\s*([\\s\\S]*?)(?=\\[섹션${n+1}\\]|$)`)); return m ? m[1].trim() : ""; };
       setReport({
-        summary: parts[0] || "", analysis: parts[1] || "", risks: parts[2] || "",
-        recommendations: parts[3] || "", section5: parts[4] || "", conclusion: parts[5] || ""
+        summary: extract(1), analysis: extract(2), risks: extract(3),
+        recommendations: extract(4), section5: extract(5), conclusion: extract(6)
       });
     } catch (err) {
       setAiError("AI 생성 오류: " + err.message);
