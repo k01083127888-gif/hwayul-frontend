@@ -17,6 +17,10 @@ export function HeroSection({ setActive }) {
       display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center",
       textAlign:"center", padding:"120px 32px 80px", position:"relative", overflow:"hidden",
     }}>
+      {/* 서울 도심 배경 이미지 */}
+      <div style={{ position:"absolute", inset:0, backgroundImage:"url('/seoul-skyline.jpg')", backgroundSize:"cover", backgroundPosition:"center 40%", opacity:0.18 }} />
+      {/* 그라데이션 오버레이 */}
+      <div style={{ position:"absolute", inset:0, background:`linear-gradient(180deg, ${C.navy}CC 0%, ${C.navy}88 40%, ${C.navy}DD 100%)` }} />
       <div style={{ position:"absolute", top:"12%", right:"6%", width:440, height:440, background:`radial-gradient(circle, rgba(13,115,119,0.13) 0%, transparent 70%)`, borderRadius:"50%" }} />
       <div style={{ position:"absolute", bottom:"8%", left:"4%", width:320, height:320, background:`radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%)`, borderRadius:"50%" }} />
       <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize:"48px 48px" }} />
