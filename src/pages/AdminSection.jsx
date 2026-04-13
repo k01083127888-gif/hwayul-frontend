@@ -756,6 +756,9 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                       {em.greeting && <div style={{ fontSize:13, color:"#5A4A30", lineHeight:1.75, marginBottom:12, paddingBottom:12, borderBottom:"1px solid rgba(10,22,40,0.06)", whiteSpace:"pre-wrap" }}>{em.greeting}</div>}
                       <div style={{ fontSize:13, color:C.navy, lineHeight:1.85, whiteSpace:"pre-wrap", marginBottom:em.closing?12:0 }}>{em.body}</div>
                       {em.closing && <div style={{ fontSize:12, color:C.gray, lineHeight:1.75, paddingTop:12, borderTop:"1px solid rgba(10,22,40,0.06)", whiteSpace:"pre-wrap" }}>{em.closing}</div>}
+                      {em.report_html && <div style={{ marginTop:12, paddingTop:12, borderTop:"1px solid rgba(10,22,40,0.06)" }}>
+                        <button onClick={() => setViewResultHtml(em.report_html)} style={{ padding:"6px 14px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit" }}>📋 검토 리포트 보기</button>
+                      </div>}
                     </div>
                   </div>
                 ))

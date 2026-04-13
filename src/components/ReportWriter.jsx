@@ -174,7 +174,8 @@ h2{color:#0D7377;margin-top:32px;font-size:16px;border-left:4px solid #C9A84C;pa
             email_type_label: "노무사 검토 리포트 발송",
             greeting: emailBody || `${r.name||""} 님 안녕하세요, 화율인사이드입니다.`,
             body: "검토 리포트 첨부 발송",
-            closing: "감사합니다. 화율인사이드 대표 노무사 김재정"
+            closing: "감사합니다. 화율인사이드 대표 노무사 김재정",
+            report_html: buildReportHtml()
           })
         });
       } catch(e) { console.error("이메일 저장 실패:", e); }
