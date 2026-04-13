@@ -54,12 +54,7 @@ export function NewFeaturesHub({ isAdmin }) {
                 <div style={{ width:44, height:44, borderRadius:"50%", background:f.color, boxShadow:"0 4px 16px rgba(10,22,40,0.25)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:20 }}>{f.icon}</div>
               </div>
             ))}
-            {/* 관리자 미로그인 시 잠긴 기능 안내 */}
-            {!isAdmin && (
-              <div style={{ padding:"8px 14px", borderRadius:100, background:"rgba(10,22,40,0.75)", border:"1px solid rgba(201,168,76,0.2)", fontSize:11, color:"rgba(244,241,235,0.45)", whiteSpace:"nowrap", display:"flex", alignItems:"center", gap:6, animation:`slideUp 0.2s ease ${publicFeatures.length*0.05}s both` }}>
-                🔒 <span>증거 수집·타임라인은 관리자 전용</span>
-              </div>
-            )}
+            {/* 관리자 전용 안내 제거 — 게스트에게 노출되면 안 됨 */}
             <style>{`@keyframes slideUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }`}</style>
           </>
         )}
