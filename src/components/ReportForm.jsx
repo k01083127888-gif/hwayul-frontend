@@ -63,6 +63,11 @@ export function ReportForm({ type, resultData, dark = false, resultHtml = "", ge
           결제 확인 후 전문 노무사가 진단 결과를 검토하여<br/>
           <strong style={{ color:dark?C.gold:"#A0720A" }}>맞춤형 검토 의견서를 영업일 2일 이내 이메일로 보내드립니다.</strong>
         </p>
+        <div style={{ padding:"12px 18px", background:dark?"rgba(201,168,76,0.08)":"rgba(13,115,119,0.06)", border:`1px solid ${dark?"rgba(201,168,76,0.25)":"rgba(13,115,119,0.2)"}`, borderRadius:10, marginBottom:12, lineHeight:1.8 }}>
+          <div style={{ fontSize:12, fontWeight:700, color:dark?C.gold:C.teal, marginBottom:4 }}>💳 입금 계좌 안내</div>
+          <div style={{ fontSize:13, fontWeight:800, color:dark?C.cream:C.navy }}>하나은행 824-910010-97104</div>
+          <div style={{ fontSize:12, color:dark?"rgba(244,241,235,0.6)":"#5A4A30" }}>예금주: 화율랩스</div>
+        </div>
         <div style={{ padding:"10px 14px", background:dark?"rgba(255,255,255,0.04)":"rgba(10,22,40,0.03)", borderRadius:8, fontSize:11, color:dark?"rgba(244,241,235,0.4)":C.gray, lineHeight:1.7 }}>
           긴급한 사항은 <strong>02-2088-1767</strong>로 연락 주세요.<br/>
           평일 09:00~18:00 운영
