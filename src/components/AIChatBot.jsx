@@ -115,7 +115,7 @@ export function AIChatBot({ onClose, isAdmin = false }) {
 - 특정 사건의 괴롭힘 성립 여부를 단정하지 않는다
 - 승소 가능성, 보상 금액, 구체적 전략은 언급하지 않는다
 - 3번째 답변부터는 반드시 마지막에 다음 문구를 추가한다:
-  "💡 구체적인 사건 검토와 대응 전략은 전문 노무사 상담이 필요합니다. 화율인사이드에서 무료 전화상담을 예약하실 수 있습니다."
+  "💡 구체적인 사건 검토와 대응 전략은 전문 노무사 상담이 필요합니다. 화율인사이드에서 무료 이메일 문의를 하실 수 있습니다."
 
 답변 원칙:
 - 200자 이내로 간결하게
@@ -146,7 +146,7 @@ export function AIChatBot({ onClose, isAdmin = false }) {
 - 피해자를 비난하거나 폄하하는 방향으로 조언하지 않는다
 - 증거 인멸이나 회유를 암시하는 조언은 절대 하지 않는다
 - 특정 사건의 결과를 단정하지 않는다
-- 3번째 답변부터는 마지막에: "💡 구체적인 사건 검토는 전문 노무사 상담이 필요합니다. 화율인사이드에서 무료 전화상담을 예약하실 수 있습니다."
+- 3번째 답변부터는 마지막에: "💡 구체적인 사건 검토는 전문 노무사 상담이 필요합니다. 화율인사이드에서 무료 이메일 문의를 하실 수 있습니다."
 
 답변 원칙:
 - 200자 이내로 간결하게
@@ -202,7 +202,7 @@ export function AIChatBot({ onClose, isAdmin = false }) {
 
 엄격한 제한사항:
 - 특정 사건의 괴롭힘 성립 여부를 단정하지 않는다
-- 3번째 답변부터는 마지막에: "💡 구체적인 사건 검토는 전문 노무사 상담이 필요합니다. 화율인사이드에서 무료 전화상담을 예약하실 수 있습니다."
+- 3번째 답변부터는 마지막에: "💡 구체적인 사건 검토는 전문 노무사 상담이 필요합니다. 화율인사이드에서 무료 이메일 문의를 하실 수 있습니다."
 
 답변 원칙:
 - 200자 이내로 간결하게
@@ -518,7 +518,7 @@ export function AIChatBot({ onClose, isAdmin = false }) {
             <div style={{ padding:"14px 16px", background:"rgba(201,168,76,0.1)", border:"1px solid rgba(201,168,76,0.3)", borderRadius:12, marginTop:4 }}>
               <div style={{ fontSize:12, fontWeight:800, color:C.gold, marginBottom:5 }}>💡 더 정확한 답변이 필요하신가요?</div>
               <div style={{ fontSize:11, color:"rgba(244,241,235,0.6)", lineHeight:1.65, marginBottom:10 }}>
-                구체적인 사건 검토와 법적 전략은 AI로는 한계가 있습니다.<br/>전문 노무사와 무료 전화상담으로 정확한 방향을 확인하세요.
+                구체적인 사건 검토와 법적 전략은 AI로는 한계가 있습니다.<br/>전문 노무사의 심층 상담(22만원 · 3단계 패키지)으로 정확한 방향을 확인하세요.
               </div>
               <button
                 onClick={() => {
@@ -527,7 +527,7 @@ export function AIChatBot({ onClose, isAdmin = false }) {
                 }}
                 style={{ width:"100%", padding:"10px", borderRadius:8, background:C.gold, border:"none", color:C.navy, fontWeight:800, fontSize:12, cursor:"pointer", fontFamily:"inherit" }}
               >
-                📅 무료 전화상담 예약하기 →
+                💼 심층 상담 신청하기 →
               </button>
             </div>
           )}
