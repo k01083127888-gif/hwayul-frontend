@@ -9,7 +9,7 @@ export const TABS = [
   { id:"checklist",label:"진단" },
   { id:"culture", label:"조직문화" },
   { id:"report",  label:"익명 제보" },
-  { id:"biz",     label:"기업상담" },
+  { id:"biz",     label:"심층상담" },
   { id:"relief",  label:"해결 의뢰" },
 ];
 

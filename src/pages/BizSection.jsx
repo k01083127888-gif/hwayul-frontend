@@ -43,9 +43,14 @@ export function BizSection() {
   if (done) return (
     <section style={{ padding:"80px 32px", background:C.navyMid, minHeight:"100vh", display:"flex", alignItems:"center" }}>
       <div style={{ maxWidth:600, margin:"0 auto", textAlign:"center" }}>
-        <div style={{ fontSize:56, marginBottom:20 }}>🏢✅</div>
-        <h3 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"1.5rem", fontWeight:800, color:C.cream, marginBottom:12 }}>기업 상담 신청이 완료되었습니다</h3>
+        <div style={{ fontSize:56, marginBottom:20 }}>💼✅</div>
+        <h3 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"1.5rem", fontWeight:800, color:C.cream, marginBottom:12 }}>심층 상담 신청이 완료되었습니다</h3>
         <p style={{ color:"rgba(244,241,235,0.6)", lineHeight:1.8, marginBottom:28 }}>입력하신 연락처로 영업일 1일 이내 담당 노무사가 연락드립니다.<br/>확인 이메일이 발송되었습니다.</p>
+        <div style={{ padding:"14px 18px", background:"rgba(201,168,76,0.1)", border:"1px solid rgba(201,168,76,0.28)", borderRadius:10, marginBottom:22, lineHeight:1.8, textAlign:"left" }}>
+          <div style={{ fontSize:12, fontWeight:700, color:C.gold, marginBottom:4 }}>💳 입금 계좌 안내 (VAT 포함 22만원)</div>
+          <div style={{ fontSize:13, fontWeight:800, color:C.cream }}>하나은행 824-910010-97104</div>
+          <div style={{ fontSize:12, color:"rgba(244,241,235,0.6)" }}>예금주: 화율랩스 · 입금 확인 후 1차 전화 상담 예약</div>
+        </div>
         <div style={{ padding:"18px 24px", background:"rgba(201,168,76,0.1)", border:"1px solid rgba(201,168,76,0.25)", borderRadius:10, marginBottom:28 }}>
           <div style={{ fontSize:13, color:C.gold, fontWeight:700 }}>신청 정보</div>
           <div style={{ fontSize:13, color:"rgba(244,241,235,0.7)", marginTop:8, lineHeight:1.7 }}>
@@ -60,10 +65,42 @@ export function BizSection() {
   return (
     <section style={{ padding:"80px 32px", background:C.navyMid, minHeight:"100vh" }}>
       <div style={{ maxWidth:820, margin:"0 auto" }}>
-        <div style={{ marginBottom:36, textAlign:"center" }}>
-          <DarkSectionTag>ENTERPRISE CONSULTING</DarkSectionTag>
-          <h2 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"clamp(1.6rem, 3vw, 2.1rem)", fontWeight:800, color:C.cream, marginTop:8, letterSpacing:"-0.5px" }}>기업 상담 예약</h2>
-          <p style={{ color:"rgba(244,241,235,0.55)", marginTop:8, fontSize:14 }}>직장내 괴롭힘 예방·대응 체계 구축을 위한 기업 전용 전문 컨설팅 서비스입니다.</p>
+        <div style={{ marginBottom:28, textAlign:"center" }}>
+          <DarkSectionTag>IN-DEPTH CONSULTATION</DarkSectionTag>
+          <h2 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"clamp(1.6rem, 3vw, 2.1rem)", fontWeight:800, color:C.cream, marginTop:8, letterSpacing:"-0.5px" }}>심층 상담 신청</h2>
+          <p style={{ color:"rgba(244,241,235,0.55)", marginTop:8, fontSize:14 }}>개인·기업 모두 이용 가능. 사안을 깊이 들여다보고 최적 경로를 제안하는 유료 전문 상담입니다.</p>
+        </div>
+
+        {/* 심층 상담 패키지 안내 카드 */}
+        <div style={{ marginBottom:30, padding:"22px 24px", background:"rgba(201,168,76,0.08)", border:"1.5px solid rgba(201,168,76,0.32)", borderRadius:14 }}>
+          <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:14, flexWrap:"wrap" }}>
+            <div style={{ fontSize:11, fontWeight:700, color:C.gold, letterSpacing:"1.5px" }}>심층 상담 패키지</div>
+            <div style={{ display:"inline-flex", alignItems:"baseline", gap:5, padding:"4px 12px", background:"rgba(201,168,76,0.15)", borderRadius:100, border:"1px solid rgba(201,168,76,0.35)" }}>
+              <span style={{ fontSize:16, fontWeight:900, color:C.goldLight }}>22만원</span>
+              <span style={{ fontSize:10, color:"rgba(244,241,235,0.5)" }}>(VAT 포함)</span>
+            </div>
+          </div>
+
+          <div style={{ display:"grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap:12, marginBottom:14 }}>
+            {[
+              { no:"1", icon:"📞", title:"1차 전화 상담", desc:"사안 청취 및 필요 서류 안내 (약 30분)" },
+              { no:"2", icon:"📂", title:"2차 서류 검토", desc:"노무사 직접 검토 (1영업일 소요)" },
+              { no:"3", icon:"🤝", title:"3차 대면 상담", desc:"검토 결과 기반 맞춤 대응 전략 제시" },
+            ].map(p => (
+              <div key={p.no} style={{ padding:"14px 14px", background:"rgba(10,22,40,0.55)", border:"1px solid rgba(201,168,76,0.2)", borderRadius:10 }}>
+                <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
+                  <div style={{ width:22, height:22, borderRadius:"50%", background:C.gold, color:C.navy, fontSize:11, fontWeight:800, display:"flex", alignItems:"center", justifyContent:"center" }}>{p.no}</div>
+                  <span style={{ fontSize:18 }}>{p.icon}</span>
+                  <span style={{ fontSize:13, fontWeight:800, color:C.cream }}>{p.title}</span>
+                </div>
+                <div style={{ fontSize:11, color:"rgba(244,241,235,0.55)", lineHeight:1.6 }}>{p.desc}</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ padding:"10px 14px", background:"rgba(13,115,119,0.15)", border:"1px dashed rgba(20,160,165,0.4)", borderRadius:8, fontSize:12, color:C.tealLight, lineHeight:1.6 }}>
+            💡 <strong>해결 의뢰 전환 시 혜택:</strong> 상담 후 해결 의뢰로 전환하시면 상담료 22만원 전액을 착수금에서 차감해 드립니다.
+          </div>
         </div>
 
         {/* 스텝 */}
