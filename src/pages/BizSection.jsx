@@ -23,13 +23,11 @@ export function BizSection() {
   }, []);
 
   const TIMES = ["09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00"];
-  const TYPES = ["직장내 괴롭힘 예방교육 컨설팅", "사건처리 프로세스 구축", "조직문화 진단 및 개선", "취업규칙·내부규정 정비", "고충처리위원회 운영 지원", "기타 HR 컴플라이언스"];
   const SIZES = ["10인 미만", "10~49인", "50~299인", "300인 이상"];
 
   const validateStep1 = () => {
     const e = {};
     if (!form.name.trim()) e.name = "성명을 입력해 주세요.";
-    if (!form.company.trim()) e.company = "기업명을 입력해 주세요.";
     if (!form.phone.trim()) e.phone = "연락처를 입력해 주세요.";
     else if (!isValidPhone(form.phone)) e.phone = "올바른 전화번호 형식이 아닙니다. (예: 010-1234-5678)";
     if (!form.email.trim()) e.email = "이메일을 입력해 주세요.";
@@ -38,7 +36,7 @@ export function BizSection() {
     setErrors(e);
     return Object.keys(e).length === 0;
   };
-  const infoComplete = form.name && form.company && form.phone && form.email && form.consent;
+  const infoComplete = form.name && form.phone && form.email && form.consent;
 
   if (done) return (
     <section style={{ padding:"80px 32px", background:C.navyMid, minHeight:"100vh", display:"flex", alignItems:"center" }}>
@@ -54,7 +52,7 @@ export function BizSection() {
         <div style={{ padding:"18px 24px", background:"rgba(201,168,76,0.1)", border:"1px solid rgba(201,168,76,0.25)", borderRadius:10, marginBottom:28 }}>
           <div style={{ fontSize:13, color:C.gold, fontWeight:700 }}>신청 정보</div>
           <div style={{ fontSize:13, color:"rgba(244,241,235,0.7)", marginTop:8, lineHeight:1.7 }}>
-            {form.name} 님 ({form.company}) · {form.consultType}{form.date && form.time ? <><br/>{form.date} {form.time}</> : <><br/><span style={{ fontSize:12, color:"rgba(244,241,235,0.45)" }}>일정은 담당 노무사와 별도 조율</span></>}
+            {form.name} 님{form.company ? ` (${form.company})` : ""}{form.date && form.time ? <><br/>{form.date} {form.time}</> : <><br/><span style={{ fontSize:12, color:"rgba(244,241,235,0.45)" }}>일정은 담당 노무사와 별도 조율</span></>}
           </div>
         </div>
         <button onClick={() => { setDone(false); setStep(1); setForm({ name:"", company:"", phone:"", email:"", position:"", size:"", consultType:"", note:"", date:"", time:"" }); }} style={{ padding:"12px 32px", borderRadius:8, border:`2px solid rgba(255,255,255,0.2)`, background:"transparent", color:C.cream, fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>새 예약하기</button>
@@ -105,7 +103,7 @@ export function BizSection() {
 
         {/* 스텝 */}
         <div style={{ display:"flex", justifyContent:"center", gap:0, marginBottom:36 }}>
-          {["담당자 정보", "상담 유형", "일정 선택 (선택)"].map((s, i) => (
+          {["신청자 정보", "상담 내용", "일정 선택 (선택)"].map((s, i) => (
             <div key={i} style={{ display:"flex", alignItems:"center" }}>
               <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:6 }}>
                 <div style={{ width:30, height:30, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", background:step > i + 1 ? C.gold : step === i + 1 ? "rgba(201,168,76,0.25)" : "rgba(255,255,255,0.07)", border:`2px solid ${step >= i + 1 ? C.gold : "rgba(255,255,255,0.1)"}`, color:step > i + 1 ? C.navy : step === i + 1 ? C.gold : "rgba(255,255,255,0.3)", fontWeight:800, fontSize:12 }}>
@@ -120,7 +118,7 @@ export function BizSection() {
 
         <div style={{ background:"rgba(255,255,255,0.04)", borderRadius:16, padding:36, border:"1px solid rgba(255,255,255,0.07)" }}>
 
-          {/* STEP 1 — 담당자 정보 (필수) */}
+          {/* STEP 1 — 신청자 정보 (필수) */}
           {step === 1 && (
             <div>
               <div style={{ padding:"12px 16px", background:"rgba(192,57,43,0.12)", border:"1px solid rgba(192,57,43,0.3)", borderRadius:8, marginBottom:28 }}>
@@ -131,7 +129,7 @@ export function BizSection() {
                 <DarkInput label="직책·직급" value={form.position} onChange={F("position")} placeholder="인사팀장, HR담당자 등" />
                 <DarkInput label="연락처" value={form.phone} onChange={F("phone")} placeholder="010-0000-0000" type="tel" required />
                 <DarkInput label="이메일" value={form.email} onChange={F("email")} placeholder="hr@company.com" type="email" required />
-                <DarkInput label="회사명" value={form.company} onChange={F("company")} placeholder="(주)예시기업" required />
+                <DarkInput label="회사명 (선택)" value={form.company} onChange={F("company")} placeholder="개인이신 경우 비워두셔도 됩니다" />
                 <div>
                   <label style={{ display:"block", fontSize:12, fontWeight:700, color:"rgba(244,241,235,0.55)", marginBottom:6, letterSpacing:"0.5px", textTransform:"uppercase" }}>사업장 규모</label>
                   <div style={{ display:"grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap:8 }}>
@@ -153,26 +151,34 @@ export function BizSection() {
             </div>
           )}
 
-          {/* STEP 2 — 상담 유형 */}
+          {/* STEP 2 — 상담 내용 작성 */}
           {step === 2 && (
             <div>
-              <h3 style={{ color:C.cream, fontWeight:700, marginBottom:22 }}>상담 유형을 선택하세요</h3>
-              <div style={{ display:"flex", flexDirection:"column", gap:11, marginBottom:24 }}>
-                {TYPES.map(t => (
-                  <button key={t} onClick={() => setForm(f => ({ ...f, consultType:t }))} style={{ padding:"15px 18px", borderRadius:10, border:`2px solid ${form.consultType === t ? C.gold : "rgba(255,255,255,0.1)"}`, background:form.consultType === t ? "rgba(201,168,76,0.1)" : "rgba(255,255,255,0.02)", color:form.consultType === t ? C.gold : "rgba(244,241,235,0.65)", fontWeight:form.consultType === t ? 700 : 400, fontSize:14, cursor:"pointer", fontFamily:"inherit", textAlign:"left", transition:"all 0.2s" }}>
-                    {form.consultType === t ? "▶ " : "    "}{t}
-                  </button>
-                ))}
-              </div>
+              <h3 style={{ color:C.cream, fontWeight:700, marginBottom:8 }}>어떤 상황인지 알려주세요</h3>
+              <p style={{ fontSize:12, color:"rgba(244,241,235,0.45)", marginBottom:22, lineHeight:1.7 }}>
+                작성해주신 내용을 바탕으로 담당 노무사가 사전에 사안을 검토합니다.<br/>
+                구체적으로 적어주실수록 1차 전화 상담 시간이 효율적으로 활용됩니다.
+              </p>
               <div style={{ marginBottom:24 }}>
-                <label style={{ display:"block", fontSize:12, fontWeight:700, color:"rgba(244,241,235,0.55)", marginBottom:8, letterSpacing:"0.5px", textTransform:"uppercase" }}>사전 요청 메모 (선택)</label>
-                <textarea value={form.note} onChange={F("note")} placeholder="미리 전달할 내용, 현재 상황, 요청 사항을 적어주세요." rows={3} style={{ width:"100%", padding:"12px 14px", borderRadius:8, border:"2px solid rgba(255,255,255,0.1)", background:"rgba(255,255,255,0.04)", color:C.cream, fontSize:14, fontFamily:"inherit", outline:"none", resize:"vertical", boxSizing:"border-box" }} />
+                <label style={{ display:"block", fontSize:12, fontWeight:700, color:"rgba(244,241,235,0.55)", marginBottom:8, letterSpacing:"0.5px", textTransform:"uppercase" }}>상담 요청 내용</label>
+                <textarea
+                  value={form.note}
+                  onChange={F("note")}
+                  placeholder={`예시) 상사의 부당지시와 폭언이 반복되어 직장내 괴롭힘에 해당하는지 판단받고 싶습니다. 관련 메시지 캡처가 있는데 증거로 쓸 수 있는지도 검토가 필요합니다.
+
+또는) 사내에서 괴롭힘 신고가 접수됐는데 조사위원회 구성과 처리 절차, 사업주 법적 의무에 대해 상담받고 싶습니다.`}
+                  rows={8}
+                  style={{ width:"100%", padding:"14px", borderRadius:8, border:"2px solid rgba(255,255,255,0.1)", background:"rgba(255,255,255,0.04)", color:C.cream, fontSize:14, fontFamily:"inherit", outline:"none", resize:"vertical", lineHeight:1.7, boxSizing:"border-box" }}
+                  onFocus={e => e.target.style.borderColor = C.goldLight}
+                  onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"}
+                />
+                <div style={{ textAlign:"right", fontSize:11, color:"rgba(244,241,235,0.3)", marginTop:4 }}>{(form.note || "").length}자</div>
               </div>
               <div style={{ display:"flex", gap:12 }}>
                 <button onClick={() => setStep(1)} style={{ padding:"14px 22px", background:"rgba(255,255,255,0.06)", border:"none", borderRadius:8, color:"rgba(244,241,235,0.65)", fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>← 이전</button>
-                <button onClick={() => form.consultType && setStep(3)} style={{ flex:1, padding:"14px", background:form.consultType ? C.gold : "rgba(255,255,255,0.08)", border:"none", borderRadius:8, color:form.consultType ? C.navy : "rgba(255,255,255,0.28)", fontWeight:800, fontSize:14, cursor:form.consultType ? "pointer" : "not-allowed", fontFamily:"inherit" }}>일정 선택 →</button>
+                <button onClick={() => form.note.trim() && setStep(3)} style={{ flex:1, padding:"14px", background:form.note.trim() ? C.gold : "rgba(255,255,255,0.08)", border:"none", borderRadius:8, color:form.note.trim() ? C.navy : "rgba(255,255,255,0.28)", fontWeight:800, fontSize:14, cursor:form.note.trim() ? "pointer" : "not-allowed", fontFamily:"inherit" }}>일정 선택 →</button>
               </div>
-              {form.consultType && (
+              {form.note.trim() && (
                 <div style={{ textAlign:"center", marginTop:10 }}>
                   <button onClick={() => { addSubmission("biz", {...form}); setDone(true); }} style={{ fontSize:12, color:"rgba(244,241,235,0.4)", background:"none", border:"none", cursor:"pointer", fontFamily:"inherit", textDecoration:"underline" }}>일정 선택 없이 바로 신청하기 →</button>
                 </div>
@@ -198,7 +204,7 @@ export function BizSection() {
               </div>
               {form.date && form.time && (
                 <div style={{ padding:"14px 18px", background:"rgba(201,168,76,0.08)", border:"1px solid rgba(201,168,76,0.2)", borderRadius:8, marginBottom:22 }}>
-                  <div style={{ fontSize:13, color:C.gold }}>📅 예약 요약: {form.name} 님 ({form.company}) · {form.consultType} · {form.date} {form.time}</div>
+                  <div style={{ fontSize:13, color:C.gold }}>📅 예약 요약: {form.name} 님{form.company ? ` (${form.company})` : ""} · {form.date} {form.time}</div>
                 </div>
               )}
               <div style={{ display:"flex", gap:12 }}>
