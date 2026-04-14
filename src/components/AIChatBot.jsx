@@ -290,7 +290,7 @@ export function AIChatBot({ onClose, isAdmin = false }) {
         method:"POST",
         body: JSON.stringify({
           model:"claude-sonnet-4-20250514",
-          max_tokens: role === "admin" ? 1500 : (role === "hr" ? 1000 : 1000)
+          max_tokens: role === "admin" ? 1500 : (role === "hr" ? 1000 : 1000),
           system: systemPrompts[role] || systemPrompts.general,
           messages:[...history, { role:"user", content: role === "admin" ? q : `[${newCount}번째 질문] ${q}` }]
         })
