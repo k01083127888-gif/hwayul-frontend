@@ -29,8 +29,6 @@ const TRACKS = [
     fees: [
       { label: "노동청 진정 / 노동위 구제신청", value: "착수금 50만원 + 성공보수 150만원" },
       { label: "산재 신청",                   value: "착수금 50만원 + 성공보수 10%" },
-      { label: "내용증명 발송",                value: "별도 문의" },
-      { label: "증거수집 컨설팅",              value: "별도 문의" },
     ],
     differentiator: "가격 투명성 · AI 진단 무료 연계",
     formLabel: "피해 내용",
