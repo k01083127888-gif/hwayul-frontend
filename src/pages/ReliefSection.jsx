@@ -237,9 +237,9 @@ export function ReliefSection() {
                   💡 {t.differentiator}
                 </div>
 
-                {/* CTA 버튼 */}
+                {/* CTA 버튼 — marginTop:auto로 하단 정렬 */}
                 <button onClick={(e) => { e.stopPropagation(); selectTrack(t.id); }} style={{
-                  margin:"0 22px", padding:"12px", borderRadius:8,
+                  margin:"auto 22px 0", padding:"12px", borderRadius:8,
                   background: isSelected ? t.accent : "transparent",
                   border: `1.5px solid ${t.accent}`,
                   color: isSelected ? "white" : t.accentLight,
