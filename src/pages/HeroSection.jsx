@@ -61,7 +61,7 @@ export function HeroSection({ setActive }) {
             { id:"checklist", icon:"🔍", title:"괴롭힘 자가진단",  desc:"직장내 괴롭힘 여부를 지금 바로 확인하세요", bg:C.gold, tc:C.navy, border:"none", badge:"무료 자가진단" },
             { id:"culture",   icon:"🏛️", title:"조직문화 진단",       desc:"괴롭힘 발생 위험을 사전에 점검하세요", bg:"transparent", tc:C.cream, border:`2px solid rgba(13,115,119,0.5)`, badge:"무료 자가진단" },
             { id:"biz",       icon:"🏢", title:"기업 상담",           desc:"기업 HR 담당자를 위한 전문 컨설팅", bg:"transparent", tc:C.cream, border:`2px solid rgba(201,168,76,0.5)` },
-            { id:"relief",    icon:"⚖️", title:"해결 의뢰",          desc:"의뢰하세요. 신속 정확하게 처리합니다", bg:"rgba(201,168,76,0.12)", tc:C.goldLight, border:`2px solid rgba(201,168,76,0.45)` },
+            { id:"relief",    icon:"⚖️", title:"해결 의뢰",          desc:"전문 노무사에게 의뢰하세요. 신속 정확하게 해결합니다", bg:"rgba(201,168,76,0.12)", tc:C.goldLight, border:`2px solid rgba(201,168,76,0.45)` },
           ].map(cta => (
             <button key={cta.id} onClick={() => setActive(cta.id)} style={{
               padding:"24px 16px", borderRadius:14, background:cta.bg, border:cta.border,
