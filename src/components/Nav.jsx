@@ -10,7 +10,7 @@ export const TABS = [
   { id:"culture", label:"조직문화" },
   { id:"report",  label:"익명 제보" },
   { id:"biz",     label:"기업상담" },
-  { id:"relief",  label:"피해자 구제" },
+  { id:"relief",  label:"해결 의뢰" },
 ];
 
 export function Nav({ active, setActive }) {
