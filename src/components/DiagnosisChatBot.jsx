@@ -42,7 +42,6 @@ export function DiagnosisChatBot({ resultData = null, setActive }) {
   };
 
   const [role, setRole] = useState("victim");
-  const [showRolePicker, setShowRolePicker] = useState(false);
   const cfg = ROLE_CONFIG[role];
 
   const [messages, setMessages] = useState([{ role: "assistant", text: cfg.welcomeMsg }]);
@@ -61,7 +60,6 @@ export function DiagnosisChatBot({ resultData = null, setActive }) {
     setMessages([{ role: "assistant", text: ROLE_CONFIG[newRole].welcomeMsg }]);
     setReplyCount(0);
     setShowCTA(false);
-    setShowRolePicker(false);
   };
 
   const systemPrompt = `당신은 '화율인사이드' 플랫폼의 직장내 괴롭힘 자가진단 전문 AI 상담 도우미입니다.
@@ -136,36 +134,24 @@ ${role === "accused" ? "- 피해자를 비난하거나 폄하하는 방향으로
         </div>
       </div>
 
-      {/* 역할 전환 안내 */}
-      <div style={{ padding: "10px 22px", borderBottom: "1px solid rgba(255,255,255,0.05)", background: "rgba(0,0,0,0.15)" }}>
-        {!showRolePicker ? (
-          <div style={{ fontSize: 11, color: "rgba(244,241,235,0.5)" }}>
-            혹시 다른 입장이신가요?{" "}
-            <button onClick={() => setShowRolePicker(true)} style={{ background: "none", border: "none", color: C.tealLight, cursor: "pointer", fontFamily: "inherit", fontSize: 11, textDecoration: "underline", padding: 0 }}>
-              입장 변경 →
+      {/* 역할 선택 (항상 표시) */}
+      <div style={{ padding: "12px 22px", borderBottom: "1px solid rgba(255,255,255,0.05)", background: "rgba(0,0,0,0.15)" }}>
+        <div style={{ fontSize: 11, color: "rgba(244,241,235,0.55)", marginBottom: 8 }}>입장을 바꿔서 상담하실 수도 있어요.</div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+          {Object.entries(ROLE_CONFIG).map(([key, r]) => (
+            <button key={key} onClick={() => switchRole(key)} style={{
+              padding: "6px 12px", borderRadius: 100,
+              background: role === key ? "rgba(13,115,119,0.25)" : "rgba(255,255,255,0.05)",
+              border: role === key ? `1px solid ${C.tealLight}` : "1px solid rgba(255,255,255,0.1)",
+              color: role === key ? C.tealLight : "rgba(244,241,235,0.7)",
+              fontSize: 11, fontWeight: role === key ? 700 : 500, cursor: "pointer", fontFamily: "inherit",
+              display: "flex", alignItems: "center", gap: 5,
+            }}>
+              <span>{r.icon}</span>
+              <span>{r.label}</span>
             </button>
-          </div>
-        ) : (
-          <div>
-            <div style={{ fontSize: 11, color: "rgba(244,241,235,0.6)", marginBottom: 8 }}>어떤 입장에서 상담하시나요?</div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-              {Object.entries(ROLE_CONFIG).map(([key, r]) => (
-                <button key={key} onClick={() => switchRole(key)} style={{
-                  padding: "6px 12px", borderRadius: 100,
-                  background: role === key ? "rgba(13,115,119,0.25)" : "rgba(255,255,255,0.05)",
-                  border: role === key ? `1px solid ${C.tealLight}` : "1px solid rgba(255,255,255,0.1)",
-                  color: role === key ? C.tealLight : "rgba(244,241,235,0.7)",
-                  fontSize: 11, fontWeight: role === key ? 700 : 500, cursor: "pointer", fontFamily: "inherit",
-                  display: "flex", alignItems: "center", gap: 5,
-                }}>
-                  <span>{r.icon}</span>
-                  <span>{r.label}</span>
-                </button>
-              ))}
-              <button onClick={() => setShowRolePicker(false)} style={{ padding: "6px 10px", borderRadius: 100, background: "transparent", border: "none", color: "rgba(244,241,235,0.4)", fontSize: 11, cursor: "pointer", fontFamily: "inherit" }}>닫기 ✕</button>
-            </div>
-          </div>
-        )}
+          ))}
+        </div>
       </div>
 
       {/* 메시지 영역 */}
