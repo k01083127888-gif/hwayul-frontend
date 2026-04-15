@@ -3,7 +3,6 @@ import C from "../tokens/colors.js";
 import { saveCulture, loadCulture } from "../utils/storage.js";
 import { generateCulturePrintHtml } from "../utils/printTemplates.js";
 import { PrintModal } from "../components/PrintModal.jsx";
-import { DiagnosisChatBot } from "../components/DiagnosisChatBot.jsx";
 import { ReportForm } from "../components/ReportForm.jsx";
 import { DarkSectionTag, SectionTag, Input } from "../components/common/FormElements.jsx";
 
@@ -297,9 +296,6 @@ export function CultureSection() {
               특히 고위험 영역은 내부 조사만으로는 원인 파악에 한계가 있으며, 전문가의 현장 진단이 필요한 경우가 많습니다.
             </div>
           </div>
-
-          {/* ── AI 즉시 상담 (진단 결과 기반) ── */}
-          <DiagnosisChatBot type="culture" resultData={{ totalRisk, catResults: catResults.map(c => ({ title:c.title, score:c.score, grade:c.grade.label })), highRiskCount: highRiskItems.length }} variant="light" />
 
           {/* 리포트 받기 */}
           <ReportForm type="culture" resultData={{ totalRisk, catResults: catResults.map(c => ({ title:c.title, score:c.score, grade:c.grade.label })), highRiskCount: highRiskItems.length }} dark={false} getResultHtml={() => generateCulturePrintHtml(totalRisk, catResults, highRiskItems, answers, orgInfo, getRiskGrade)} />
