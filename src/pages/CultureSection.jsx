@@ -3,7 +3,7 @@ import C from "../tokens/colors.js";
 import { saveCulture, loadCulture } from "../utils/storage.js";
 import { generateCulturePrintHtml } from "../utils/printTemplates.js";
 import { PrintModal } from "../components/PrintModal.jsx";
-import { FreeConsultBanner } from "../components/FreeConsultBanner.jsx";
+import { DiagnosisChatBot } from "../components/DiagnosisChatBot.jsx";
 import { ReportForm } from "../components/ReportForm.jsx";
 import { DarkSectionTag, SectionTag, Input } from "../components/common/FormElements.jsx";
 
@@ -298,8 +298,8 @@ export function CultureSection() {
             </div>
           </div>
 
-          {/* ── 무료 상담 연결 ── */}
-          <FreeConsultBanner variant="light" context="culture" getResultHtml={() => generateCulturePrintHtml(totalRisk, catResults, highRiskItems, answers, orgInfo, getRiskGrade)} />
+          {/* ── AI 즉시 상담 (진단 결과 기반) ── */}
+          <DiagnosisChatBot type="culture" resultData={{ totalRisk, catResults: catResults.map(c => ({ title:c.title, score:c.score, grade:c.grade.label })), highRiskCount: highRiskItems.length }} variant="light" />
 
           {/* 리포트 받기 */}
           <ReportForm type="culture" resultData={{ totalRisk, catResults: catResults.map(c => ({ title:c.title, score:c.score, grade:c.grade.label })), highRiskCount: highRiskItems.length }} dark={false} getResultHtml={() => generateCulturePrintHtml(totalRisk, catResults, highRiskItems, answers, orgInfo, getRiskGrade)} />

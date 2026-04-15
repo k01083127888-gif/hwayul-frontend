@@ -5,7 +5,7 @@ import { saveChecklist, loadChecklist } from "../utils/storage.js";
 import { calcResult } from "../utils/calcResult.js";
 import { generateChecklistPrintHtml } from "../utils/printTemplates.js";
 import { PrintModal } from "../components/PrintModal.jsx";
-import { FreeConsultBanner } from "../components/FreeConsultBanner.jsx";
+import { DiagnosisChatBot } from "../components/DiagnosisChatBot.jsx";
 import { ReportForm } from "../components/ReportForm.jsx";
 import { SectionTag, DarkSectionTag } from "../components/common/FormElements.jsx";
 
@@ -333,8 +333,8 @@ export function ChecklistSection({ setActive }) {
             </div>
             <PrintModal isOpen={showPrintModal} onClose={() => setShowPrintModal(false)} type="checklist" getHtml={() => generateChecklistPrintHtml(prereq, behavior, impact, continuity, result)} />
 
-            {/* ── 무료 상담 연결 ── */}
-            <FreeConsultBanner variant="dark" context="checklist" setActive={setActive} getResultHtml={() => generateChecklistPrintHtml(prereq, behavior, impact, continuity, result)} />
+            {/* ── AI 즉시 상담 (진단 결과 기반) ── */}
+            <DiagnosisChatBot type="checklist" resultData={result} variant="dark" setActive={setActive} />
 
             {/* 리포트 받기 */}
             <ReportForm type="checklist" resultData={result} dark={true} getResultHtml={() => generateChecklistPrintHtml(prereq, behavior, impact, continuity, result)} />
