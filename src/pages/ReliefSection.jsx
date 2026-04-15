@@ -7,7 +7,7 @@ import { ValidationMsg } from "../components/common/ValidationMsg.jsx";
 import { PrivacyConsent } from "../components/common/PrivacyConsent.jsx";
 import { PrivacyPolicyModal } from "../components/common/PrivacyPolicyModal.jsx";
 
-// ── 3개 트랙 서비스 정의 ─────────────────────────────────────────────────
+// ── 4개 트랙 서비스 정의 ─────────────────────────────────────────────────
 const TRACKS = [
   {
     id: "victim",
@@ -23,12 +23,10 @@ const TRACKS = [
       "사내 신고서 작성 대행",
       "노동청 진정 대리",
       "노동위원회 구제신청",
-      "산재 신청",
       "내용증명 발송",
     ],
     fees: [
       { label: "노동청 진정 / 노동위 구제신청", value: "착수금 50만원 + 성공보수 150만원" },
-      { label: "산재 신청",                   value: "착수금 50만원 + 성공보수 10%" },
     ],
     differentiator: "가격 투명성 · AI 진단 무료 연계",
     formLabel: "피해 내용",
@@ -36,13 +34,38 @@ const TRACKS = [
     ctaText: "피해자 구제 신청하기",
   },
   {
-    id: "accused",
+    id: "sanjae",
     no: "트랙 2",
     icon: "⚖️",
-    title: "피지목인 항변",
-    subtitle: "신고당한 사람의 방어 지원",
+    title: "산재 신청",
+    subtitle: "정신질환·업무상 재해 산재 승인 대리",
     accent: C.gold,
     accentLight: C.goldLight,
+    badge: "⭐ 전문분야",
+    services: [
+      "재해경위서 작성",
+      "업무관련성 입증자료 준비",
+      "근로복지공단 신청 대리",
+      "정신질환 산재 전문 대응",
+      "불승인 시 재심사·행정소송",
+    ],
+    fees: [
+      { label: "산재 신청",                   value: "착수금 50만원 + 성공보수 10%" },
+      { label: "재심사·행정소송",             value: "별도 협의" },
+    ],
+    differentiator: "산재 승인 675건+ · 정신질환 산재 전문",
+    formLabel: "재해 경위 및 업무 관련성",
+    formPlaceholder: "언제부터 어떤 증상이 있었는지, 업무와의 관련성(업무량·괴롭힘·사고 등), 병원 진단 여부를 적어주세요. 작성 내용은 담당 노무사만 확인하며 비밀이 보장됩니다.",
+    ctaText: "산재 신청하기",
+  },
+  {
+    id: "accused",
+    no: "트랙 3",
+    icon: "🧑‍⚖️",
+    title: "피지목인 항변",
+    subtitle: "신고당한 사람의 방어 지원",
+    accent: "#A67C2E",
+    accentLight: "#D4A745",
     badge: "블루오션",
     services: [
       "사건 경위의견서 작성",
@@ -62,7 +85,7 @@ const TRACKS = [
   },
   {
     id: "company",
-    no: "트랙 3",
+    no: "트랙 4",
     icon: "🏛️",
     title: "회사 조사처리",
     subtitle: "사용자(회사)의 법정 조사의무 대행",
@@ -160,11 +183,11 @@ export function ReliefSection() {
           </p>
         </div>
 
-        {/* 3개 트랙 카드 */}
+        {/* 4개 트랙 카드 */}
         <div style={{
           display:"grid",
-          gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
-          gap:20,
+          gridTemplateColumns: isMobile ? "1fr" : "repeat(4, 1fr)",
+          gap:16,
           marginBottom:56,
         }}>
           {TRACKS.map(t => {
