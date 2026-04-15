@@ -10,6 +10,35 @@ import { StatCard, BarChart, MiniTrend, StatusPie, getMonthly, StatSection, NlHi
 import { AdminEmailComposer } from "../components/AdminEmailComposer.jsx";
 import { ReportWriter } from "../components/ReportWriter.jsx";
 import { SectionTag } from "../components/common/FormElements.jsx";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+import { Quill } from "react-quill-new";
+
+// ── Quill 이미지 포맷 확장 — width, height, style 속성 보존 ──
+const BaseImageFormat = Quill.import("formats/image");
+const ImageFormatAttributesList = ["alt", "height", "width", "style"];
+class ImageFormat extends BaseImageFormat {
+  static formats(domNode) {
+    return ImageFormatAttributesList.reduce((formats, attribute) => {
+      if (domNode.hasAttribute(attribute)) {
+        formats[attribute] = domNode.getAttribute(attribute);
+      }
+      return formats;
+    }, {});
+  }
+  format(name, value) {
+    if (ImageFormatAttributesList.indexOf(name) > -1) {
+      if (value) {
+        this.domNode.setAttribute(name, value);
+      } else {
+        this.domNode.removeAttribute(name);
+      }
+    } else {
+      super.format(name, value);
+    }
+  }
+}
+Quill.register(ImageFormat, true);
 
 // ── 관리자 섹션 ─────────────────────────────────────────────────────────────
 export function AdminSection({ setActive, authed, setAuthed }) {
@@ -284,6 +313,116 @@ export function AdminSection({ setActive, authed, setAuthed }) {
       setAiGenerated(true);
     };
 
+    // ── Cloudinary 이미지 업로드 + Quill 에디터 설정 ──
+    const quillRef = useRef(null);
+    const CLOUDINARY_CLOUD = "drx8qy9ck";
+    const CLOUDINARY_PRESET = "hwayul_unsigned";
+
+    const imageHandler = () => {
+      const quill = quillRef.current?.getEditor?.() || quillRef.current;
+      if (!quill || !quill.clipboard) {
+        alert("에디터를 찾을 수 없습니다. 페이지를 새로고침 후 다시 시도해주세요.");
+        return;
+      }
+      const input = document.createElement("input");
+      input.setAttribute("type", "file");
+      input.setAttribute("accept", "image/*");
+      input.click();
+      input.onchange = async () => {
+        const file = input.files[0];
+        if (!file) return;
+        try {
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("upload_preset", CLOUDINARY_PRESET);
+          const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, {
+            method: "POST",
+            body: formData,
+          });
+          const data = await res.json();
+          if (!data.secure_url) {
+            console.error("Cloudinary 응답:", data);
+            alert("이미지 업로드 실패: " + (data.error?.message || "알 수 없는 오류"));
+            return;
+          }
+          const currentHtml = quill.root.innerHTML;
+          const imgTag = `<p><img src="${data.secure_url}" alt="uploaded"/></p><p><br/></p>`;
+          quill.root.innerHTML = currentHtml + imgTag;
+          setBody(quill.root.innerHTML);
+        } catch (err) {
+          console.error("업로드 오류:", err);
+          alert("이미지 업로드 오류: " + err.message);
+        }
+      };
+    };
+
+    const quillModules = {
+      toolbar: {
+        container: [
+          [{ header: [1, 2, 3, false] }],
+          ["bold", "italic", "underline", "strike"],
+          [{ color: [] }, { background: [] }],
+          [{ list: "ordered" }, { list: "bullet" }],
+          ["blockquote"],
+          ["link", "image", "video"],
+          ["clean"],
+        ],
+        handlers: { image: imageHandler },
+      },
+    };
+
+    // 이미지 클릭 → 크기 조절 + 정렬
+    useEffect(() => {
+      const handleImageClick = (e) => {
+        const target = e.target;
+        if (target?.tagName !== "IMG") return;
+        const editor = target.closest(".ql-editor");
+        if (!editor) return;
+        e.preventDefault();
+        e.stopPropagation();
+        const currentWidth = target.style.width || "100%";
+        const input = window.prompt(
+          "이미지 크기와 정렬을 입력하세요.\n\n" +
+          "✔ 크기: 50% / 70% / 100% / 300px\n" +
+          "✔ 정렬: left / center / right\n" +
+          "✔ 크기+정렬 동시: 50% center\n" +
+          "✔ 원래대로: reset",
+          currentWidth
+        );
+        if (!input || !input.trim()) return;
+        const tokens = input.trim().toLowerCase().split(/\s+/);
+        if (tokens.includes("reset")) {
+          target.removeAttribute("style");
+          target.removeAttribute("width");
+          target.removeAttribute("height");
+        } else {
+          tokens.forEach(tok => {
+            if (tok === "left") {
+              target.style.float = "left";
+              target.style.display = "";
+              target.style.margin = "0 16px 8px 0";
+            } else if (tok === "right") {
+              target.style.float = "right";
+              target.style.display = "";
+              target.style.margin = "0 0 8px 16px";
+            } else if (tok === "center") {
+              target.style.float = "";
+              target.style.display = "block";
+              target.style.margin = "16px auto";
+            } else if (/^\d+(%|px)$/.test(tok)) {
+              target.style.width = tok;
+              target.style.height = "auto";
+              target.style.maxWidth = "100%";
+            }
+          });
+        }
+        const quill = quillRef.current?.getEditor?.() || quillRef.current;
+        if (quill?.root) setBody(quill.root.innerHTML);
+      };
+      document.addEventListener("click", handleImageClick, true);
+      return () => document.removeEventListener("click", handleImageClick, true);
+    }, []);
+
     const handleSave = () => {
       if (!f.title) return;
     const savedItem = { ...f, id: item?.id || Date.now(), views: Number(f.views)||0, body: body || "", attachments: attachments.length > 0 ? attachments : [] };
@@ -333,7 +472,17 @@ export function AdminSection({ setActive, authed, setAuthed }) {
               </div>
             </div>
           )}
-          <textarea value={body} onChange={e => setBody(e.target.value)} rows={12} placeholder="콘텐츠 본문을 입력하세요." style={{ ...inputStyle, resize:"vertical", lineHeight:1.8, fontSize:13 }} />
+          <div style={{ background:"white", borderRadius:6, border:"2px solid rgba(10,22,40,0.1)" }}>
+            <ReactQuill
+              ref={quillRef}
+              theme="snow"
+              value={body}
+              onChange={setBody}
+              modules={quillModules}
+              placeholder="콘텐츠 본문을 입력하세요. 이미지와 유튜브 영상을 바로 삽입할 수 있어요."
+              style={{ minHeight: 300, fontSize: 13 }}
+            />
+          </div>
         </div>
         {/* ── 첨부파일 관리 ── */}
         <div style={{ marginBottom:16, padding:"16px 18px", background:"rgba(10,22,40,0.02)", border:"1px solid rgba(10,22,40,0.08)", borderRadius:10 }}>
