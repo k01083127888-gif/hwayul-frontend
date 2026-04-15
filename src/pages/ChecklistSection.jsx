@@ -338,7 +338,7 @@ export function ChecklistSection({ setActive }) {
             <div style={{ height:20 }} />
             <div style={{ display:"flex", gap:12 }}>
               <button onClick={reset} style={{ flex:1, padding:"13px", background:"rgba(255,255,255,0.06)", border:"none", borderRadius:8, color:"rgba(244,241,235,0.65)", fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>↺ 다시 진단하기</button>
-              <button onClick={() => setActive("relief")} style={{ flex:2, padding:"13px", background:C.gold, border:"none", borderRadius:8, color:C.navy, fontWeight:800, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>🛡️ 피해자 구제 신청 →</button>
+              <button onClick={() => setActive("relief")} style={{ flex:2, padding:"13px", background:C.gold, border:"none", borderRadius:8, color:C.navy, fontWeight:800, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>⚖️ 해결 의뢰 →</button>
             </div>
           </div>
         )}
