@@ -6,7 +6,6 @@ import { calcResult } from "../utils/calcResult.js";
 import { generateChecklistPrintHtml } from "../utils/printTemplates.js";
 import { PrintModal } from "../components/PrintModal.jsx";
 import { DiagnosisChatBot } from "../components/DiagnosisChatBot.jsx";
-import { ReportForm } from "../components/ReportForm.jsx";
 import { SectionTag, DarkSectionTag } from "../components/common/FormElements.jsx";
 
 // ── ChecklistSection ─────────────────────────────────────────────────────────────────
@@ -311,18 +310,6 @@ export function ChecklistSection({ setActive }) {
               </div>
             </div>
 
-            {/* 자가진단 무료 안내 */}
-            <div style={{ display:"flex", gap:12, marginBottom:20 }}>
-              <div style={{ flex:1, padding:"14px 16px", background:"rgba(13,115,119,0.1)", border:"1px solid rgba(13,115,119,0.3)", borderRadius:10, textAlign:"center" }}>
-                <div style={{ fontSize:11, color:"rgba(244,241,235,0.5)", marginBottom:4 }}>자가진단 결과</div>
-                <div style={{ fontSize:16, fontWeight:800, color:C.tealLight }}>무료</div>
-              </div>
-              <div style={{ flex:1, padding:"14px 16px", background:"rgba(201,168,76,0.1)", border:"1px solid rgba(201,168,76,0.3)", borderRadius:10, textAlign:"center" }}>
-                <div style={{ fontSize:11, color:"rgba(244,241,235,0.5)", marginBottom:4 }}>노무사 검토 리포트</div>
-                <div style={{ fontSize:16, fontWeight:800, color:C.gold }}>99,000원 <span style={{ fontSize:10, fontWeight:400 }}>(VAT 포함)</span></div>
-              </div>
-            </div>
-
             {/* 결과지 보기 */}
             <div style={{ padding:"18px", background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", borderRadius:12, display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20 }}>
               <div>
@@ -336,8 +323,17 @@ export function ChecklistSection({ setActive }) {
             {/* ── AI 즉시 상담 (진단 결과 기반) ── */}
             <DiagnosisChatBot type="checklist" resultData={result} variant="dark" setActive={setActive} />
 
-            {/* 리포트 받기 */}
-            <ReportForm type="checklist" resultData={result} dark={true} getResultHtml={() => generateChecklistPrintHtml(prereq, behavior, impact, continuity, result)} />
+            {/* 심층 상담 안내 (유료 노무사 상담 유도) */}
+            <div style={{ padding:"20px 22px", background:"rgba(201,168,76,0.08)", border:"1.5px solid rgba(201,168,76,0.32)", borderRadius:14, marginBottom:20, display:"flex", alignItems:"center", justifyContent:"space-between", gap:16, flexWrap:"wrap" }}>
+              <div style={{ flex:1, minWidth:200 }}>
+                <div style={{ fontSize:11, fontWeight:700, color:C.gold, letterSpacing:"1.5px", marginBottom:6 }}>💼 더 깊이 있는 검토가 필요하시다면</div>
+                <div style={{ fontSize:14, fontWeight:800, color:C.cream, marginBottom:4 }}>전문 노무사 심층 상담 <span style={{ fontSize:13, color:C.goldLight }}>22만원 (VAT 포함)</span></div>
+                <div style={{ fontSize:11, color:"rgba(244,241,235,0.6)", lineHeight:1.6 }}>1차 전화 상담 → 2차 서류 검토 → 3차 대면 상담 패키지<br/>해결 의뢰 전환 시 상담료 전액 착수금에서 차감</div>
+              </div>
+              <button onClick={() => setActive("biz")} style={{ padding:"12px 22px", borderRadius:10, background:C.gold, border:"none", color:C.navy, fontWeight:800, fontSize:13, cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap", flexShrink:0 }}>
+                💼 심층 상담 신청 →
+              </button>
+            </div>
 
             <div style={{ height:20 }} />
             <div style={{ display:"flex", gap:12 }}>
