@@ -168,11 +168,11 @@ export function AdminSection({ setActive, authed, setAuthed }) {
     { id:"members", icon:"👥", label:"전문가 관리" },
     { id:"contents", icon:"📰", label:"콘텐츠 관리" },
     { id:"reports", icon:"📩", label:"익명 제보" },
-    { id:"biz", icon:"🏢", label:"기업 상담" },
-    { id:"relief", icon:"🛡️", label:"피해자 구제" },
+    { id:"biz", icon:"🏢", label:"심층상담" },
+    { id:"relief", icon:"🛡️", label:"해결 의뢰" },
     { id:"resultEmails", icon:"📧", label:"결과지 발송" },
-    { id:"reviewRequests", icon:"📋", label:"노무사검토" },
-    { id:"services", icon:"📞", label:"전화상담·서비스" },
+    { id:"reviewRequests", icon:"📋", label:"리포트 검토" },
+    { id:"services", icon:"📞", label:"강의 등 요청" },
     { id:"newsletter", icon:"📬", label:"뉴스레터" },
   ];
 
@@ -611,11 +611,11 @@ export function AdminSection({ setActive, authed, setAuthed }) {
             <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:12, marginBottom:20 }}>
               {[
                 { icon:"📩", label:"익명 제보", count:allSubs.reports.length, color:C.teal, newCount:allSubs.reports.filter(r=>r.status==="신규").length, tab:"reports" },
-                { icon:"🏢", label:"기업 상담", count:allSubs.biz.length, color:C.gold, newCount:allSubs.biz.filter(r=>r.status==="신규").length, tab:"biz" },
-                { icon:"🛡️", label:"피해자 구제", count:allSubs.relief.length, color:C.red, newCount:allSubs.relief.filter(r=>r.status==="신규").length, tab:"relief" },
+                { icon:"🏢", label:"심층상담", count:allSubs.biz.length, color:C.gold, newCount:allSubs.biz.filter(r=>r.status==="신규").length, tab:"biz" },
+                { icon:"🛡️", label:"해결 의뢰", count:allSubs.relief.length, color:C.red, newCount:allSubs.relief.filter(r=>r.status==="신규").length, tab:"relief" },
                 { icon:"📧", label:"결과지 발송", count:resultOnly.length, color:C.blue, newCount:resultOnly.filter(r=>r.status==="신규").length, tab:"resultEmails" },
                 { icon:"📋", label:"노무사 검토", count:allSubs.reviewRequests.length, color:C.purple, newCount:allSubs.reviewRequests.filter(r=>r.status==="신규").length, tab:"reviewRequests" },
-                { icon:"📞", label:"전화상담·서비스", count:services.length, color:"#D35400", newCount:services.filter(r=>r.status==="신규").length, tab:"services" },
+                { icon:"📞", label:"강의 등 요청", count:services.length, color:"#D35400", newCount:services.filter(r=>r.status==="신규").length, tab:"services" },
               ].map(s=>(
                 <div key={s.label} onClick={()=>setTab(s.tab)} style={{ ...cardStyle, position:"relative", cursor:"pointer", transition:"all 0.15s" }}
                   onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow="0 6px 20px rgba(10,22,40,0.1)";}}
@@ -646,11 +646,11 @@ export function AdminSection({ setActive, authed, setAuthed }) {
             <StatSection title="📊 채널별 비중">
               <BarChart total={total} items={[
                 { label:"📩 익명 제보", count:allSubs.reports.length, color:C.teal },
-                { label:"🏢 기업 상담", count:allSubs.biz.length, color:C.gold },
-                { label:"🛡️ 피해자 구제", count:allSubs.relief.length, color:C.red },
+                { label:"💼 심층상담", count:allSubs.biz.length, color:C.gold },
+                { label:"⚖️ 해결 의뢰", count:allSubs.relief.length, color:C.red },
                 { label:"📧 결과지 발송", count:resultOnly.length, color:C.blue },
-                { label:"📋 노무사 검토", count:allSubs.reviewRequests.length, color:C.purple },
-                { label:"📞 전화상담·서비스", count:services.length, color:"#D35400" },
+                { label:"📋 리포트 검토", count:allSubs.reviewRequests.length, color:C.purple },
+                { label:"📞 강의 등 요청", count:services.length, color:"#D35400" },
               ]} />
             </StatSection>
 
@@ -1044,7 +1044,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
               </div>
             )}
             <div style={cardStyle}>
-              <h3 style={{ fontSize:15, fontWeight:800, color:C.navy, marginBottom:14 }}>🏢 기업 상담 접수 내역 ({d.length}건)</h3>
+              <h3 style={{ fontSize:15, fontWeight:800, color:C.navy, marginBottom:14 }}>💼 심층상담 접수 내역 ({d.length}건)</h3>
               {d.length === 0 ? <div style={{ textAlign:"center", padding:48, color:C.gray }}>📭 접수된 내역이 없습니다.</div> : (
                 <table style={{ width:"100%", borderCollapse:"collapse" }}>
                   <thead><tr>{["접수일시","담당자","기업명","연락처","이메일","상담유형","상태",""].map(h=><th key={h} style={thStyle}>{h}</th>)}</tr></thead>
@@ -1107,7 +1107,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
               </div>
             )}
             <div style={cardStyle}>
-              <h3 style={{ fontSize:15, fontWeight:800, color:C.navy, marginBottom:14 }}>🛡️ 피해자 구제 접수 내역 ({d.length}건)</h3>
+              <h3 style={{ fontSize:15, fontWeight:800, color:C.navy, marginBottom:14 }}>⚖️ 해결 의뢰 접수 내역 ({d.length}건)</h3>
               {d.length === 0 ? <div style={{ textAlign:"center", padding:48, color:C.gray }}>📭 접수된 내역이 없습니다.</div> : (
                 <table style={{ width:"100%", borderCollapse:"collapse" }}>
                   <thead><tr>{["접수일시","성명","연락처","이메일","긴급도","상태",""].map(h=><th key={h} style={thStyle}>{h}</th>)}</tr></thead>
@@ -1237,7 +1237,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
               </div>
             )}
             <div style={cardStyle}>
-              <h3 style={{ fontSize:15, fontWeight:800, color:C.navy, marginBottom:6 }}>📋 노무사 검토 리포트 요청 ({d.length}건)</h3>
+              <h3 style={{ fontSize:15, fontWeight:800, color:C.navy, marginBottom:6 }}>📋 리포트 검토 요청 ({d.length}건)</h3>
               <p style={{ fontSize:12, color:C.gray, marginBottom:14 }}>전문 노무사 검토 리포트를 신청한 사용자 목록입니다. 검토 리포트를 작성하여 이메일로 발송하세요.</p>
               {d.length === 0 ? <div style={{ textAlign:"center", padding:48, color:C.gray }}>📭 신청 내역이 없습니다.</div> : (
                 <table style={{ width:"100%", borderCollapse:"collapse" }}>
