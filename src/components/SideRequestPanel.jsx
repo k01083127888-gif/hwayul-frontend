@@ -11,7 +11,7 @@ export function SideRequestPanel() {
   const [open, setOpen] = useState(null); // "lecture"|"advisory"|"consulting"|null
   const [form, setForm] = useState({ name:"", company:"", email:"", phone:"", date:"", detail:"" });
   const [done, setDone] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(typeof window !== "undefined" && window.innerWidth <= 768);
   const F = k => e => setForm(f => ({ ...f, [k]: e.target.value }));
   const reset = () => { setForm({ name:"", company:"", email:"", phone:"", date:"", detail:"" }); setDone(false); };
 

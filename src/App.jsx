@@ -286,7 +286,7 @@ useEffect(() => {
       `}</style>
 
       <PrivacyPolicyModal isOpen={showFooterPrivacy} onClose={() => setShowFooterPrivacy(false)} />
-      {active === "culture" && <SideRequestPanel />}
+      {active === "home" && <SideRequestPanel />}
       <NewFeaturesHub isAdmin={isAdmin} />
       <Nav active={active} setActive={setActive} />
 
