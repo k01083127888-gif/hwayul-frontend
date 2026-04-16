@@ -94,32 +94,6 @@ export function HeroSection({ setActive }) {
           ※ 출처: 국회 환경노동위원회·근로복지공단 공식 자료 (2024.10.22)
         </div>
 
-        {/* 조직문화 진단 배너 */}
-        <div
-          onClick={() => setActive("culture")}
-          style={{
-            marginTop:48, padding:"24px 28px", borderRadius:14,
-            background:"rgba(13,115,119,0.08)", border:"1.5px solid rgba(13,115,119,0.3)",
-            display:"flex", alignItems:"center", justifyContent:"space-between", gap:20,
-            cursor:"pointer", transition:"all 0.25s", flexWrap:"wrap",
-          }}
-          onMouseEnter={e => { e.currentTarget.style.background = "rgba(13,115,119,0.14)"; e.currentTarget.style.borderColor = "rgba(13,115,119,0.5)"; }}
-          onMouseLeave={e => { e.currentTarget.style.background = "rgba(13,115,119,0.08)"; e.currentTarget.style.borderColor = "rgba(13,115,119,0.3)"; }}
-        >
-          <div style={{ flex:1, minWidth:220 }}>
-            <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:8 }}>
-              <span style={{ fontSize:22 }}>🏢</span>
-              <span style={{ fontSize:15, fontWeight:800, color:C.cream }}>기업 HR 담당자이신가요?</span>
-              <span style={{ fontSize:10, fontWeight:700, color:"#fff", background:C.teal, borderRadius:20, padding:"2px 10px" }}>무료 진단</span>
-            </div>
-            <div style={{ fontSize:13, color:"rgba(244,241,235,0.6)", lineHeight:1.7 }}>
-              조직문화 위험도를 6개 영역별로 무료 진단하고, 전문 노무사의 <strong style={{ color:C.tealLight }}>맞춤형 리포트(33만원)</strong>를 받아보세요.
-            </div>
-          </div>
-          <div style={{ padding:"12px 24px", borderRadius:10, background:C.teal, color:"white", fontWeight:800, fontSize:13, whiteSpace:"nowrap", flexShrink:0 }}>
-            조직문화 진단 시작 →
-          </div>
-        </div>
       </div>
     </section>
   );
