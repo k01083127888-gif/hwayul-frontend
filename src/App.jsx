@@ -127,8 +127,9 @@ useEffect(() => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&family=Noto+Serif+KR:wght@700;900&display=swap');
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { background:${C.navy}; overflow-x: hidden; overscroll-behavior: none; }
-        html { overflow-x: hidden; background:${C.navy}; }
+        body { background:${C.navy}; overflow-x: hidden; overscroll-behavior-y: none; -webkit-overflow-scrolling: auto; }
+        html { overflow-x: hidden; background:${C.navy}; overscroll-behavior-y: none; }
+        #root { background:${C.navy}; }
         ::-webkit-scrollbar { width:5px; }
         ::-webkit-scrollbar-track { background:${C.navy}; }
         ::-webkit-scrollbar-thumb { background:${C.gold}; border-radius:3px; }
