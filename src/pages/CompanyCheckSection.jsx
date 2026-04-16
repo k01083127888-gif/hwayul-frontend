@@ -142,7 +142,7 @@ export function CompanyCheckSection({ setActive }) {
               <div style={{ fontSize:14, fontWeight:800, color:C.cream, marginBottom:4 }}>전문 노무사 심층 상담 <span style={{ fontSize:13, color:C.goldLight }}>22만원 (VAT 포함)</span></div>
               <div style={{ fontSize:11, color:"rgba(244,241,235,0.6)", lineHeight:1.6 }}>조사 절차·조사보고서·징계 결정 자문<br/>해결 의뢰 전환 시 상담료 전액 착수금에서 차감</div>
             </div>
-            <button onClick={() => setActive("biz")} style={{ padding:"12px 22px", borderRadius:10, background:C.gold, border:"none", color:C.navy, fontWeight:800, fontSize:13, cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap", flexShrink:0 }}>
+            <button onClick={() => { try { localStorage.setItem("hwayul_diag_for_biz", JSON.stringify(resultData)); } catch {} setActive("biz"); }} style={{ padding:"12px 22px", borderRadius:10, background:C.gold, border:"none", color:C.navy, fontWeight:800, fontSize:13, cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap", flexShrink:0 }}>
               💼 심층 상담 신청 →
             </button>
           </div>

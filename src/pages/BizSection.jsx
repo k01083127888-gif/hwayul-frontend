@@ -232,7 +232,7 @@ export function BizSection() {
               </div>
               {form.note.trim() && (
                 <div style={{ textAlign:"center", marginTop:10 }}>
-                  <button onClick={() => { addSubmission("biz", {...form}); sendConfirmEmail(form); setDone(true); }} style={{ fontSize:12, color:"rgba(244,241,235,0.4)", background:"none", border:"none", cursor:"pointer", fontFamily:"inherit", textDecoration:"underline" }}>일정 선택 없이 바로 신청하기 →</button>
+                  <button onClick={() => { const diagData = (() => { try { const d = localStorage.getItem("hwayul_diag_for_biz"); localStorage.removeItem("hwayul_diag_for_biz"); return d || ""; } catch { return ""; } })(); addSubmission("biz", {...form, diagResult: diagData}); sendConfirmEmail(form); setDone(true); }} style={{ fontSize:12, color:"rgba(244,241,235,0.4)", background:"none", border:"none", cursor:"pointer", fontFamily:"inherit", textDecoration:"underline" }}>일정 선택 없이 바로 신청하기 →</button>
                 </div>
               )}
             </div>
@@ -261,7 +261,7 @@ export function BizSection() {
               )}
               <div style={{ display:"flex", gap:12 }}>
                 <button onClick={() => setStep(2)} style={{ padding:"14px 22px", background:"rgba(255,255,255,0.06)", border:"none", borderRadius:8, color:"rgba(244,241,235,0.65)", fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>← 이전</button>
-                <button onClick={() => { addSubmission("biz", {...form}); sendConfirmEmail(form); setDone(true); }} style={{ flex:1, padding:"14px", background:C.gold, border:"none", borderRadius:8, color:C.navy, fontWeight:800, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>{form.date && form.time ? "예약 확정하기 ✓" : "일정 없이 상담 신청하기 →"}</button>
+                <button onClick={() => { const diagData = (() => { try { const d = localStorage.getItem("hwayul_diag_for_biz"); localStorage.removeItem("hwayul_diag_for_biz"); return d || ""; } catch { return ""; } })(); addSubmission("biz", {...form, diagResult: diagData}); sendConfirmEmail(form); setDone(true); }} style={{ flex:1, padding:"14px", background:C.gold, border:"none", borderRadius:8, color:C.navy, fontWeight:800, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>{form.date && form.time ? "예약 확정하기 ✓" : "일정 없이 상담 신청하기 →"}</button>
               </div>
               {!form.date && !form.time && (
                 <div style={{ textAlign:"center", fontSize:11, color:"rgba(244,241,235,0.35)", marginTop:10 }}>일정을 선택하지 않으시면 담당 노무사가 연락하여 일정을 조율합니다.</div>
