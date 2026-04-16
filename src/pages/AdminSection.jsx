@@ -1078,24 +1078,25 @@ export function AdminSection({ setActive, authed, setAuthed }) {
             { label:"진행중", count:d.filter(r=>r.status==="진행중").length, color:C.orange },
             { label:"완료", count:d.filter(r=>r.status==="완료").length, color:C.green },
           ];
-          const urgencyCounts = [
-            { label:"🚨 긴급", count:d.filter(r=>r.urgency==="emergency").length, color:"#C0392B" },
-            { label:"⚡ 빠른", count:d.filter(r=>r.urgency==="urgent").length, color:C.orange },
-            { label:"일반", count:d.filter(r=>!r.urgency||r.urgency==="normal").length, color:C.teal },
+          const trackCounts = [
+            { label:"🛡️ 피해자 구제", count:d.filter(r=>r.trackId==="victim"||(!r.trackId&&!r.trackTitle)).length, color:C.teal },
+            { label:"🩺 산재 신청", count:d.filter(r=>r.trackId==="sanjae").length, color:C.gold },
+            { label:"⚖️ 피지목인 항변", count:d.filter(r=>r.trackId==="accused").length, color:"#A67C2E" },
+            { label:"🏛️ 회사 조사처리", count:d.filter(r=>r.trackId==="company").length, color:"#3D5A80" },
           ];
           return (
           <div>
             {d.length > 0 && (
               <div style={{ marginBottom:16 }}>
                 <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:10, marginBottom:12 }}>
-                  <StatCard icon="🛡️" label="총 접수" value={d.length+"건"} color={C.red} />
-                  <StatCard icon="🚨" label="긴급" value={urgencyCounts[0].count+"건"} color="#C0392B" sub="즉시 처리 필요" />
-                  <StatCard icon="⚡" label="빠른 처리" value={urgencyCounts[1].count+"건"} color={C.orange} />
+                  <StatCard icon="⚖️" label="총 접수" value={d.length+"건"} color={C.red} />
+                  <StatCard icon="🛡️" label="피해자 구제" value={trackCounts[0].count+"건"} color={C.teal} />
+                  <StatCard icon="⚖️" label="피지목인/산재" value={(trackCounts[1].count+trackCounts[2].count)+"건"} color={C.gold} />
                   <StatCard icon="✅" label="처리 완료" value={statusCounts[2].count+"건"} color={C.green} sub={`완료율 ${d.length?Math.round(statusCounts[2].count/d.length*100):0}%`} />
                 </div>
                 <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
-                  <StatSection title="🚨 긴급도 분포">
-                    <BarChart items={urgencyCounts} total={d.length} />
+                  <StatSection title="📋 트랙별 분포">
+                    <BarChart items={trackCounts} total={d.length} />
                   </StatSection>
                   <StatSection title="📈 월별 접수 추이 (6개월)">
                     <MiniTrend data={getMonthly(d,6)} color={C.red} />
@@ -1110,18 +1111,18 @@ export function AdminSection({ setActive, authed, setAuthed }) {
               <h3 style={{ fontSize:15, fontWeight:800, color:C.navy, marginBottom:14 }}>⚖️ 해결 의뢰 접수 내역 ({d.length}건)</h3>
               {d.length === 0 ? <div style={{ textAlign:"center", padding:48, color:C.gray }}>📭 접수된 내역이 없습니다.</div> : (
                 <table style={{ width:"100%", borderCollapse:"collapse" }}>
-                  <thead><tr>{["접수일시","성명","연락처","이메일","긴급도","상태",""].map(h=><th key={h} style={thStyle}>{h}</th>)}</tr></thead>
+                  <thead><tr>{["접수일시","성명","연락처","이메일","트랙","상태",""].map(h=><th key={h} style={thStyle}>{h}</th>)}</tr></thead>
                   <tbody>{d.map((r,i)=>(
                     <tr key={r.id} style={{ background:i%2===0?"transparent":"rgba(10,22,40,0.015)" }}>
                       <td style={tdStyle}>{new Date(r.submittedAt).toLocaleString("ko-KR")}</td>
                       <td style={{ ...tdStyle, fontWeight:700 }}>{r.name||"-"}</td>
                       <td style={tdStyle}>{r.phone||"-"}</td>
                       <td style={tdStyle}>{r.email||"-"}</td>
-                      <td style={tdStyle}>{r.urgency==="emergency"?"🚨 긴급":r.urgency==="urgent"?"⚡ 빠른":"일반"}</td>
+                      <td style={tdStyle}><span style={{ padding:"3px 8px", borderRadius:4, fontSize:10, fontWeight:700, background: r.trackId==="accused"?"rgba(166,124,46,0.12)":r.trackId==="sanjae"?"rgba(201,168,76,0.12)":r.trackId==="company"?"rgba(61,90,128,0.12)":"rgba(13,115,119,0.12)", color: r.trackId==="accused"?"#A67C2E":r.trackId==="sanjae"?C.gold:r.trackId==="company"?"#3D5A80":C.teal, border:`1px solid ${r.trackId==="accused"?"rgba(166,124,46,0.3)":r.trackId==="sanjae"?"rgba(201,168,76,0.3)":r.trackId==="company"?"rgba(61,90,128,0.3)":"rgba(13,115,119,0.3)"}` }}>{r.trackTitle||"피해자 구제"}</span></td>
                       <td style={tdStyle}><select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;updateSubmissionStatus(r.id,e.target.value);_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}><option>신규</option><option>진행중</option><option>완료</option></select></td>
                       <td style={{ ...tdStyle, textAlign:"right" }}>
                         <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 12px", marginRight:6 }}>상세보기</button>
-                        <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:"relief", data:r, greeting:`${r.name||""} 님 안녕하세요,\n화율인사이드입니다.\n\n신청하신 피해자 구제 건에 대한 검토 결과를 안내드립니다.`, body:"" })} style={{ padding:"5px 12px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
+                        <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:"relief", data:r, greeting:`${r.name||""} 님 안녕하세요,\n화율인사이드입니다.\n\n신청하신 ${r.trackTitle||"해결 의뢰"} 건에 대한 검토 결과를 안내드립니다.`, body:"" })} style={{ padding:"5px 12px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
                         <button onClick={()=>fetchEmailHistory(r.id)} style={{ padding:"5px 10px", borderRadius:6, background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", color:C.teal, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit", marginLeft:4 }}>📬 이력</button>
                       </td>
                     </tr>
