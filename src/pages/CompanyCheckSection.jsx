@@ -2,14 +2,17 @@ import { useState, useEffect } from "react";
 import C from "../tokens/colors.js";
 import { companyReportStatus, companyOrgStatus, companyCurrentActions } from "../data/companyCheckData.js";
 import { DiagnosisChatBot } from "../components/DiagnosisChatBot.jsx";
+import { loadCompany, saveCompany } from "../utils/storage.js";
 
 // ── 사내 괴롭힘 조사 필요성 체크 ─────────────────────────────────────────
 export function CompanyCheckSection({ setActive }) {
-  const [step, setStep] = useState(0);
-  const [report, setReport] = useState({});
-  const [org, setOrg] = useState({});
-  const [actions, setActions] = useState({});
+  const _saved = loadCompany();
+  const [step, setStep] = useState(_saved?.step || 0);
+  const [report, setReport] = useState(_saved?.report || {});
+  const [org, setOrg] = useState(_saved?.org || {});
+  const [actions, setActions] = useState(_saved?.actions || {});
 
+  useEffect(() => { saveCompany({ step, report, org, actions }); }, [step, report, org, actions]);
   useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, [step]);
 
   const STEPS = ["신고 현황", "조직 상황", "조치 상태", "결과"];
@@ -76,7 +79,7 @@ export function CompanyCheckSection({ setActive }) {
   };
 
   const result = step === 3 ? calcResult() : null;
-  const reset = () => { setReport({}); setOrg({}); setActions({}); setStep(0); };
+  const reset = () => { setReport({}); setOrg({}); setActions({}); setStep(0); saveCompany(null); };
 
   // 결과에 넘길 데이터
   const resultData = result ? {

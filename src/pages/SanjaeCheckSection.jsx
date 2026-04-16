@@ -2,14 +2,17 @@ import { useState, useEffect } from "react";
 import C from "../tokens/colors.js";
 import { sanjaeTypeOptions, sanjaeMedicalOptions, sanjaeWorkConditions } from "../data/sanjaeCheckData.js";
 import { DiagnosisChatBot } from "../components/DiagnosisChatBot.jsx";
+import { loadSanjae, saveSanjae } from "../utils/storage.js";
 
 // ── 산재 상담 필요성 체크 ─────────────────────────────────────────────────
 export function SanjaeCheckSection({ setActive }) {
-  const [step, setStep] = useState(0);
-  const [situation, setSituation] = useState(null);    // 단일 선택
-  const [medical, setMedical] = useState({});          // 복수 선택
-  const [workCond, setWorkCond] = useState({});        // 복수 선택
+  const _saved = loadSanjae();
+  const [step, setStep] = useState(_saved?.step || 0);
+  const [situation, setSituation] = useState(_saved?.situation || null);
+  const [medical, setMedical] = useState(_saved?.medical || {});
+  const [workCond, setWorkCond] = useState(_saved?.workCond || {});
 
+  useEffect(() => { saveSanjae({ step, situation, medical, workCond }); }, [step, situation, medical, workCond]);
   useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, [step]);
 
   const STEPS = ["상황 확인", "현재 상태", "근무 환경", "결과"];
@@ -62,7 +65,7 @@ export function SanjaeCheckSection({ setActive }) {
   };
 
   const result = step === 3 ? calcResult() : null;
-  const reset = () => { setSituation(null); setMedical({}); setWorkCond({}); setStep(0); };
+  const reset = () => { setSituation(null); setMedical({}); setWorkCond({}); setStep(0); saveSanjae(null); };
 
   // ── 결과 화면 ──
   if (step === 3 && result) {

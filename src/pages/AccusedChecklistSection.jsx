@@ -3,18 +3,21 @@ import C from "../tokens/colors.js";
 import { accusedRelationItems, accusedSuperiorityItems, accusedBehaviorCategories, accusedJustificationQuestions, accusedRepetitionQuestions, accusedImpactItems } from "../data/accusedChecklistData.js";
 import { calcAccusedResult } from "../utils/calcAccusedResult.js";
 import { DiagnosisChatBot } from "../components/DiagnosisChatBot.jsx";
+import { loadAccused, saveAccused } from "../utils/storage.js";
 
 // ── 피지목인 자가진단 ─────────────────────────────────────────────────────
 export function AccusedChecklistSection({ setActive }) {
   const STEPS = ["관계 확인", "행위 유형", "업무 적정성", "반복성 판단", "영향도 확인", "결과"];
-  const [step, setStep] = useState(0);
-  const [relation, setRelation] = useState(null);  // 단일 선택
-  const [superiority, setSup] = useState({});       // 복수 선택
-  const [behavior, setBehavior] = useState({});
-  const [justification, setJust] = useState({});    // 질문별 단일 선택
-  const [repetition, setRep] = useState({});        // 질문별 단일 선택
-  const [impact, setImpact] = useState({});
+  const _saved = loadAccused();
+  const [step, setStep] = useState(_saved?.step || 0);
+  const [relation, setRelation] = useState(_saved?.relation || null);
+  const [superiority, setSup] = useState(_saved?.superiority || {});
+  const [behavior, setBehavior] = useState(_saved?.behavior || {});
+  const [justification, setJust] = useState(_saved?.justification || {});
+  const [repetition, setRep] = useState(_saved?.repetition || {});
+  const [impact, setImpact] = useState(_saved?.impact || {});
 
+  useEffect(() => { saveAccused({ step, relation, superiority, behavior, justification, repetition, impact }); }, [step, relation, superiority, behavior, justification, repetition, impact]);
   useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, [step]);
 
   const pct = step === 5 ? 100 : Math.round(step / 5 * 100);
@@ -37,7 +40,7 @@ export function AccusedChecklistSection({ setActive }) {
     })),
   ) : null;
 
-  const reset = () => { setRelation(null); setSup({}); setBehavior({}); setJust({}); setRep({}); setImpact({}); setStep(0); };
+  const reset = () => { setRelation(null); setSup({}); setBehavior({}); setJust({}); setRep({}); setImpact({}); setStep(0); saveAccused(null); };
 
   const toggleCheck = (setter, id) => setter(s => ({ ...s, [id]: !s[id] }));
 

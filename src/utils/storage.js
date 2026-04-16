@@ -2,6 +2,9 @@
 export const STORAGE_KEY   = "hwayul_submissions_v2";
 export const CHECKLIST_KEY = "hwayul_checklist_v1";
 export const CULTURE_KEY   = "hwayul_culture_v1";
+export const ACCUSED_KEY   = "hwayul_accused_v1";
+export const SANJAE_KEY    = "hwayul_sanjae_v1";
+export const COMPANY_KEY   = "hwayul_company_v1";
 export const CONTENTS_KEY  = "hwayul_contents_v1";
 export const DETAILS_KEY   = "hwayul_details_v1";
 export const MEMBERS_KEY   = "hwayul_members_v1";
@@ -46,6 +49,36 @@ export function saveCulture(data) {
   try {
     if (data) localStorage.setItem(CULTURE_KEY, JSON.stringify(data));
     else       localStorage.removeItem(CULTURE_KEY);
+  } catch {}
+}
+
+export function loadAccused() {
+  try { const r = localStorage.getItem(ACCUSED_KEY); return r ? JSON.parse(r) : null; } catch { return null; }
+}
+export function saveAccused(data) {
+  try {
+    if (data) localStorage.setItem(ACCUSED_KEY, JSON.stringify(data));
+    else       localStorage.removeItem(ACCUSED_KEY);
+  } catch {}
+}
+
+export function loadSanjae() {
+  try { const r = localStorage.getItem(SANJAE_KEY); return r ? JSON.parse(r) : null; } catch { return null; }
+}
+export function saveSanjae(data) {
+  try {
+    if (data) localStorage.setItem(SANJAE_KEY, JSON.stringify(data));
+    else       localStorage.removeItem(SANJAE_KEY);
+  } catch {}
+}
+
+export function loadCompany() {
+  try { const r = localStorage.getItem(COMPANY_KEY); return r ? JSON.parse(r) : null; } catch { return null; }
+}
+export function saveCompany(data) {
+  try {
+    if (data) localStorage.setItem(COMPANY_KEY, JSON.stringify(data));
+    else       localStorage.removeItem(COMPANY_KEY);
   } catch {}
 }
 
