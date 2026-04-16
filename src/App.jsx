@@ -303,8 +303,8 @@ useEffect(() => {
         {active === "cases"     && <CasesManager />}
       </main>
 
-      {active === "home" && <DifferentiationSection setActive={setActive} />}
       {active === "home" && <CulturePromoSection setActive={setActive} />}
+      {active === "home" && <DifferentiationSection setActive={setActive} />}
       {active === "home" && <NewsletterSection />}
 
       <footer style={{ background:C.navy, borderTop:`1px solid rgba(201,168,76,0.18)`, padding:"40px 32px" }}>
