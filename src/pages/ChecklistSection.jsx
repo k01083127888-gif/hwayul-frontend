@@ -7,6 +7,7 @@ import { generateChecklistPrintHtml } from "../utils/printTemplates.js";
 import { PrintModal } from "../components/PrintModal.jsx";
 import { DiagnosisChatBot } from "../components/DiagnosisChatBot.jsx";
 import { AccusedChecklistSection } from "./AccusedChecklistSection.jsx";
+import { SanjaeCheckSection } from "./SanjaeCheckSection.jsx";
 import { SectionTag, DarkSectionTag } from "../components/common/FormElements.jsx";
 
 // ── ChecklistSection ─────────────────────────────────────────────────────────────────
@@ -45,25 +46,29 @@ export function ChecklistSection({ setActive, initialTab = "victim" }) {
           <p style={{ color:"rgba(244,241,235,0.55)", marginTop:8, fontSize:13, lineHeight:1.7 }}>고용노동부 판단 매뉴얼 기반 · 근로기준법 제76조의2</p>
         </div>
 
-        {/* ── 피해자 / 피지목인 탭 ── */}
+        {/* ── 피해자 / 피지목인 / 산재 탭 ── */}
         <div style={{ display:"flex", justifyContent:"center", gap:0, marginBottom:28 }}>
-          <button onClick={() => setDiagTab("victim")} style={{
-            padding:"12px 28px", borderRadius:"10px 0 0 10px", fontSize:14, fontWeight:diagTab==="victim"?800:500, cursor:"pointer", fontFamily:"inherit",
-            background:diagTab==="victim"?C.teal:"rgba(255,255,255,0.05)",
-            border:diagTab==="victim"?`2px solid ${C.teal}`:"2px solid rgba(255,255,255,0.1)",
-            color:diagTab==="victim"?"white":"rgba(244,241,235,0.6)", transition:"all 0.2s",
-          }}>😟 피해자 진단</button>
-          <button onClick={() => setDiagTab("accused")} style={{
-            padding:"12px 28px", borderRadius:"0 10px 10px 0", fontSize:14, fontWeight:diagTab==="accused"?800:500, cursor:"pointer", fontFamily:"inherit",
-            background:diagTab==="accused"?C.gold:"rgba(255,255,255,0.05)",
-            border:diagTab==="accused"?`2px solid ${C.gold}`:"2px solid rgba(255,255,255,0.1)",
-            color:diagTab==="accused"?C.navy:"rgba(244,241,235,0.6)", transition:"all 0.2s",
-          }}>😰 피지목인 진단</button>
+          {[
+            { id:"victim", label:"😟 피해자 진단", color:C.teal },
+            { id:"accused", label:"😰 피지목인 진단", color:C.gold },
+            { id:"sanjae", label:"🩺 산재 체크", color:C.teal },
+          ].map((tab, i, arr) => (
+            <button key={tab.id} onClick={() => setDiagTab(tab.id)} style={{
+              padding:"12px 22px",
+              borderRadius: i === 0 ? "10px 0 0 10px" : i === arr.length - 1 ? "0 10px 10px 0" : "0",
+              fontSize:13, fontWeight:diagTab===tab.id?800:500, cursor:"pointer", fontFamily:"inherit",
+              background:diagTab===tab.id?tab.color:"rgba(255,255,255,0.05)",
+              border:diagTab===tab.id?`2px solid ${tab.color}`:"2px solid rgba(255,255,255,0.1)",
+              color:diagTab===tab.id?(tab.color===C.gold?C.navy:"white"):"rgba(244,241,235,0.6)", transition:"all 0.2s",
+            }}>{tab.label}</button>
+          ))}
         </div>
 
-        {/* 피지목인 탭이면 AccusedChecklistSection 렌더링 */}
+        {/* 탭별 콘텐츠 렌더링 */}
         {diagTab === "accused" ? (
           <AccusedChecklistSection setActive={setActive} />
+        ) : diagTab === "sanjae" ? (
+          <SanjaeCheckSection setActive={setActive} />
         ) : (
         <>
         <div style={{ textAlign:"center", marginBottom:12 }}>
