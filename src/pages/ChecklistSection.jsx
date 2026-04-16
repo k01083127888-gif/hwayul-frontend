@@ -8,6 +8,7 @@ import { PrintModal } from "../components/PrintModal.jsx";
 import { DiagnosisChatBot } from "../components/DiagnosisChatBot.jsx";
 import { AccusedChecklistSection } from "./AccusedChecklistSection.jsx";
 import { SanjaeCheckSection } from "./SanjaeCheckSection.jsx";
+import { CompanyCheckSection } from "./CompanyCheckSection.jsx";
 import { SectionTag, DarkSectionTag } from "../components/common/FormElements.jsx";
 
 // ── ChecklistSection ─────────────────────────────────────────────────────────────────
@@ -52,6 +53,7 @@ export function ChecklistSection({ setActive, initialTab = "victim" }) {
             { id:"victim", label:"😟 피해자 진단", color:C.teal },
             { id:"accused", label:"😰 피지목인 진단", color:C.gold },
             { id:"sanjae", label:"🩺 산재 체크", color:C.teal },
+            { id:"company", label:"🏛️ 사내조사 체크", color:"#3D5A80" },
           ].map((tab, i, arr) => (
             <button key={tab.id} onClick={() => setDiagTab(tab.id)} style={{
               padding:"12px 22px",
@@ -69,6 +71,8 @@ export function ChecklistSection({ setActive, initialTab = "victim" }) {
           <AccusedChecklistSection setActive={setActive} />
         ) : diagTab === "sanjae" ? (
           <SanjaeCheckSection setActive={setActive} />
+        ) : diagTab === "company" ? (
+          <CompanyCheckSection setActive={setActive} />
         ) : (
         <>
         <div style={{ textAlign:"center", marginBottom:12 }}>

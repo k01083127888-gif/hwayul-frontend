@@ -46,10 +46,19 @@ export function DiagnosisChatBot({ type = "checklist", resultData = null, setAct
       quickQs: ["산재 신청 절차가 어떻게 되나요?", "정신질환도 산재가 되나요?", "회사가 비협조적이면 어떻게 하나요?", "산재 승인까지 얼마나 걸리나요?"],
       tone: "실무적이고 친절한 어조. 산재보험법과 판례를 기반으로. 승인 가능성을 단정하지 않되 유사 사례 참고 안내",
     },
+    company: {
+      label: "회사 담당자",
+      icon: "🏛️",
+      welcomeMsg: "안녕하세요. 사내 괴롭힘 사건 처리에 관한 궁금한 점을 답변드리겠습니다.\n\n조사 절차, 사업주 의무, 징계 결정, 2차 피해 방지 등을 안내해 드립니다.\n\n⚠️ 일반적 안내이며 법적 효력은 없습니다.",
+      quickQs: ["조사 착수 기한은 며칠인가요?", "당사자 분리 조치는 어떻게 하나요?", "조사보고서에 뭘 넣어야 하나요?", "미조치 시 과태료는 얼마인가요?"],
+      tone: "객관적·실무 중심. 근로기준법 제76조의2·제76조의3 기반. 법적 의무·기한·과태료를 명확하게 안내. 체크리스트 형태 선호",
+    },
   };
 
   const isSanjae = type === "sanjae";
-  const [role, setRole] = useState(isSanjae ? "sanjae" : "victim");
+  const isCompany = type === "company";
+  const isSpecial = isSanjae || isCompany;
+  const [role, setRole] = useState(isSanjae ? "sanjae" : isCompany ? "company" : "victim");
   const cfg = ROLE_CONFIG[role];
 
   const [messages, setMessages] = useState([{ role: "assistant", text: cfg.welcomeMsg }]);
@@ -70,8 +79,14 @@ export function DiagnosisChatBot({ type = "checklist", resultData = null, setAct
     setShowCTA(false);
   };
 
-  const systemPrompt = `당신은 '화율인사이드' 플랫폼의 ${isSanjae ? "산재 상담" : "직장내 괴롭힘 자가진단"} 전문 AI 상담 도우미입니다.
-${isSanjae ? "\n산재보험법, 산업재해보상보험법, 근로복지공단 심사 기준을 바탕으로 답변합니다.\n판례DB에 산재 관련 판례가 있다면 참고하여 유사 사례를 안내해 주세요." : ""}
+  const topicLabel = isSanjae ? "산재 상담" : isCompany ? "사내 괴롭힘 조사 자문" : "직장내 괴롭힘 자가진단";
+  const topicExtra = isSanjae
+    ? "\n산재보험법, 산업재해보상보험법, 근로복지공단 심사 기준을 바탕으로 답변합니다.\n판례DB에 산재 관련 판례가 있다면 참고하여 유사 사례를 안내해 주세요."
+    : isCompany
+    ? "\n근로기준법 제76조의2·제76조의3, 사업주 의무, 조사 절차, 과태료 기준을 바탕으로 답변합니다.\n사업주 입장에서 실무적 체크리스트를 제공하세요."
+    : "";
+  const systemPrompt = `당신은 '화율인사이드' 플랫폼의 ${topicLabel} 전문 AI 상담 도우미입니다.
+${topicExtra}
 
 사용자 입장: ${cfg.label}
 
@@ -143,8 +158,8 @@ ${role === "accused" ? "- 피해자를 비난하거나 폄하하는 방향으로
         </div>
       </div>
 
-      {/* 역할 선택 (산재 모드에서는 숨김) */}
-      {!isSanjae && (
+      {/* 역할 선택 (산재·회사 모드에서는 숨김) */}
+      {!isSpecial && (
       <div style={{ padding: "12px 22px", borderBottom: "1px solid rgba(255,255,255,0.05)", background: "rgba(0,0,0,0.15)" }}>
         <div style={{ fontSize: 11, color: "rgba(244,241,235,0.55)", marginBottom: 8 }}>입장을 바꿔서 상담하실 수도 있어요.</div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
