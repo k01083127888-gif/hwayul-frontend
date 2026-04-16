@@ -7,6 +7,58 @@ import { ValidationMsg } from "../components/common/ValidationMsg.jsx";
 import { PrivacyConsent } from "../components/common/PrivacyConsent.jsx";
 import { PrivacyPolicyModal } from "../components/common/PrivacyPolicyModal.jsx";
 
+const API_BASE = "https://hwayul-backend-production-96cf.up.railway.app/api";
+
+function sendConfirmEmail(form) {
+  if (!form.email) return;
+  const today = new Date().toISOString().slice(0, 10).replace(/-/g, ".");
+  const html = `
+    <div style="max-width:600px;margin:0 auto;font-family:'Noto Sans KR',sans-serif;color:#333;line-height:1.8;">
+      <div style="background:#0A1628;padding:28px 24px;border-radius:12px 12px 0 0;">
+        <h2 style="color:#F4F1EB;margin:0;font-size:18px;">화율인사이드</h2>
+        <p style="color:rgba(244,241,235,0.6);margin:4px 0 0;font-size:12px;">직장내 괴롭힘 & 조직문화 전문 플랫폼</p>
+      </div>
+      <div style="padding:28px 24px;border:1px solid #eee;border-top:none;border-radius:0 0 12px 12px;">
+        <p style="font-size:15px;font-weight:700;margin-bottom:16px;">${form.name}님, 안녕하세요.</p>
+        <p>화율인사이드 <strong>심층 상담 신청</strong>이 정상적으로 접수되었습니다.</p>
+
+        <div style="background:#f8f7f5;padding:16px 18px;border-radius:8px;margin:20px 0;">
+          <p style="font-size:13px;font-weight:700;color:#0A1628;margin:0 0 8px;">📋 신청 정보</p>
+          <p style="font-size:13px;margin:4px 0;">• 성명: ${form.name}</p>
+          <p style="font-size:13px;margin:4px 0;">• 연락처: ${form.phone}</p>
+          ${form.company ? `<p style="font-size:13px;margin:4px 0;">• 회사명: ${form.company}</p>` : ""}
+          <p style="font-size:13px;margin:4px 0;">• 신청일: ${today}</p>
+        </div>
+
+        <div style="background:#f8f7f5;padding:16px 18px;border-radius:8px;margin:20px 0;">
+          <p style="font-size:13px;font-weight:700;color:#0A1628;margin:0 0 8px;">📞 진행 절차</p>
+          <p style="font-size:13px;margin:4px 0;">1. 담당 노무사가 영업일 1일 내 연락드립니다</p>
+          <p style="font-size:13px;margin:4px 0;">2. 1차 전화 상담 → 2차 서류 검토(1일) → 3차 대면 상담</p>
+        </div>
+
+        <div style="background:#FFF8E7;padding:16px 18px;border-radius:8px;border:1px solid #F0E6C8;margin:20px 0;">
+          <p style="font-size:13px;font-weight:700;color:#8B7A40;margin:0 0 8px;">💳 입금 안내</p>
+          <p style="font-size:13px;margin:4px 0;">• 금액: <strong>22만원 (VAT 포함)</strong></p>
+          <p style="font-size:13px;margin:4px 0;">• 계좌: <strong>하나은행 824-910010-97104 (화율랩스)</strong></p>
+          <p style="font-size:13px;margin:4px 0;">• 입금 확인 후 1차 전화 상담이 예약됩니다</p>
+        </div>
+
+        <p style="font-size:13px;margin-top:20px;">궁금한 점은 <strong>02-2088-1767</strong>로 연락 주세요. (평일 09:00~18:00)</p>
+        <p style="font-size:13px;color:#999;margin-top:24px;padding-top:16px;border-top:1px solid #eee;">본 메일은 발신 전용이며, 상담 내용은 노무사법 제37조에 따라 비밀이 유지됩니다.</p>
+      </div>
+    </div>
+  `;
+  fetch(`${API_BASE}/send-email`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      to: form.email,
+      subject: "[화율인사이드] 심층 상담 신청이 접수되었습니다",
+      html,
+    }),
+  }).catch(e => console.log("확인 이메일 발송 실패(무시):", e.message));
+}
+
 // ── BizSection ─────────────────────────────────────────────────────────────────
 export function BizSection() {
   const [step, setStep] = useState(1);
@@ -180,7 +232,7 @@ export function BizSection() {
               </div>
               {form.note.trim() && (
                 <div style={{ textAlign:"center", marginTop:10 }}>
-                  <button onClick={() => { addSubmission("biz", {...form}); setDone(true); }} style={{ fontSize:12, color:"rgba(244,241,235,0.4)", background:"none", border:"none", cursor:"pointer", fontFamily:"inherit", textDecoration:"underline" }}>일정 선택 없이 바로 신청하기 →</button>
+                  <button onClick={() => { addSubmission("biz", {...form}); sendConfirmEmail(form); setDone(true); }} style={{ fontSize:12, color:"rgba(244,241,235,0.4)", background:"none", border:"none", cursor:"pointer", fontFamily:"inherit", textDecoration:"underline" }}>일정 선택 없이 바로 신청하기 →</button>
                 </div>
               )}
             </div>
@@ -209,7 +261,7 @@ export function BizSection() {
               )}
               <div style={{ display:"flex", gap:12 }}>
                 <button onClick={() => setStep(2)} style={{ padding:"14px 22px", background:"rgba(255,255,255,0.06)", border:"none", borderRadius:8, color:"rgba(244,241,235,0.65)", fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>← 이전</button>
-                <button onClick={() => { addSubmission("biz", {...form}); setDone(true); }} style={{ flex:1, padding:"14px", background:C.gold, border:"none", borderRadius:8, color:C.navy, fontWeight:800, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>{form.date && form.time ? "예약 확정하기 ✓" : "일정 없이 상담 신청하기 →"}</button>
+                <button onClick={() => { addSubmission("biz", {...form}); sendConfirmEmail(form); setDone(true); }} style={{ flex:1, padding:"14px", background:C.gold, border:"none", borderRadius:8, color:C.navy, fontWeight:800, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>{form.date && form.time ? "예약 확정하기 ✓" : "일정 없이 상담 신청하기 →"}</button>
               </div>
               {!form.date && !form.time && (
                 <div style={{ textAlign:"center", fontSize:11, color:"rgba(244,241,235,0.35)", marginTop:10 }}>일정을 선택하지 않으시면 담당 노무사가 연락하여 일정을 조율합니다.</div>
