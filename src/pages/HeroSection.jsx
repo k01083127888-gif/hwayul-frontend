@@ -55,39 +55,14 @@ export function HeroSection({ setActive }) {
           "1,000건+의 판례를 학습한 AI가 20년 전문가의 시선으로 답변합니다"
         </p>
 
-        {/* 5개 고객 유형 CTA */}
+        {/* 4개 고객 유형 CTA */}
         <div style={{ fontSize:11, fontWeight:700, color:"rgba(244,241,235,0.4)", letterSpacing:"2px", textAlign:"center", marginBottom:14 }}>어떤 상황이신가요?</div>
-
-        {/* 개인 3개 */}
-        <div style={{ fontSize:10, fontWeight:600, color:C.tealLight, letterSpacing:"1.5px", marginBottom:8, maxWidth:920, margin:"0 auto 8px" }}>개인</div>
-        <div className="hero-cta-grid" style={{ display:"grid", gridTemplateColumns:"repeat(3, 1fr)", gap:12, maxWidth:920, margin:"0 auto 16px" }}>
+        <div className="hero-cta-grid" style={{ display:"grid", gridTemplateColumns:"repeat(4, 1fr)", gap:14, maxWidth:920, margin:"0 auto 64px" }}>
           {[
-            { id:"checklist", icon:"😟", title:"괴롭힘을 당하고 있어요", desc:"무료 자가진단 → AI상담 → 심층상담", bg:C.gold, tc:C.navy, border:"none", badge:"무료 진단" },
-            { id:"checklist-accused", icon:"😰", title:"가해자로 지목됐어요", desc:"무료 자가진단 → AI상담 → 심층상담", bg:"transparent", tc:C.cream, border:`2px solid rgba(201,168,76,0.5)`, badge:"무료 진단" },
-            { id:"checklist-sanjae", icon:"🩺", title:"산재를 신청하고 싶어요", desc:"무료 상담필요성 체크 → AI상담", bg:"transparent", tc:C.cream, border:`2px solid rgba(13,115,119,0.5)`, badge:"무료 체크" },
-          ].map(cta => (
-            <button key={cta.id} onClick={() => setActive(cta.id)} style={{
-              padding:"22px 14px", borderRadius:14, background:cta.bg, border:cta.border,
-              color:cta.tc, cursor:"pointer", fontFamily:"inherit", textAlign:"center",
-              transition:"all 0.25s",
-            }}
-              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.filter = "brightness(1.1)"; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.filter = ""; }}
-            >
-              {cta.badge && <div style={{ fontSize:10, fontWeight:700, color:"#fff", background:C.teal, borderRadius:20, padding:"2px 10px", display:"inline-block", marginBottom:6 }}>{cta.badge}</div>}
-              <div style={{ fontSize:30, marginBottom:10 }}>{cta.icon}</div>
-              <div style={{ fontWeight:800, fontSize:15, marginBottom:6 }}>{cta.title}</div>
-              <div style={{ fontSize:12, opacity:0.72, lineHeight:1.5 }}>{cta.desc}</div>
-            </button>
-          ))}
-        </div>
-
-        {/* 기업 2개 */}
-        <div style={{ fontSize:10, fontWeight:600, color:C.goldLight, letterSpacing:"1.5px", marginBottom:8, maxWidth:920, margin:"0 auto 8px" }}>기업</div>
-        <div className="hero-cta-grid-biz" style={{ display:"grid", gridTemplateColumns:"repeat(2, 1fr)", gap:12, maxWidth:920, margin:"0 auto 64px" }}>
-          {[
-            { id:"culture", icon:"🏢", title:"조직문화를 점검하고 싶어요", desc:"무료 진단 → 33만원 전문 리포트", bg:"transparent", tc:C.cream, border:`2px solid rgba(13,115,119,0.4)`, badge:"무료 진단" },
-            { id:"checklist-company", icon:"🏛️", title:"사내 신고가 접수됐어요", desc:"무료 조사 필요성 체크 → AI상담", bg:"transparent", tc:C.cream, border:`2px solid rgba(61,90,128,0.5)`, badge:"무료 체크" },
+            { id:"checklist", icon:"😟", title:"괴롭힘을 당하고 있어요", desc:"무료 자가진단 → AI상담", bg:C.gold, tc:C.navy, border:"none", badge:"무료 진단" },
+            { id:"checklist-accused", icon:"😰", title:"가해자로 지목됐어요", desc:"무료 자가진단 → AI상담", bg:"transparent", tc:C.cream, border:`2px solid rgba(201,168,76,0.5)`, badge:"무료 진단" },
+            { id:"checklist-sanjae", icon:"🩺", title:"산재를 신청하고 싶어요", desc:"무료 상담필요성 체크", bg:"transparent", tc:C.cream, border:`2px solid rgba(13,115,119,0.5)`, badge:"무료 체크" },
+            { id:"checklist-company", icon:"🏛️", title:"사내 신고가 접수됐어요", desc:"무료 조사필요성 체크", bg:"transparent", tc:C.cream, border:`2px solid rgba(61,90,128,0.5)`, badge:"무료 체크" },
           ].map(cta => (
             <button key={cta.id} onClick={() => setActive(cta.id)} style={{
               padding:"22px 14px", borderRadius:14, background:cta.bg, border:cta.border,
@@ -117,6 +92,33 @@ export function HeroSection({ setActive }) {
         </div>
         <div style={{ textAlign:"center", marginTop:10, fontSize:10, color:"rgba(244,241,235,0.2)" }}>
           ※ 출처: 국회 환경노동위원회·근로복지공단 공식 자료 (2024.10.22)
+        </div>
+
+        {/* 조직문화 진단 배너 */}
+        <div
+          onClick={() => setActive("culture")}
+          style={{
+            marginTop:48, padding:"24px 28px", borderRadius:14,
+            background:"rgba(13,115,119,0.08)", border:"1.5px solid rgba(13,115,119,0.3)",
+            display:"flex", alignItems:"center", justifyContent:"space-between", gap:20,
+            cursor:"pointer", transition:"all 0.25s", flexWrap:"wrap",
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = "rgba(13,115,119,0.14)"; e.currentTarget.style.borderColor = "rgba(13,115,119,0.5)"; }}
+          onMouseLeave={e => { e.currentTarget.style.background = "rgba(13,115,119,0.08)"; e.currentTarget.style.borderColor = "rgba(13,115,119,0.3)"; }}
+        >
+          <div style={{ flex:1, minWidth:220 }}>
+            <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:8 }}>
+              <span style={{ fontSize:22 }}>🏢</span>
+              <span style={{ fontSize:15, fontWeight:800, color:C.cream }}>기업 HR 담당자이신가요?</span>
+              <span style={{ fontSize:10, fontWeight:700, color:"#fff", background:C.teal, borderRadius:20, padding:"2px 10px" }}>무료 진단</span>
+            </div>
+            <div style={{ fontSize:13, color:"rgba(244,241,235,0.6)", lineHeight:1.7 }}>
+              조직문화 위험도를 6개 영역별로 무료 진단하고, 전문 노무사의 <strong style={{ color:C.tealLight }}>맞춤형 리포트(33만원)</strong>를 받아보세요.
+            </div>
+          </div>
+          <div style={{ padding:"12px 24px", borderRadius:10, background:C.teal, color:"white", fontWeight:800, fontSize:13, whiteSpace:"nowrap", flexShrink:0 }}>
+            조직문화 진단 시작 →
+          </div>
         </div>
       </div>
     </section>
