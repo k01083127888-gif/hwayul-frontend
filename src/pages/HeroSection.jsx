@@ -59,10 +59,10 @@ export function HeroSection({ setActive }) {
         <div style={{ fontSize:11, fontWeight:700, color:"rgba(244,241,235,0.4)", letterSpacing:"2px", textAlign:"center", marginBottom:14 }}>어떤 상황이신가요?</div>
         <div className="hero-cta-grid" style={{ display:"grid", gridTemplateColumns:"repeat(4, 1fr)", gap:14, maxWidth:920, margin:"0 auto 64px" }}>
           {[
-            { id:"checklist", icon:"😟", title:"괴롭힘을 당하고 있어요", desc:"무료 자가진단 → AI상담", bg:C.gold, tc:C.navy, border:"none", badge:"무료 진단" },
-            { id:"checklist-accused", icon:"😰", title:"가해자로 지목됐어요", desc:"무료 자가진단 → AI상담", bg:"transparent", tc:C.cream, border:`2px solid rgba(201,168,76,0.5)`, badge:"무료 진단" },
-            { id:"checklist-sanjae", icon:"🩺", title:"산재를 신청하고 싶어요", desc:"무료 상담필요성 체크", bg:"transparent", tc:C.cream, border:`2px solid rgba(13,115,119,0.5)`, badge:"무료 체크" },
-            { id:"checklist-company", icon:"🏛️", title:"사내 신고가 접수됐어요", desc:"무료 조사필요성 체크", bg:"transparent", tc:C.cream, border:`2px solid rgba(61,90,128,0.5)`, badge:"무료 체크" },
+            { id:"checklist", icon:"😟", title:"괴롭힘을 당하고 있어요", desc:"혼자 감당하지 않아도 됩니다", bg:C.gold, tc:C.navy, border:"none", badge:"무료 진단" },
+            { id:"checklist-accused", icon:"😰", title:"가해자로 지목됐어요", desc:"당신도 적정 절차를 받을 권리가 있습니다", bg:"transparent", tc:C.cream, border:`2px solid rgba(201,168,76,0.5)`, badge:"무료 진단" },
+            { id:"checklist-sanjae", icon:"🩺", title:"산재를 신청하고 싶어요", desc:"업무로 인한 질병, 보상받을 수 있습니다", bg:"transparent", tc:C.cream, border:`2px solid rgba(13,115,119,0.5)`, badge:"무료 체크" },
+            { id:"checklist-company", icon:"🏛️", title:"사내 신고가 접수됐어요", desc:"법적 의무를 지키는 것이 회사를 지킵니다", bg:"transparent", tc:C.cream, border:`2px solid rgba(61,90,128,0.5)`, badge:"무료 체크" },
           ].map(cta => (
             <button key={cta.id} onClick={() => setActive(cta.id)} style={{
               padding:"22px 14px", borderRadius:14, background:cta.bg, border:cta.border,
