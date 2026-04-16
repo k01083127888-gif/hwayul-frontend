@@ -11,7 +11,18 @@ export function SideRequestPanel() {
   const [open, setOpen] = useState(null); // "lecture"|"advisory"|"consulting"|null
   const [form, setForm] = useState({ name:"", company:"", email:"", phone:"", date:"", detail:"" });
   const [done, setDone] = useState(false);
-  const [collapsed, setCollapsed] = useState(typeof window !== "undefined" && window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(typeof window !== "undefined" && window.innerWidth <= 768);
+  const [collapsed, setCollapsed] = useState(false);
+
+  // 모바일에서는 아예 렌더링하지 않음
+  useState(() => {
+    if (typeof window === "undefined") return;
+    const onResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  });
+
+  if (isMobile) return null;
   const F = k => e => setForm(f => ({ ...f, [k]: e.target.value }));
   const reset = () => { setForm({ name:"", company:"", email:"", phone:"", date:"", detail:"" }); setDone(false); };
 
