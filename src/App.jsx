@@ -286,7 +286,7 @@ useEffect(() => {
       `}</style>
 
       <PrivacyPolicyModal isOpen={showFooterPrivacy} onClose={() => setShowFooterPrivacy(false)} />
-      {active === "home" && <SideRequestPanel />}
+      {/* SideRequestPanel은 CulturePromoSection 내부로 이동 */}
       <NewFeaturesHub isAdmin={isAdmin} />
       <Nav active={active} setActive={setActive} />
 

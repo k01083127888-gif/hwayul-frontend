@@ -114,6 +114,41 @@ export function CulturePromoSection({ setActive }) {
             소요 시간 약 10분 · 결과 즉시 확인 · 전문 리포트(33만원) 별도 신청 가능
           </div>
         </div>
+
+        {/* 기업 맞춤 서비스 (강의·자문·교육) */}
+        <div style={{ marginTop:56, padding:"32px 28px", background:"rgba(255,255,255,0.03)", border:"1px solid rgba(201,168,76,0.2)", borderRadius:16 }}>
+          <div style={{ textAlign:"center", marginBottom:24 }}>
+            <div style={{ fontSize:11, fontWeight:700, color:C.gold, letterSpacing:"2px", marginBottom:8 }}>ENTERPRISE SERVICE</div>
+            <div style={{ fontFamily:"'Noto Serif KR', serif", fontSize:18, fontWeight:800, color:C.cream }}>기업 맞춤 서비스</div>
+            <div style={{ fontSize:12, color:"rgba(244,241,235,0.5)", marginTop:6 }}>조직문화 개선을 위한 전문 노무사의 강의·자문·교육을 신청하세요</div>
+          </div>
+          <div className="content-grid-3" style={{ display:"grid", gridTemplateColumns:"repeat(3, 1fr)", gap:14 }}>
+            {[
+              { icon:"🎓", title:"전문 강의", desc:"괴롭힘 예방교육, 성희롱 예방교육 등 법정의무교육을 전문 노무사가 직접 진행", color:"#2980B9", items:["괴롭힘 예방교육", "성희롱 예방교육", "관리자 리더십 교육"] },
+              { icon:"💼", title:"노무 자문", desc:"사건 처리, 취업규칙 정비, 노사관계 자문 등 기업 맞춤 노무 자문", color:"#8E44AD", items:["사건 처리 자문", "취업규칙 정비", "인사·징계 자문"] },
+              { icon:"📚", title:"맞춤 교육", desc:"조직문화 개선 워크숍, 고충처리위원 실무 교육 등 맞춤형 프로그램", color:C.teal, items:["조직문화 워크숍", "고충처리위원 교육", "소통 스킬 교육"] },
+            ].map(svc => (
+              <div key={svc.title} style={{ padding:"22px 18px", background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.07)", borderRadius:12, borderTop:`3px solid ${svc.color}` }}>
+                <div style={{ fontSize:28, marginBottom:10 }}>{svc.icon}</div>
+                <div style={{ fontSize:14, fontWeight:800, color:C.cream, marginBottom:6 }}>{svc.title}</div>
+                <div style={{ fontSize:11, color:"rgba(244,241,235,0.5)", lineHeight:1.65, marginBottom:12 }}>{svc.desc}</div>
+                {svc.items.map((item, i) => (
+                  <div key={i} style={{ fontSize:11, color:"rgba(244,241,235,0.6)", lineHeight:1.6, display:"flex", gap:6 }}>
+                    <span style={{ color:svc.color, flexShrink:0 }}>✓</span>{item}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+          <div style={{ textAlign:"center", marginTop:20 }}>
+            <button
+              onClick={() => setActive("biz")}
+              style={{ padding:"12px 32px", borderRadius:10, background:C.gold, border:"none", color:C.navy, fontWeight:800, fontSize:13, cursor:"pointer", fontFamily:"inherit" }}
+            >
+              💼 기업 서비스 문의하기 →
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );
