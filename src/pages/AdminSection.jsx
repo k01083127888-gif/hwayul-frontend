@@ -476,8 +476,11 @@ export function AdminSection({ setActive, authed, setAuthed }) {
             <ReactQuill
               ref={quillRef}
               theme="snow"
-              value={body}
-              onChange={setBody}
+              defaultValue={body}
+              onBlur={() => {
+                const quill = quillRef.current?.getEditor?.() || quillRef.current;
+                if (quill?.root) setBody(quill.root.innerHTML);
+              }}
               modules={quillModules}
               placeholder="콘텐츠 본문을 입력하세요. 이미지와 유튜브 영상을 바로 삽입할 수 있어요."
               style={{ minHeight: 300, fontSize: 13 }}
