@@ -108,7 +108,7 @@ export function CulturePromoSection({ setActive }) {
             onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(13,115,119,0.45)"; }}
             onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 8px 32px rgba(13,115,119,0.35)"; }}
           >
-            🏢 조직문화 무료 진단 시작하기 →
+            🏢 조직문화 무료 자가진단 시작하기 →
           </button>
           <div style={{ marginTop:12, fontSize:11, color:"rgba(244,241,235,0.35)" }}>
             소요 시간 약 10분 · 결과 즉시 확인 · 전문 리포트(33만원) 별도 신청 가능
