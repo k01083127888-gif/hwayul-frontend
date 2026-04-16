@@ -3,7 +3,7 @@ import C from "../tokens/colors.js";
 
 // ── 진단 결과 기반 인라인 AI 챗봇 (괴롭힘 자가진단 전용) ──────────────────
 // 기본은 피해자 입장으로 시작, 다른 입장이면 역할 변경 가능
-export function DiagnosisChatBot({ resultData = null, setActive }) {
+export function DiagnosisChatBot({ type = "checklist", resultData = null, setActive }) {
   const resultSummary = (() => {
     if (!resultData) return "";
     try { return JSON.stringify(resultData, null, 2); } catch { return ""; }
@@ -39,9 +39,17 @@ export function DiagnosisChatBot({ resultData = null, setActive }) {
       quickQs: ["이런 상황이 괴롭힘인가요?", "상사의 업무지시와 괴롭힘의 차이는?", "동료 간 갈등도 괴롭힘인가요?", "어떤 절차를 밟아야 하나요?"],
       tone: "중립적이고 친절한 안내자. 직장내 괴롭힘 3요건 기준으로 체계적으로",
     },
+    sanjae: {
+      label: "산재 상담",
+      icon: "🩺",
+      welcomeMsg: "안녕하세요. 산재 체크 결과를 바탕으로 궁금한 점을 답변드리겠습니다.\n\n산재 승인 절차, 필요 서류, 유사 판례 등을 안내해 드립니다.\n\n⚠️ 일반적 안내이며 법적 효력은 없습니다.",
+      quickQs: ["산재 신청 절차가 어떻게 되나요?", "정신질환도 산재가 되나요?", "회사가 비협조적이면 어떻게 하나요?", "산재 승인까지 얼마나 걸리나요?"],
+      tone: "실무적이고 친절한 어조. 산재보험법과 판례를 기반으로. 승인 가능성을 단정하지 않되 유사 사례 참고 안내",
+    },
   };
 
-  const [role, setRole] = useState("victim");
+  const isSanjae = type === "sanjae";
+  const [role, setRole] = useState(isSanjae ? "sanjae" : "victim");
   const cfg = ROLE_CONFIG[role];
 
   const [messages, setMessages] = useState([{ role: "assistant", text: cfg.welcomeMsg }]);
@@ -62,7 +70,8 @@ export function DiagnosisChatBot({ resultData = null, setActive }) {
     setShowCTA(false);
   };
 
-  const systemPrompt = `당신은 '화율인사이드' 플랫폼의 직장내 괴롭힘 자가진단 전문 AI 상담 도우미입니다.
+  const systemPrompt = `당신은 '화율인사이드' 플랫폼의 ${isSanjae ? "산재 상담" : "직장내 괴롭힘 자가진단"} 전문 AI 상담 도우미입니다.
+${isSanjae ? "\n산재보험법, 산업재해보상보험법, 근로복지공단 심사 기준을 바탕으로 답변합니다.\n판례DB에 산재 관련 판례가 있다면 참고하여 유사 사례를 안내해 주세요." : ""}
 
 사용자 입장: ${cfg.label}
 
@@ -134,11 +143,12 @@ ${role === "accused" ? "- 피해자를 비난하거나 폄하하는 방향으로
         </div>
       </div>
 
-      {/* 역할 선택 (항상 표시) */}
+      {/* 역할 선택 (산재 모드에서는 숨김) */}
+      {!isSanjae && (
       <div style={{ padding: "12px 22px", borderBottom: "1px solid rgba(255,255,255,0.05)", background: "rgba(0,0,0,0.15)" }}>
         <div style={{ fontSize: 11, color: "rgba(244,241,235,0.55)", marginBottom: 8 }}>입장을 바꿔서 상담하실 수도 있어요.</div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-          {Object.entries(ROLE_CONFIG).map(([key, r]) => (
+          {Object.entries(ROLE_CONFIG).filter(([key]) => key !== "sanjae").map(([key, r]) => (
             <button key={key} onClick={() => switchRole(key)} style={{
               padding: "6px 12px", borderRadius: 100,
               background: role === key ? "rgba(13,115,119,0.25)" : "rgba(255,255,255,0.05)",
@@ -153,6 +163,7 @@ ${role === "accused" ? "- 피해자를 비난하거나 폄하하는 방향으로
           ))}
         </div>
       </div>
+      )}
 
       {/* 메시지 영역 */}
       <div style={{ padding: "16px 18px 8px", display: "flex", flexDirection: "column", gap: 12, maxHeight: 480, overflowY: "auto" }}>

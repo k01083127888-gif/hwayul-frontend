@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import C from "../tokens/colors.js";
 import { sanjaeTypeOptions, sanjaeMedicalOptions, sanjaeWorkConditions } from "../data/sanjaeCheckData.js";
+import { DiagnosisChatBot } from "../components/DiagnosisChatBot.jsx";
 
 // ── 산재 상담 필요성 체크 ─────────────────────────────────────────────────
 export function SanjaeCheckSection({ setActive }) {
@@ -90,6 +91,9 @@ export function SanjaeCheckSection({ setActive }) {
             실제 승인 여부는 근로복지공단의 심사에 의해 결정됩니다. <strong style={{ color:"#E67E22" }}>전문 노무사 상담</strong>을 권장합니다.
           </div>
         </div>
+
+        {/* AI 챗봇 (산재 상담) */}
+        <DiagnosisChatBot type="sanjae" resultData={{ ...result, situation: situation?.tag || "", medicalChecked: Object.keys(medical).filter(k => medical[k]), workChecked: Object.keys(workCond).filter(k => workCond[k]) }} variant="dark" setActive={setActive} />
 
         {/* 심층 상담 CTA */}
         <div style={{ padding:"20px 22px", background:"rgba(201,168,76,0.08)", border:"1.5px solid rgba(201,168,76,0.32)", borderRadius:14, marginBottom:20, display:"flex", alignItems:"center", justifyContent:"space-between", gap:16, flexWrap:"wrap" }}>
