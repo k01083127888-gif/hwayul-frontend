@@ -289,7 +289,7 @@ useEffect(() => {
         {active === "home"      && <HeroSection    setActive={setActive} />}
         {active === "intro"     && <IntroSection />}
         {active === "content"   && <ContentSection />}
-        {active === "checklist" && <ChecklistSection setActive={setActive} />}
+        {(active === "checklist" || active === "checklist-accused") && <ChecklistSection setActive={setActive} initialTab={active === "checklist-accused" ? "accused" : "victim"} />}
         {active === "culture"  && <CultureSection />}
         {active === "report"    && <ReportSection />}
         {active === "biz"       && <BizSection />}

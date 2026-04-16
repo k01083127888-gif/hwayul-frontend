@@ -6,10 +6,12 @@ import { calcResult } from "../utils/calcResult.js";
 import { generateChecklistPrintHtml } from "../utils/printTemplates.js";
 import { PrintModal } from "../components/PrintModal.jsx";
 import { DiagnosisChatBot } from "../components/DiagnosisChatBot.jsx";
+import { AccusedChecklistSection } from "./AccusedChecklistSection.jsx";
 import { SectionTag, DarkSectionTag } from "../components/common/FormElements.jsx";
 
 // ── ChecklistSection ─────────────────────────────────────────────────────────────────
-export function ChecklistSection({ setActive }) {
+export function ChecklistSection({ setActive, initialTab = "victim" }) {
+  const [diagTab, setDiagTab] = useState(initialTab);
   const STEPS = ["사전요건 확인", "행위유형 진단", "피해 영향도", "반복성 판단", "결과 확인"];
   const _saved = loadChecklist();
   const [step, setStep] = useState(_saved?.step || 0);
@@ -37,10 +39,35 @@ export function ChecklistSection({ setActive }) {
   return (
     <section style={{ padding:"80px 32px", background:C.navy, minHeight:"100vh" }}>
       <div style={{ maxWidth:860, margin:"0 auto" }}>
-        <div style={{ textAlign:"center", marginBottom:36 }}>
+        <div style={{ textAlign:"center", marginBottom:24 }}>
           <DarkSectionTag>DIAGNOSIS TOOL v2.0</DarkSectionTag>
-          <h2 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"clamp(1.6rem, 3vw, 2.1rem)", fontWeight:800, color:C.cream, marginTop:8, letterSpacing:"-0.5px" }}>직장내 괴롭힘 전문 진단 체크리스트</h2>
-          <p style={{ color:"rgba(244,241,235,0.55)", marginTop:8, fontSize:13, lineHeight:1.7 }}>고용노동부 판단 매뉴얼 기반 · 근로기준법 제76조의2 · 3대 요건 × 6개 행위유형 · 피해영향도 종합 분석</p>
+          <h2 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"clamp(1.6rem, 3vw, 2.1rem)", fontWeight:800, color:C.cream, marginTop:8, letterSpacing:"-0.5px" }}>직장내 괴롭힘 전문 진단</h2>
+          <p style={{ color:"rgba(244,241,235,0.55)", marginTop:8, fontSize:13, lineHeight:1.7 }}>고용노동부 판단 매뉴얼 기반 · 근로기준법 제76조의2</p>
+        </div>
+
+        {/* ── 피해자 / 피지목인 탭 ── */}
+        <div style={{ display:"flex", justifyContent:"center", gap:0, marginBottom:28 }}>
+          <button onClick={() => setDiagTab("victim")} style={{
+            padding:"12px 28px", borderRadius:"10px 0 0 10px", fontSize:14, fontWeight:diagTab==="victim"?800:500, cursor:"pointer", fontFamily:"inherit",
+            background:diagTab==="victim"?C.teal:"rgba(255,255,255,0.05)",
+            border:diagTab==="victim"?`2px solid ${C.teal}`:"2px solid rgba(255,255,255,0.1)",
+            color:diagTab==="victim"?"white":"rgba(244,241,235,0.6)", transition:"all 0.2s",
+          }}>😟 피해자 진단</button>
+          <button onClick={() => setDiagTab("accused")} style={{
+            padding:"12px 28px", borderRadius:"0 10px 10px 0", fontSize:14, fontWeight:diagTab==="accused"?800:500, cursor:"pointer", fontFamily:"inherit",
+            background:diagTab==="accused"?C.gold:"rgba(255,255,255,0.05)",
+            border:diagTab==="accused"?`2px solid ${C.gold}`:"2px solid rgba(255,255,255,0.1)",
+            color:diagTab==="accused"?C.navy:"rgba(244,241,235,0.6)", transition:"all 0.2s",
+          }}>😰 피지목인 진단</button>
+        </div>
+
+        {/* 피지목인 탭이면 AccusedChecklistSection 렌더링 */}
+        {diagTab === "accused" ? (
+          <AccusedChecklistSection setActive={setActive} />
+        ) : (
+        <>
+        <div style={{ textAlign:"center", marginBottom:12 }}>
+          <p style={{ color:"rgba(244,241,235,0.45)", fontSize:12 }}>3대 요건 × 6개 행위유형 · 피해영향도 종합 분석</p>
         </div>
 
         {/* 스텝 표시 */}
@@ -340,6 +367,8 @@ export function ChecklistSection({ setActive }) {
               <button onClick={reset} style={{ padding:"13px 36px", background:"rgba(255,255,255,0.06)", border:"none", borderRadius:8, color:"rgba(244,241,235,0.65)", fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>↺ 다시 진단하기</button>
             </div>
           </div>
+        )}
+        </>
         )}
       </div>
     </section>
