@@ -21,6 +21,7 @@ import { BizSection } from "./pages/BizSection.jsx";
 import { ReliefSection } from "./pages/ReliefSection.jsx";
 import { AdminSection } from "./pages/AdminSection.jsx";
 import { DifferentiationSection } from "./pages/DifferentiationSection.jsx";
+import { CulturePromoSection } from "./pages/CulturePromoSection.jsx";
 
 export default function App() {
   // URL ↔ 페이지 매핑
@@ -303,6 +304,7 @@ useEffect(() => {
       </main>
 
       {active === "home" && <DifferentiationSection setActive={setActive} />}
+      {active === "home" && <CulturePromoSection setActive={setActive} />}
       {active === "home" && <NewsletterSection />}
 
       <footer style={{ background:C.navy, borderTop:`1px solid rgba(201,168,76,0.18)`, padding:"40px 32px" }}>
