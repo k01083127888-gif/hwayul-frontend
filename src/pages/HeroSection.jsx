@@ -55,16 +55,42 @@ export function HeroSection({ setActive }) {
           "1,000건+의 판례를 학습한 AI가 20년 전문가의 시선으로 답변합니다"
         </p>
 
-        {/* 4개 핵심 CTA */}
-        <div className="hero-cta-grid" style={{ display:"grid", gridTemplateColumns:"repeat(4, 1fr)", gap:14, maxWidth:860, margin:"0 auto 64px" }}>
+        {/* 5개 고객 유형 CTA */}
+        <div style={{ fontSize:11, fontWeight:700, color:"rgba(244,241,235,0.4)", letterSpacing:"2px", textAlign:"center", marginBottom:14 }}>어떤 상황이신가요?</div>
+
+        {/* 개인 3개 */}
+        <div style={{ fontSize:10, fontWeight:600, color:C.tealLight, letterSpacing:"1.5px", marginBottom:8, maxWidth:920, margin:"0 auto 8px" }}>개인</div>
+        <div className="hero-cta-grid" style={{ display:"grid", gridTemplateColumns:"repeat(3, 1fr)", gap:12, maxWidth:920, margin:"0 auto 16px" }}>
           {[
-            { id:"checklist", icon:"🔍", title:"괴롭힘 자가진단",  desc:"직장내 괴롭힘 여부를 지금 바로 확인하세요", bg:C.gold, tc:C.navy, border:"none", badge:"무료 자가진단" },
-            { id:"culture",   icon:"🏛️", title:"조직문화 진단",       desc:"괴롭힘 발생 위험을 사전에 점검하세요", bg:"transparent", tc:C.cream, border:`2px solid rgba(13,115,119,0.5)`, badge:"무료 자가진단" },
-            { id:"biz",       icon:"💼", title:"심층 상담",           desc:"유료 전문 상담 · 3단계 패키지 22만원", bg:"transparent", tc:C.cream, border:`2px solid rgba(201,168,76,0.5)` },
-            { id:"relief",    icon:"⚖️", title:"해결 의뢰",          desc:"전문 노무사에게 의뢰하세요. 신속 정확하게 해결합니다", bg:"rgba(201,168,76,0.12)", tc:C.goldLight, border:`2px solid rgba(201,168,76,0.45)` },
+            { id:"checklist", icon:"😟", title:"괴롭힘을 당하고 있어요", desc:"무료 자가진단 → AI상담 → 심층상담", bg:C.gold, tc:C.navy, border:"none", badge:"무료 진단" },
+            { id:"checklist-accused", icon:"😰", title:"가해자로 지목됐어요", desc:"무료 자가진단 → AI상담 → 심층상담", bg:"transparent", tc:C.cream, border:`2px solid rgba(201,168,76,0.5)`, badge:"무료 진단" },
+            { id:"checklist-sanjae", icon:"🩺", title:"산재를 신청하고 싶어요", desc:"무료 상담필요성 체크 → AI상담", bg:"transparent", tc:C.cream, border:`2px solid rgba(13,115,119,0.5)`, badge:"무료 체크" },
           ].map(cta => (
             <button key={cta.id} onClick={() => setActive(cta.id)} style={{
-              padding:"24px 16px", borderRadius:14, background:cta.bg, border:cta.border,
+              padding:"22px 14px", borderRadius:14, background:cta.bg, border:cta.border,
+              color:cta.tc, cursor:"pointer", fontFamily:"inherit", textAlign:"center",
+              transition:"all 0.25s",
+            }}
+              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.filter = "brightness(1.1)"; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.filter = ""; }}
+            >
+              {cta.badge && <div style={{ fontSize:10, fontWeight:700, color:"#fff", background:C.teal, borderRadius:20, padding:"2px 10px", display:"inline-block", marginBottom:6 }}>{cta.badge}</div>}
+              <div style={{ fontSize:30, marginBottom:10 }}>{cta.icon}</div>
+              <div style={{ fontWeight:800, fontSize:15, marginBottom:6 }}>{cta.title}</div>
+              <div style={{ fontSize:12, opacity:0.72, lineHeight:1.5 }}>{cta.desc}</div>
+            </button>
+          ))}
+        </div>
+
+        {/* 기업 2개 */}
+        <div style={{ fontSize:10, fontWeight:600, color:C.goldLight, letterSpacing:"1.5px", marginBottom:8, maxWidth:920, margin:"0 auto 8px" }}>기업</div>
+        <div className="hero-cta-grid-biz" style={{ display:"grid", gridTemplateColumns:"repeat(2, 1fr)", gap:12, maxWidth:920, margin:"0 auto 64px" }}>
+          {[
+            { id:"culture", icon:"🏢", title:"조직문화를 점검하고 싶어요", desc:"무료 진단 → 33만원 전문 리포트", bg:"transparent", tc:C.cream, border:`2px solid rgba(13,115,119,0.4)`, badge:"무료 진단" },
+            { id:"checklist-company", icon:"🏛️", title:"사내 신고가 접수됐어요", desc:"무료 조사 필요성 체크 → AI상담", bg:"transparent", tc:C.cream, border:`2px solid rgba(61,90,128,0.5)`, badge:"무료 체크" },
+          ].map(cta => (
+            <button key={cta.id} onClick={() => setActive(cta.id)} style={{
+              padding:"22px 14px", borderRadius:14, background:cta.bg, border:cta.border,
               color:cta.tc, cursor:"pointer", fontFamily:"inherit", textAlign:"center",
               transition:"all 0.25s",
             }}

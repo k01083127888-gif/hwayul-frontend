@@ -166,10 +166,14 @@ useEffect(() => {
           }
         }
 
-        /* ── 히어로 4열 CTA → 모바일 2열 ── */
+        /* ── 히어로 CTA → 모바일 ── */
         @media (max-width: 768px) {
           .hero-cta-grid {
             grid-template-columns: repeat(2, 1fr) !important;
+            gap: 10px !important;
+          }
+          .hero-cta-grid-biz {
+            grid-template-columns: 1fr !important;
             gap: 10px !important;
           }
         }
@@ -289,7 +293,7 @@ useEffect(() => {
         {active === "home"      && <HeroSection    setActive={setActive} />}
         {active === "intro"     && <IntroSection />}
         {active === "content"   && <ContentSection />}
-        {(active === "checklist" || active === "checklist-accused") && <ChecklistSection setActive={setActive} initialTab={active === "checklist-accused" ? "accused" : "victim"} />}
+        {(active === "checklist" || active === "checklist-accused" || active === "checklist-sanjae" || active === "checklist-company") && <ChecklistSection setActive={setActive} initialTab={active === "checklist-accused" ? "accused" : active === "checklist-sanjae" ? "sanjae" : active === "checklist-company" ? "company" : "victim"} />}
         {active === "culture"  && <CultureSection />}
         {active === "report"    && <ReportSection />}
         {active === "biz"       && <BizSection />}
