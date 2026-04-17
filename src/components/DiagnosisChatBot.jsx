@@ -57,8 +57,9 @@ export function DiagnosisChatBot({ type = "checklist", resultData = null, setAct
 
   const isSanjae = type === "sanjae";
   const isCompany = type === "company";
+  const isAccused = type === "accused";
   const isSpecial = isSanjae || isCompany;
-  const [role, setRole] = useState(isSanjae ? "sanjae" : isCompany ? "company" : "victim");
+  const [role, setRole] = useState(isSanjae ? "sanjae" : isCompany ? "company" : isAccused ? "accused" : "victim");
   const cfg = ROLE_CONFIG[role];
 
   const [messages, setMessages] = useState([{ role: "assistant", text: cfg.welcomeMsg }]);

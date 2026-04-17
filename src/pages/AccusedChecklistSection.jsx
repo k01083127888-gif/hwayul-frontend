@@ -95,7 +95,7 @@ export function AccusedChecklistSection({ setActive }) {
         </div>
 
         {/* AI 챗봇 (피지목인 모드) */}
-        <DiagnosisChatBot resultData={result} setActive={setActive} />
+        <DiagnosisChatBot type="accused" resultData={result} setActive={setActive} />
 
         {/* 심층 상담 CTA */}
         <div style={{ padding:"20px 22px", background:"rgba(201,168,76,0.08)", border:"1.5px solid rgba(201,168,76,0.32)", borderRadius:14, marginBottom:20, display:"flex", alignItems:"center", justifyContent:"space-between", gap:16, flexWrap:"wrap" }}>
