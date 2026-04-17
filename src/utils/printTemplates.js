@@ -160,3 +160,88 @@ export function generateCulturePrintHtml(totalRisk, catResults, highRiskItems, a
     <script>window.onload = function() { window.print(); }</script>
   </body></html>`;
 }
+
+// ── 공용 결과지 템플릿 (피지목인·산재·사내조사) ───────────────────────────
+function genericPrintHtml({ title, subtitle, result, scoreCards = [], checkedItems = [] }) {
+  const scoreCardsHtml = scoreCards.map(s => `
+    <div style="flex:1;min-width:110px;padding:14px;background:#F8F7F5;border:1px solid #E8E5DE;border-radius:10px;text-align:center">
+      <div style="font-size:10px;color:#8B8680;margin-bottom:4px">${s.label}</div>
+      <div style="font-size:18px;font-weight:900;color:#C9A84C">${s.value}</div>
+    </div>`).join("");
+
+  const checkedHtml = checkedItems.length > 0 ? `
+    <div class="section">
+      <h2>체크한 항목</h2>
+      <div style="background:#FAFAF8;padding:14px 16px;border-left:3px solid #0D7377;border-radius:8px">
+        ${checkedItems.map(item => `<div style="font-size:12px;color:#3A3530;margin-bottom:4px">✓ ${item}</div>`).join("")}
+      </div>
+    </div>` : "";
+
+  const actionsHtml = (result.actions || []).map(a => `<div style="font-size:12.5px;color:#3A3530;margin-bottom:6px">✓ ${a}</div>`).join("");
+
+  return `<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"/><title>${title} 결과지</title>${PRINT_STYLE}
+    <style>
+      h2 { font-size:14px; font-weight:800; color:#0A1628; margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid #E8E5DE; }
+      .section { margin-bottom:22px; }
+      .result-card { padding:28px 24px; background:${result.color || "#C9A84C"}15; border:2px solid ${result.color || "#C9A84C"}40; border-radius:14px; text-align:center; margin-bottom:22px; }
+    </style></head><body>
+    ${PRINT_HEADER}
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:10px;color:#0D7377;letter-spacing:2px;margin-bottom:4px">HWAYUL INSIDE DIAGNOSIS REPORT</div>
+      <div style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:800;color:#0A1628">${title}</div>
+      ${subtitle ? `<div style="font-size:11px;color:#8B8680;margin-top:4px">${subtitle}</div>` : ""}
+      <div style="font-size:10px;color:#B0ADA6;margin-top:6px">진단일: ${new Date().toLocaleDateString("ko-KR")}</div>
+    </div>
+    <div class="result-card">
+      <div style="font-size:40px;margin-bottom:10px">${result.emoji || "📋"}</div>
+      <div style="font-size:11px;font-weight:700;color:${result.color || "#C9A84C"};letter-spacing:1px;margin-bottom:8px">${result.level || ""}</div>
+      <div style="font-family:'Noto Serif KR',serif;font-size:18px;font-weight:800;color:#0A1628;margin-bottom:10px">${result.title || ""}</div>
+      <p style="font-size:12px;color:#5A5550;line-height:1.8;max-width:580px;margin:0 auto">${result.summary || ""}</p>
+    </div>
+    ${scoreCards.length > 0 ? `<div class="section"><h2>점수 요약</h2><div style="display:flex;gap:10px;flex-wrap:wrap">${scoreCardsHtml}</div></div>` : ""}
+    ${checkedHtml}
+    <div class="section">
+      <h2>권장 조치</h2>
+      <div style="background:#FFF8E7;padding:14px 16px;border-left:3px solid ${result.color || "#C9A84C"};border-radius:8px">
+        ${actionsHtml}
+      </div>
+    </div>
+    ${PRINT_FOOTER}
+    <script>window.onload = function() { window.print(); }</script>
+  </body></html>`;
+}
+
+// ── 피지목인 진단 결과지 ───────────────────────────────────────────────────
+export function generateAccusedPrintHtml(relation, superiority, behavior, justification, repetition, impact, result) {
+  const scoreCards = [
+    { label: "관계 우위", value: result.positionScore },
+    { label: "행위 점수", value: result.behaviorScore },
+    { label: "적정성", value: result.justScore },
+    { label: "반복성", value: result.repScore },
+    { label: "영향도", value: result.impactScore },
+  ];
+  return genericPrintHtml({
+    title: "피지목인 자가진단 결과지",
+    subtitle: "괴롭힘 지목 사안 성립 가능성 분석",
+    result,
+    scoreCards,
+  });
+}
+
+// ── 산재 상담 필요성 체크 결과지 ───────────────────────────────────────────
+export function generateSanjaePrintHtml(situation, medical, workCond, result) {
+  return genericPrintHtml({
+    title: "산재 상담 필요성 체크 결과지",
+    subtitle: situation?.tag ? `상황 유형: ${situation.tag}` : "",
+    result,
+  });
+}
+
+// ── 사내 괴롭힘 조사 필요성 체크 결과지 ─────────────────────────────────────
+export function generateCompanyPrintHtml(report, org, actions, result) {
+  return genericPrintHtml({
+    title: "사내 괴롭힘 조사 필요성 체크 결과지",
+    subtitle: "기업의 법적 의무 이행 점검",
+    result,
+  });
+}

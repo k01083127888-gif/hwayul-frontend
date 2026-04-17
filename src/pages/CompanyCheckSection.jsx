@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import C from "../tokens/colors.js";
 import { companyReportStatus, companyOrgStatus, companyCurrentActions } from "../data/companyCheckData.js";
+import { generateCompanyPrintHtml } from "../utils/printTemplates.js";
 import { DiagnosisChatBot } from "../components/DiagnosisChatBot.jsx";
+import { PrintModal } from "../components/PrintModal.jsx";
 import { loadCompany, saveCompany } from "../utils/storage.js";
 
 // ── 사내 괴롭힘 조사 필요성 체크 ─────────────────────────────────────────
@@ -11,6 +13,7 @@ export function CompanyCheckSection({ setActive }) {
   const [report, setReport] = useState(_saved?.report || {});
   const [org, setOrg] = useState(_saved?.org || {});
   const [actions, setActions] = useState(_saved?.actions || {});
+  const [showPrintModal, setShowPrintModal] = useState(false);
 
   useEffect(() => { saveCompany({ step, report, org, actions }); }, [step, report, org, actions]);
   useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, [step]);
@@ -119,6 +122,16 @@ export function CompanyCheckSection({ setActive }) {
             • 신고를 이유로 한 <strong style={{ color:C.cream }}>불리한 처우 금지</strong> (해고·전보 등)
           </div>
         </div>
+
+        {/* 결과지 보기 */}
+        <div style={{ padding:"18px", background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", borderRadius:12, display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20 }}>
+          <div>
+            <div style={{ fontSize:13, fontWeight:700, color:C.tealLight, marginBottom:3 }}>📄 체크 결과를 문서로 받아보세요</div>
+            <div style={{ fontSize:11, color:"rgba(244,241,235,0.4)" }}>조사 필요성 판단, 권장 조치, 법적 의무가 포함된 보고서입니다.</div>
+          </div>
+          <button onClick={() => setShowPrintModal(true)} style={{ padding:"10px 22px", borderRadius:8, background:C.teal, border:"none", color:"white", fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" }}>📄 결과지 보기</button>
+        </div>
+        <PrintModal isOpen={showPrintModal} onClose={() => setShowPrintModal(false)} type="company" getHtml={() => generateCompanyPrintHtml(report, org, actions, result)} />
 
         {/* AI 챗봇 */}
         <DiagnosisChatBot type="company" resultData={resultData} variant="dark" setActive={setActive} />

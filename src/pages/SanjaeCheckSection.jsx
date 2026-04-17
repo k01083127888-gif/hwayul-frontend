@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import C from "../tokens/colors.js";
 import { sanjaeTypeOptions, sanjaeMedicalOptions, sanjaeWorkConditions } from "../data/sanjaeCheckData.js";
+import { generateSanjaePrintHtml } from "../utils/printTemplates.js";
 import { DiagnosisChatBot } from "../components/DiagnosisChatBot.jsx";
+import { PrintModal } from "../components/PrintModal.jsx";
 import { loadSanjae, saveSanjae } from "../utils/storage.js";
 
 // ── 산재 상담 필요성 체크 ─────────────────────────────────────────────────
@@ -11,6 +13,7 @@ export function SanjaeCheckSection({ setActive }) {
   const [situation, setSituation] = useState(_saved?.situation || null);
   const [medical, setMedical] = useState(_saved?.medical || {});
   const [workCond, setWorkCond] = useState(_saved?.workCond || {});
+  const [showPrintModal, setShowPrintModal] = useState(false);
 
   useEffect(() => { saveSanjae({ step, situation, medical, workCond }); }, [step, situation, medical, workCond]);
   useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, [step]);
@@ -94,6 +97,16 @@ export function SanjaeCheckSection({ setActive }) {
             실제 승인 여부는 근로복지공단의 심사에 의해 결정됩니다. <strong style={{ color:"#E67E22" }}>전문 노무사 상담</strong>을 권장합니다.
           </div>
         </div>
+
+        {/* 결과지 보기 */}
+        <div style={{ padding:"18px", background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", borderRadius:12, display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20 }}>
+          <div>
+            <div style={{ fontSize:13, fontWeight:700, color:C.tealLight, marginBottom:3 }}>📄 체크 결과를 문서로 받아보세요</div>
+            <div style={{ fontSize:11, color:"rgba(244,241,235,0.4)" }}>상담 필요성과 권장 조치가 포함된 보고서입니다.</div>
+          </div>
+          <button onClick={() => setShowPrintModal(true)} style={{ padding:"10px 22px", borderRadius:8, background:C.teal, border:"none", color:"white", fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" }}>📄 결과지 보기</button>
+        </div>
+        <PrintModal isOpen={showPrintModal} onClose={() => setShowPrintModal(false)} type="sanjae" getHtml={() => generateSanjaePrintHtml(situation, medical, workCond, result)} />
 
         {/* AI 챗봇 (산재 상담) */}
         <DiagnosisChatBot type="sanjae" resultData={{ ...result, situation: situation?.tag || "", medicalChecked: Object.keys(medical).filter(k => medical[k]), workChecked: Object.keys(workCond).filter(k => workCond[k]) }} variant="dark" setActive={setActive} />

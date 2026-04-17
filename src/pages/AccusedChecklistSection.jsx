@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import C from "../tokens/colors.js";
 import { accusedRelationItems, accusedSuperiorityItems, accusedBehaviorCategories, accusedJustificationQuestions, accusedRepetitionQuestions, accusedImpactItems } from "../data/accusedChecklistData.js";
 import { calcAccusedResult } from "../utils/calcAccusedResult.js";
+import { generateAccusedPrintHtml } from "../utils/printTemplates.js";
 import { DiagnosisChatBot } from "../components/DiagnosisChatBot.jsx";
+import { PrintModal } from "../components/PrintModal.jsx";
 import { loadAccused, saveAccused } from "../utils/storage.js";
 
 // ── 피지목인 자가진단 ─────────────────────────────────────────────────────
@@ -16,6 +18,7 @@ export function AccusedChecklistSection({ setActive }) {
   const [justification, setJust] = useState(_saved?.justification || {});
   const [repetition, setRep] = useState(_saved?.repetition || {});
   const [impact, setImpact] = useState(_saved?.impact || {});
+  const [showPrintModal, setShowPrintModal] = useState(false);
 
   useEffect(() => { saveAccused({ step, relation, superiority, behavior, justification, repetition, impact }); }, [step, relation, superiority, behavior, justification, repetition, impact]);
   useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, [step]);
@@ -93,6 +96,16 @@ export function AccusedChecklistSection({ setActive }) {
             실제 성립 여부는 구체적 사실관계와 증거에 따라 달라집니다. <strong style={{ color:"#E67E22" }}>전문 노무사 상담</strong>을 권장합니다.
           </div>
         </div>
+
+        {/* 결과지 보기 */}
+        <div style={{ padding:"18px", background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", borderRadius:12, display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20 }}>
+          <div>
+            <div style={{ fontSize:13, fontWeight:700, color:C.tealLight, marginBottom:3 }}>📄 진단 결과를 문서로 받아보세요</div>
+            <div style={{ fontSize:11, color:"rgba(244,241,235,0.4)" }}>점수, 권장 조치, 전문가 상담 안내가 포함된 보고서입니다.</div>
+          </div>
+          <button onClick={() => setShowPrintModal(true)} style={{ padding:"10px 22px", borderRadius:8, background:C.teal, border:"none", color:"white", fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" }}>📄 진단결과지 보기</button>
+        </div>
+        <PrintModal isOpen={showPrintModal} onClose={() => setShowPrintModal(false)} type="accused" getHtml={() => generateAccusedPrintHtml(relation, superiority, behavior, justification, repetition, impact, result)} />
 
         {/* AI 챗봇 (피지목인 모드) */}
         <DiagnosisChatBot type="accused" resultData={result} setActive={setActive} />
