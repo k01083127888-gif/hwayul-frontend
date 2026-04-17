@@ -29,10 +29,10 @@ export function NewsletterSection() {
       <div style={{ maxWidth:640, margin:"0 auto" }}>
         <div style={{ fontSize:28, marginBottom:14 }}>📬</div>
         <h3 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"clamp(1.1rem, 2.5vw, 1.4rem)", fontWeight:800, color:C.cream, marginBottom:8 }}>
-          직장내 괴롭힘 최신 소식을 받아보세요
+          직장내 괴롭힘·조직문화 최신 소식을 받아보세요
         </h3>
         <p style={{ fontSize:13, color:"rgba(244,241,235,0.5)", lineHeight:1.7, marginBottom:28 }}>
-          새로운 판례, 법령 개정, 산재 승인 사례, 예방교육 정보를<br/>이메일로 정기적으로 보내드립니다.
+          새로운 판례, 법령 개정, 산재 승인 사례, 조직문화 개선 사례, 예방교육 정보를<br/>이메일로 정기적으로 보내드립니다.
         </p>
         {subscribed ? (
           <div style={{ padding:"16px 24px", background:"rgba(26,122,74,0.12)", border:"1px solid rgba(26,122,74,0.3)", borderRadius:12, display:"inline-block" }}>
