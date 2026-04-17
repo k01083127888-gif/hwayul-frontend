@@ -121,6 +121,44 @@ export function BizSection() {
           <p style={{ color:"rgba(244,241,235,0.55)", marginTop:8, fontSize:14 }}>개인·기업 모두 이용 가능. 사안을 깊이 들여다보고 최적 경로를 제안하는 유료 전문 상담입니다.</p>
         </div>
 
+        {/* 왜 전문가 심층 상담이 필요한가 */}
+        <div style={{ marginBottom:24, padding:"26px 26px", background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:14 }}>
+          <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:16 }}>
+            <span style={{ fontSize:22 }}>👨‍⚖️</span>
+            <div>
+              <div style={{ fontSize:11, fontWeight:700, color:C.gold, letterSpacing:"1.5px", marginBottom:3 }}>WHY IN-DEPTH CONSULTATION</div>
+              <div style={{ fontSize:16, fontWeight:800, color:C.cream }}>왜 전문가 심층 상담이 필요할까요?</div>
+            </div>
+          </div>
+
+          <p style={{ fontSize:13, color:"rgba(244,241,235,0.7)", lineHeight:1.85, marginBottom:16 }}>
+            AI 상담은 <strong style={{ color:C.cream }}>일반적 기준</strong>까지만 안내할 수 있습니다.
+            실제 사건은 <strong style={{ color:C.goldLight }}>구체적 정황·증거·관계</strong>에 따라 결과가 완전히 달라지며,
+            잘못된 초동 대응은 돌이키기 어렵습니다.
+          </p>
+
+          <div style={{ display:"grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 1fr)", gap:12 }}>
+            {[
+              { icon:"🎯", title:"사안별 맞춤 판단", desc:"20년 경력 노무사가 귀하의 사실관계·증거를 직접 검토하여 법적 성립 가능성을 판단합니다." },
+              { icon:"📋", title:"최적 경로 설계", desc:"진정·조정·소송·산재 등 여러 경로 중 사안에 가장 유리한 전략을 비교·제시합니다." },
+              { icon:"⏱️", title:"골든타임 대응", desc:"진술 전·징계 전·조사 전 전문가 검토를 받은 분과 안 받은 분의 결과 차이는 큽니다." },
+              { icon:"🔐", title:"비밀유지 의무", desc:"노무사법 제37조에 따라 상담 내용은 법적으로 비밀이 보장됩니다." },
+            ].map(item => (
+              <div key={item.title} style={{ padding:"14px 16px", background:"rgba(10,22,40,0.4)", border:"1px solid rgba(255,255,255,0.06)", borderRadius:10 }}>
+                <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
+                  <span style={{ fontSize:18 }}>{item.icon}</span>
+                  <span style={{ fontSize:13, fontWeight:800, color:C.cream }}>{item.title}</span>
+                </div>
+                <div style={{ fontSize:11.5, color:"rgba(244,241,235,0.55)", lineHeight:1.65 }}>{item.desc}</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ marginTop:14, padding:"10px 14px", background:"rgba(192,57,43,0.08)", border:"1px dashed rgba(192,57,43,0.3)", borderRadius:8, fontSize:11.5, color:"#FF8A80", lineHeight:1.7 }}>
+            ⚠️ 진술은 한 번 하면 돌이키기 어렵습니다. 조사·징계 일정이 임박했다면 <strong>반드시 전문가 검토 후</strong> 대응하세요.
+          </div>
+        </div>
+
         {/* 심층 상담 패키지 안내 카드 */}
         <div style={{ marginBottom:30, padding:"22px 24px", background:"rgba(201,168,76,0.08)", border:"1.5px solid rgba(201,168,76,0.32)", borderRadius:14 }}>
           <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:14, flexWrap:"wrap" }}>
