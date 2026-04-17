@@ -148,20 +148,20 @@ export function CompanyCheckSection({ setActive }) {
           </div>
         )}
 
-        {/* 조직문화 진단 유도 — 텍스트 링크 (시각적 무게 낮춤) */}
-        <div style={{ textAlign:"center", marginBottom:18 }}>
-          <button
-            onClick={() => setActive("culture")}
-            style={{ background:"none", border:"none", color:C.tealLight, fontSize:12.5, fontWeight:600, cursor:"pointer", fontFamily:"inherit", textDecoration:"underline", textDecorationColor:"rgba(20,160,165,0.4)", textUnderlineOffset:4, padding:"4px 8px" }}
-            onMouseEnter={e => { e.currentTarget.style.textDecorationColor = C.tealLight; }}
-            onMouseLeave={e => { e.currentTarget.style.textDecorationColor = "rgba(20,160,165,0.4)"; }}
-          >
-            💡 재발 방지가 궁금하시면 조직문화 진단도 확인해보세요 →
-          </button>
-        </div>
-
         <div style={{ display:"flex", justifyContent:"center" }}>
           <button onClick={reset} style={{ padding:"13px 36px", background:"rgba(255,255,255,0.06)", border:"none", borderRadius:8, color:"rgba(244,241,235,0.65)", fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>↺ 다시 체크하기</button>
+        </div>
+
+        {/* 조직문화 진단 유도 — 매우 약한 보조 링크 */}
+        <div style={{ textAlign:"center", marginTop:14 }}>
+          <button
+            onClick={() => setActive("culture")}
+            style={{ background:"none", border:"none", color:"rgba(244,241,235,0.35)", fontSize:11, fontWeight:400, cursor:"pointer", fontFamily:"inherit", padding:"2px 4px" }}
+            onMouseEnter={e => { e.currentTarget.style.color = C.tealLight; }}
+            onMouseLeave={e => { e.currentTarget.style.color = "rgba(244,241,235,0.35)"; }}
+          >
+            재발 방지가 궁금하시면 조직문화 진단도 확인해보세요 →
+          </button>
         </div>
       </div>
     );
