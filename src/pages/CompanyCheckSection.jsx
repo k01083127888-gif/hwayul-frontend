@@ -148,6 +148,21 @@ export function CompanyCheckSection({ setActive }) {
           </div>
         )}
 
+        {/* 조직문화 진단 유도 배너 */}
+        <div style={{ marginBottom:20, padding:"20px 22px", background:"rgba(13,115,119,0.08)", border:"1.5px solid rgba(13,115,119,0.3)", borderRadius:14, display:"flex", alignItems:"center", justifyContent:"space-between", gap:16, flexWrap:"wrap" }}>
+          <div style={{ flex:1, minWidth:200 }}>
+            <div style={{ fontSize:11, fontWeight:700, color:C.tealLight, letterSpacing:"1.5px", marginBottom:6 }}>🏢 사건은 빙산의 일각입니다</div>
+            <div style={{ fontSize:14, fontWeight:800, color:C.cream, marginBottom:4 }}>조직문화 무료 자가진단으로 재발을 예방하세요</div>
+            <div style={{ fontSize:11, color:"rgba(244,241,235,0.6)", lineHeight:1.6 }}>
+              괴롭힘 사건은 대개 조직문화의 구조적 문제에서 비롯됩니다.<br/>
+              6개 영역 진단으로 사전 위험을 파악하고 재발 방지 체계를 만드세요.
+            </div>
+          </div>
+          <button onClick={() => setActive("culture")} style={{ padding:"12px 22px", borderRadius:10, background:C.teal, border:"none", color:"white", fontWeight:800, fontSize:13, cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap", flexShrink:0 }}>
+            🏢 조직문화 진단 받기 →
+          </button>
+        </div>
+
         <div style={{ display:"flex", justifyContent:"center" }}>
           <button onClick={reset} style={{ padding:"13px 36px", background:"rgba(255,255,255,0.06)", border:"none", borderRadius:8, color:"rgba(244,241,235,0.65)", fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>↺ 다시 체크하기</button>
         </div>
