@@ -67,7 +67,7 @@ export function PrintModal({ isOpen, onClose, getHtml, type }) {
         <div style={{ textAlign:"center", marginBottom:24 }}>
           <div style={{ fontSize:40, marginBottom:12 }}>📄</div>
           <h3 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:19, fontWeight:800, color:C.navy, marginBottom:6 }}>진단 결과지</h3>
-          <p style={{ fontSize:13, color:C.gray, lineHeight:1.7 }}>이메일을 남겨주시면 결과를 이메일로도 전달해 드리고,<br/>직장내 괴롭힘 예방 관련 유익한 정보도 보내드립니다.</p>
+          <p style={{ fontSize:13, color:C.gray, lineHeight:1.7 }}>이메일을 남겨주시면 결과를 이메일로도 전달해 드리고,<br/>직장내 괴롭힘과 조직문화 관련 유익한 정보도 보내드립니다.</p>
         </div>
         <div style={{ marginBottom:16 }}>
           <label style={{ display:"block", fontSize:12, fontWeight:700, color:C.gray, marginBottom:6 }}>이메일 주소</label>
