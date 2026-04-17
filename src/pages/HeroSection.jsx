@@ -7,7 +7,7 @@ export function HeroSection({ setActive }) {
   const stats = [
     { n:"675건+",  l:"산재 승인 누적 (2019~2024)", icon:"⚖️" },
     { n:"60~80%",  l:"산재 승인률",                icon:"📊" },
-    { n:"2019년",  l:"직장내 괴롭힘 금지법 시행",  icon:"📋" },
+    { n:"12,253건",  l:"2024년 노동부 신고 (5년만 5.8배↑)",  icon:"📋" },
     { n:"10배↑",   l:"정신질환 산재 승인 증가",    icon:"📈" },
   ];
 
@@ -92,6 +92,65 @@ export function HeroSection({ setActive }) {
         </div>
         <div style={{ textAlign:"center", marginTop:10, fontSize:10, color:"rgba(244,241,235,0.2)" }}>
           ※ 출처: 국회 환경노동위원회·근로복지공단 공식 자료 (2024.10.22)
+        </div>
+
+        {/* 고용노동부 신고 건수 추이 */}
+        <div style={{ marginTop:56, padding:"28px 28px", background:"rgba(255,255,255,0.03)", border:"1px solid rgba(201,168,76,0.2)", borderRadius:14, maxWidth:820, marginLeft:"auto", marginRight:"auto" }}>
+          <div style={{ textAlign:"center", marginBottom:20 }}>
+            <div style={{ fontSize:10, fontWeight:700, color:C.gold, letterSpacing:"2px", marginBottom:6 }}>MINISTRY OF EMPLOYMENT & LABOR</div>
+            <div style={{ fontFamily:"'Noto Serif KR', serif", fontSize:15, fontWeight:800, color:C.cream }}>고용노동부 직장 내 괴롭힘 신고 건수 추이</div>
+            <div style={{ fontSize:10, color:"rgba(244,241,235,0.4)", marginTop:4 }}>2019년 시행 이후 매년 꾸준히 증가 — 5년 만에 5.8배</div>
+          </div>
+
+          {/* 막대 그래프 */}
+          <div style={{ display:"flex", alignItems:"flex-end", gap:"clamp(4px, 1.5vw, 14px)", height:140, padding:"0 4px 8px", borderBottom:"1px solid rgba(255,255,255,0.08)", marginBottom:14 }}>
+            {[
+              { year:"2019", count:2130, change:"7월 시행" },
+              { year:"2020", count:5823, change:"+173%" },
+              { year:"2021", count:7774, change:"+33%" },
+              { year:"2022", count:8961, change:"+15%" },
+              { year:"2023", count:11038, change:"+23%" },
+              { year:"2024", count:12253, change:"+11%", highlight:true },
+            ].map(d => {
+              const max = 12253;
+              const heightPct = (d.count / max) * 100;
+              return (
+                <div key={d.year} style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", gap:6, height:"100%" }}>
+                  <div style={{ fontSize:10, fontWeight:700, color:d.highlight?C.gold:"rgba(244,241,235,0.6)", whiteSpace:"nowrap" }}>{d.count.toLocaleString()}</div>
+                  <div style={{ flex:1, width:"100%", display:"flex", alignItems:"flex-end" }}>
+                    <div style={{
+                      width:"100%",
+                      height:`${heightPct}%`,
+                      background:d.highlight
+                        ? `linear-gradient(180deg, ${C.goldLight}, ${C.gold})`
+                        : `linear-gradient(180deg, rgba(13,115,119,0.6), rgba(13,115,119,0.3))`,
+                      borderRadius:"4px 4px 0 0",
+                      transition:"all 0.3s",
+                      minHeight:8,
+                    }} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div style={{ display:"flex", gap:"clamp(4px, 1.5vw, 14px)", padding:"0 4px" }}>
+            {[
+              { year:"2019", change:"시행" },
+              { year:"2020", change:"+173%" },
+              { year:"2021", change:"+33%" },
+              { year:"2022", change:"+15%" },
+              { year:"2023", change:"+23%" },
+              { year:"2024", change:"+11%", highlight:true },
+            ].map(d => (
+              <div key={d.year} style={{ flex:1, textAlign:"center" }}>
+                <div style={{ fontSize:11, fontWeight:700, color:d.highlight?C.goldLight:C.cream }}>{d.year}</div>
+                <div style={{ fontSize:9, color:"rgba(244,241,235,0.4)", marginTop:2 }}>{d.change}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ textAlign:"center", marginTop:14, fontSize:10, color:"rgba(244,241,235,0.3)" }}>
+            ※ 출처: 고용노동부 연도별 통계 — 2019년 7월 시행일 이후
+          </div>
         </div>
 
       </div>
