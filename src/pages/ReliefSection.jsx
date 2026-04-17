@@ -75,7 +75,7 @@ const TRACKS = [
       "무고·명예훼손 역대응 검토",
     ],
     fees: [
-      { label: "기본 대응 수임료",              value: "300만원" },
+      { label: "기본 대응 수임료",              value: "300만원", note: "신청 건수에 따라 차등 적용" },
       { label: "민사·형사 대응",               value: "별도 협의" },
     ],
     differentiator: "전용 플랫폼 희소 · 커리어 보호 최우선",
