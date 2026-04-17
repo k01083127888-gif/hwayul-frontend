@@ -60,7 +60,7 @@ export function HeroSection({ setActive }) {
         <div className="hero-cta-grid" style={{ display:"grid", gridTemplateColumns:"repeat(4, 1fr)", gap:14, maxWidth:920, margin:"0 auto 64px" }}>
           {[
             { id:"checklist", icon:"😟", title:"괴롭힘을 당하고 있어요", desc:"혼자 감당하지 않아도 됩니다", bg:C.gold, tc:C.navy, border:"none", badge:"무료 자가진단" },
-            { id:"checklist-accused", icon:"😰", title:"가해자로 지목됐어요", desc:"당신도 적정 절차를 받을 권리가 있습니다", bg:"transparent", tc:C.cream, border:`2px solid rgba(201,168,76,0.5)`, badge:"무료 자가진단" },
+            { id:"checklist-accused", icon:"😰", title:"가해자로 지목됐어요", desc:"적정 절차를 받도록 도와드립니다", bg:"transparent", tc:C.cream, border:`2px solid rgba(201,168,76,0.5)`, badge:"무료 자가진단" },
             { id:"checklist-sanjae", icon:"🩺", title:"산재를 신청하고 싶어요", desc:"업무로 인한 질병, 보상받을 수 있습니다", bg:"transparent", tc:C.cream, border:`2px solid rgba(13,115,119,0.5)`, badge:"무료 자가진단" },
             { id:"checklist-company", icon:"🏛️", title:"사내 신고가 접수됐어요", desc:"법적 절차를 지키는 것이 회사를 지킵니다", bg:"transparent", tc:C.cream, border:`2px solid rgba(61,90,128,0.5)`, badge:"무료 자가진단" },
           ].map(cta => (
