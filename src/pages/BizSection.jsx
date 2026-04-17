@@ -220,14 +220,16 @@ export function BizSection() {
                 <DarkInput label="연락처" value={form.phone} onChange={F("phone")} placeholder="010-0000-0000" type="tel" required />
                 <DarkInput label="이메일" value={form.email} onChange={F("email")} placeholder="hr@company.com" type="email" required />
                 <DarkInput label="회사명 (선택)" value={form.company} onChange={F("company")} placeholder="개인이신 경우 비워두셔도 됩니다" />
-                <div>
-                  <label style={{ display:"block", fontSize:12, fontWeight:700, color:"rgba(244,241,235,0.55)", marginBottom:6, letterSpacing:"0.5px", textTransform:"uppercase" }}>사업장 규모</label>
-                  <div style={{ display:"grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap:8 }}>
-                    {SIZES.map(s => (
-                      <button key={s} onClick={() => setForm(f => ({ ...f, size:s }))} style={{ padding:"9px", borderRadius:7, border:`2px solid ${form.size === s ? C.gold : "rgba(255,255,255,0.1)"}`, background:form.size === s ? "rgba(201,168,76,0.12)" : "rgba(255,255,255,0.02)", color:form.size === s ? C.gold : "rgba(244,241,235,0.55)", fontWeight:form.size === s ? 700 : 400, fontSize:12, cursor:"pointer", fontFamily:"inherit", transition:"all 0.2s" }}>{s}</button>
-                    ))}
+                {form.company.trim() && (
+                  <div>
+                    <label style={{ display:"block", fontSize:12, fontWeight:700, color:"rgba(244,241,235,0.55)", marginBottom:6, letterSpacing:"0.5px", textTransform:"uppercase" }}>사업장 규모</label>
+                    <div style={{ display:"grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap:8 }}>
+                      {SIZES.map(s => (
+                        <button key={s} onClick={() => setForm(f => ({ ...f, size:s }))} style={{ padding:"9px", borderRadius:7, border:`2px solid ${form.size === s ? C.gold : "rgba(255,255,255,0.1)"}`, background:form.size === s ? "rgba(201,168,76,0.12)" : "rgba(255,255,255,0.02)", color:form.size === s ? C.gold : "rgba(244,241,235,0.55)", fontWeight:form.size === s ? 700 : 400, fontSize:12, cursor:"pointer", fontFamily:"inherit", transition:"all 0.2s" }}>{s}</button>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
               <ValidationMsg show={errors.name} msg={errors.name} />
               <ValidationMsg show={errors.phone} msg={errors.phone} />
