@@ -258,9 +258,13 @@ export function BizSection() {
                 <textarea
                   value={form.note}
                   onChange={F("note")}
-                  placeholder={`예시) 상사의 부당지시와 폭언이 반복되어 직장내 괴롭힘에 해당하는지 판단받고 싶습니다. 관련 메시지 캡처가 있는데 증거로 쓸 수 있는지도 검토가 필요합니다.
+                  placeholder={`[피해 상황] 상사의 부당지시와 폭언이 반복되어 괴롭힘에 해당하는지 판단받고 싶습니다. 녹음·카톡 증거도 검토가 필요합니다.
 
-또는) 사내에서 괴롭힘 신고가 접수됐는데 조사위원회 구성과 처리 절차, 사업주 법적 의무에 대해 상담받고 싶습니다.`}
+[피지목인] 괴롭힘 가해자로 지목받아 조사가 예정되어 있습니다. 소명서 작성과 진술 전략을 상담받고 싶습니다.
+
+[산재 신청] 업무 스트레스로 우울증 진단을 받았습니다. 산재 승인 가능성과 인과관계 입증 방법을 검토받고 싶습니다.
+
+[기업 담당] 사내에서 괴롭힘 신고가 접수됐습니다. 조사위원회 구성, 처리 절차, 사업주 법적 의무에 대해 상담받고 싶습니다.`}
                   rows={8}
                   style={{ width:"100%", padding:"14px", borderRadius:8, border:"2px solid rgba(255,255,255,0.1)", background:"rgba(255,255,255,0.04)", color:C.cream, fontSize:14, fontFamily:"inherit", outline:"none", resize:"vertical", lineHeight:1.7, boxSizing:"border-box" }}
                   onFocus={e => e.target.style.borderColor = C.goldLight}
