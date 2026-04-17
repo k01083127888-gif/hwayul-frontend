@@ -38,7 +38,7 @@ const TRACKS = [
     no: "트랙 2",
     icon: "⚖️",
     title: "산재 신청",
-    subtitle: "정신질환·업무상 재해 산재 승인 대리",
+    subtitle: "정신질환·업무상 질병·재해 산재 승인 대리",
     accent: C.gold,
     accentLight: C.goldLight,
     badge: "⭐ 전문분야",
