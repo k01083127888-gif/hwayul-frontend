@@ -16,7 +16,24 @@ export function PrintModal({ isOpen, onClose, getHtml, type }) {
   const handleSendEmail = () => {
     if (email && isValidEmail(email) && consent) {
       const html = getHtml().replace(/<script>window\.onload.*?<\/script>/g, '');
+      // 1) DB에 접수 기록
       addSubmission("resultEmails", { email, type, userType:"unknown", name:"(결과지 요청)", marketing:true, consent:true, resultHtml:html, source:"resultView" });
+      // 2) 실제 이메일 발송
+      const typeLabel = type === "checklist" ? "직장내 괴롭힘 진단"
+        : type === "accused" ? "피지목인 자가진단"
+        : type === "sanjae" ? "산재 상담 필요성 체크"
+        : type === "company" ? "사내 괴롭힘 조사 필요성 체크"
+        : type === "culture" ? "조직문화 진단"
+        : "진단";
+      fetch("https://hwayul-backend-production-96cf.up.railway.app/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: email,
+          subject: `[화율인사이드] ${typeLabel} 결과지`,
+          html,
+        }),
+      }).catch(e => console.log("결과지 이메일 발송 실패(무시):", e.message));
       setSent(true);
     }
   };
