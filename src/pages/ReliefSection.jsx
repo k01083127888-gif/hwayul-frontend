@@ -26,7 +26,7 @@ const TRACKS = [
       "내용증명 발송",
     ],
     fees: [
-      { label: "노동청 진정 / 노동위 구제신청", value: "착수금 50만원 + 성공보수 150만원" },
+      { label: "노동청 진정 / 노동위 구제신청", value: "착수금 50만원 + 성공보수 150만원", note: "신청 건수에 따라 차등 적용" },
     ],
     differentiator: "가격 투명성 · AI 진단 무료 연계",
     formLabel: "피해 내용",
@@ -250,6 +250,7 @@ export function ReliefSection() {
                     <div key={i} style={{ marginBottom: i < t.fees.length - 1 ? 10 : 0 }}>
                       <div style={{ fontSize:11, color:"rgba(244,241,235,0.5)", marginBottom:3 }}>{f.label}</div>
                       <div style={{ fontSize:13, fontWeight:700, color:C.goldLight, lineHeight:1.5 }}>{f.value}</div>
+                      {f.note && <div style={{ fontSize:10, color:"rgba(244,241,235,0.45)", marginTop:3, fontStyle:"italic" }}>※ {f.note}</div>}
                     </div>
                   ))}
                   <div style={{ marginTop:10, paddingTop:8, borderTop:"1px dashed rgba(201,168,76,0.15)", fontSize:10, color:"rgba(244,241,235,0.35)" }}>VAT 별도 · 사안별 협의 가능</div>
