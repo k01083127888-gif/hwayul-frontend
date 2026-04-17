@@ -70,7 +70,11 @@ export function DiagnosisChatBot({ type = "checklist", resultData = null, setAct
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
 
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages, loading]);
+  useEffect(() => {
+    // 웰컴 메시지만 있는 상태(첫 메시지 or 역할 전환 직후)에는 페이지 스크롤하지 않음
+    if (messages.length <= 1 && !loading) return;
+    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [messages, loading]);
 
   // 역할 변경 시 챗봇 리셋
   const switchRole = (newRole) => {
