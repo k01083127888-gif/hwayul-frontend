@@ -134,8 +134,8 @@ ${resultSummary || "(결과 데이터 없음)"}
   }, []);
 
   const typeLabel = {
-    "report":"익명 제보 회신", "biz":"기업 상담 회신", "relief":"피해자 구제 회신",
-    "report-email":"결과지 + 검토 코멘트 발송", "review":"노무사 검토 리포트 발송",
+    "report":"익명 제보 회신", "biz":"심층 상담 회신", "relief":"해결 의뢰 회신",
+    "report-email":"결과지 + 검토 코멘트 발송", "review":"리포트 검토 회신",
     "lecture":"강의 요청 회신", "advisory":"자문 요청 회신", "consulting":"교육 요청 회신"
   }[data.type] || "이메일";
 
@@ -154,11 +154,11 @@ ${resultSummary || "(결과 데이터 없음)"}
               try {
                 const subjectMap = {
                   "report":"[화율인사이드] 익명 제보 검토 결과 안내",
-                  "biz":"[화율인사이드] 기업 상담 회신",
-                  "relief":"[화율인사이드] 피해자 구제 검토 결과 안내",
-                  "review":"[화율인사이드] 노무사 검토 리포트",
+                  "biz":"[화율인사이드] 심층 상담 회신",
+                  "relief":"[화율인사이드] 해결 의뢰 검토 결과 안내",
+                  "review":"[화율인사이드] 리포트 검토 회신",
                   "report-email":"[화율인사이드] 진단 결과지 발송",
-                  "consulting":"[화율인사이드] 전화상담 안내",
+                  "consulting":"[화율인사이드] 상담 안내",
                   "lecture":"[화율인사이드] 강의 요청 회신",
                   "advisory":"[화율인사이드] 자문 요청 회신",
                 };
