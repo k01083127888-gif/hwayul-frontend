@@ -50,6 +50,59 @@ export function CulturePromoSection({ setActive }) {
           </div>
         </div>
 
+        {/* 조직문화 개선이 필요한 순간들 */}
+        <div style={{ marginBottom:40 }}>
+          <div style={{ fontSize:11, fontWeight:700, color:C.tealLight, letterSpacing:"2px", textAlign:"center", marginBottom:8 }}>WHEN TO IMPROVE</div>
+          <div style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"clamp(1.2rem, 2.3vw, 1.5rem)", fontWeight:800, color:C.cream, textAlign:"center", marginBottom:8 }}>이런 상황이라면 조직문화 개선이 필요합니다</div>
+          <p style={{ fontSize:13, color:"rgba(244,241,235,0.5)", textAlign:"center", marginBottom:24, lineHeight:1.7 }}>
+            괴롭힘 예방은 조직문화 개선의 한 부분일 뿐입니다.<br/>
+            건강한 조직문화는 인재 유치·생산성·브랜드 가치까지 직결됩니다.
+          </p>
+          <div className="content-grid-3" style={{ display:"grid", gridTemplateColumns:"repeat(3, 1fr)", gap:14 }}>
+            {[
+              { icon:"👥", title:"MZ세대 이탈이 잦다", desc:"입사한 지 1~2년 만에 나가는 직원이 많다면, 문제는 개인이 아닌 조직문화입니다.", color:"#E74C3C" },
+              { icon:"📉", title:"생산성·몰입도가 떨어진다", desc:"회의·보고·결재에 시간이 소진되고 실질 업무가 줄어드는 조직은 문화 점검이 필요합니다.", color:"#E67E22" },
+              { icon:"🤝", title:"세대·부서 갈등이 심하다", desc:"관리자-실무자, 본사-현장, 세대 간 소통 단절이 반복되면 개선 신호입니다.", color:C.gold },
+              { icon:"🏗️", title:"M&A·조직개편 직후", desc:"통합 과정의 문화 충돌을 방치하면 핵심 인재 이탈로 이어집니다.", color:C.teal },
+              { icon:"📣", title:"평가·보상에 불만이 크다", desc:"공정성 논란은 사기 저하와 집단 반발로 직결됩니다. 제도 재설계가 필요합니다.", color:C.blue },
+              { icon:"🌐", title:"하이브리드·원격근무 전환", desc:"근무 형태가 바뀌면 소통·협업·평가 체계도 재정비되어야 합니다.", color:"#16A085" },
+              { icon:"🎯", title:"ESG·DEI 대응 필요", desc:"투자자·구직자가 기업 문화를 평가하는 시대. 진단 기반의 체계적 대응이 필요합니다.", color:"#8E44AD" },
+              { icon:"⚠️", title:"사건·사고가 반복된다", desc:"괴롭힘·성희롱·내부고발이 반복된다면 제도와 문화 양쪽 모두 점검이 필요합니다.", color:C.red },
+              { icon:"📈", title:"급성장 스케일업 단계", desc:"인원이 빠르게 늘 때 기존 문화가 희석됩니다. 가치관·규범의 재정립이 필요합니다.", color:"#2ECC71" },
+            ].map(item => (
+              <div key={item.title} style={{ padding:"18px 18px", background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.07)", borderRadius:12, borderLeft:`3px solid ${item.color}` }}>
+                <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:8 }}>
+                  <span style={{ fontSize:20 }}>{item.icon}</span>
+                  <span style={{ fontSize:13, fontWeight:800, color:C.cream }}>{item.title}</span>
+                </div>
+                <div style={{ fontSize:11.5, color:"rgba(244,241,235,0.55)", lineHeight:1.65 }}>{item.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 기대 효과 */}
+        <div style={{ marginBottom:40, padding:"28px 32px", background:"rgba(13,115,119,0.06)", border:"1px solid rgba(13,115,119,0.25)", borderRadius:16 }}>
+          <div style={{ textAlign:"center", marginBottom:20 }}>
+            <div style={{ fontSize:11, fontWeight:700, color:C.tealLight, letterSpacing:"2px", marginBottom:6 }}>EXPECTED OUTCOMES</div>
+            <div style={{ fontFamily:"'Noto Serif KR', serif", fontSize:17, fontWeight:800, color:C.cream }}>조직문화 개선으로 얻는 변화</div>
+          </div>
+          <div className="content-grid-4" style={{ display:"grid", gridTemplateColumns:"repeat(4, 1fr)", gap:12 }}>
+            {[
+              { metric:"이직률", change:"감소", desc:"우수 인력 유지", color:C.teal },
+              { metric:"생산성", change:"향상", desc:"몰입도·효율성 증가", color:C.gold },
+              { metric:"브랜드 가치", change:"상승", desc:"채용 경쟁력·ESG", color:"#8E44AD" },
+              { metric:"법적 리스크", change:"차단", desc:"분쟁·과태료 예방", color:C.red },
+            ].map(o => (
+              <div key={o.metric} style={{ padding:"16px 14px", background:"rgba(10,22,40,0.5)", border:`1px solid ${o.color}40`, borderRadius:10, textAlign:"center" }}>
+                <div style={{ fontSize:11, color:"rgba(244,241,235,0.5)", marginBottom:4 }}>{o.metric}</div>
+                <div style={{ fontSize:18, fontWeight:900, color:o.color, marginBottom:4 }}>{o.change}</div>
+                <div style={{ fontSize:10, color:"rgba(244,241,235,0.5)", lineHeight:1.5 }}>{o.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* 6개 진단 영역 */}
         <div style={{ marginBottom:40 }}>
           <div style={{ fontSize:11, fontWeight:700, color:C.gold, letterSpacing:"2px", textAlign:"center", marginBottom:20 }}>6개 핵심 진단 영역</div>
