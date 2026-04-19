@@ -25,14 +25,29 @@ import { CulturePromoSection } from "./pages/CulturePromoSection.jsx";
 
 export default function App() {
   // URL ↔ 페이지 매핑
-  const pageToPath = { home:"/", intro:"/intro", content:"/content", checklist:"/checklist", culture:"/culture", report:"/report", biz:"/biz", relief:"/relief", admin:"/admin", cases:"/cases" };
+  const pageToPath = { home:"/", intro:"/intro", content:"/content", checklist:"/diagnosis", culture:"/culture", report:"/report", biz:"/biz", relief:"/relief", admin:"/admin", cases:"/cases" };
   const pathToPage = Object.fromEntries(Object.entries(pageToPath).map(([k,v])=>[v,k]));
 
-  // URL 전체 파싱 (콘텐츠 상세 /content/:id 포함)
+  // 진단 탭 ↔ 페이지 상태 매핑
+  const diagTypeToPage = { victim:"checklist", accused:"checklist-accused", sanjae:"checklist-sanjae", company:"checklist-company" };
+  const pageToDiagType = { checklist:"victim", "checklist-accused":"accused", "checklist-sanjae":"sanjae", "checklist-company":"company" };
+
+  // 진단 페이지 전용 경로 생성
+  const buildPath = (page) => {
+    if (pageToDiagType[page]) return `/diagnosis?type=${pageToDiagType[page]}`;
+    return pageToPath[page] || "/";
+  };
+
+  // URL 전체 파싱 (콘텐츠 상세 /content/:id, 진단 /diagnosis?type=X 포함)
   const parseURL = () => {
     const path = window.location.pathname;
     const m = path.match(/^\/content\/(\d+)$/);
     if (m) return { page: "content", contentId: parseInt(m[1], 10) };
+    // 진단 페이지: /diagnosis?type=X 또는 /checklist(레거시)
+    if (path === "/diagnosis" || path === "/checklist") {
+      const type = new URLSearchParams(window.location.search).get("type");
+      return { page: diagTypeToPage[type] || "checklist", contentId: null };
+    }
     return { page: pathToPage[path] || "home", contentId: null };
   };
   // 기존 호환용
@@ -42,7 +57,7 @@ export default function App() {
   const [active, _setActive] = useState(initial.page);
   const [contentId, _setContentId] = useState(initial.contentId);
   const setActive = (page) => {
-    const path = pageToPath[page] || "/";
+    const path = buildPath(page);
     window.history.pushState({ page }, "", path);
     _setActive(page);
     _setContentId(null);
@@ -62,7 +77,7 @@ export default function App() {
   const isPopState = useRef(false);
 useEffect(() => {
     const { page, contentId: cid } = parseURL();
-    const path = cid ? `/content/${cid}` : (pageToPath[page] || "/");
+    const path = cid ? `/content/${cid}` : buildPath(page);
     window.history.replaceState({ page, contentId: cid }, "", path);
   }, []);
   useEffect(() => {

@@ -14,6 +14,14 @@ import { SectionTag, DarkSectionTag } from "../components/common/FormElements.js
 // ── ChecklistSection ─────────────────────────────────────────────────────────────────
 export function ChecklistSection({ setActive, initialTab = "victim" }) {
   const [diagTab, setDiagTab] = useState(initialTab);
+  // 외부(App.jsx)에서 active가 바뀌어 initialTab이 달라지면 동기화 (뒤로가기/앞으로가기/URL 직접입력 대응)
+  useEffect(() => { setDiagTab(initialTab); }, [initialTab]);
+  // 탭 클릭 시 URL도 업데이트 (type 파라미터 반영)
+  const tabToPage = { victim:"checklist", accused:"checklist-accused", sanjae:"checklist-sanjae", company:"checklist-company" };
+  const handleTabClick = (tabId) => {
+    setDiagTab(tabId);
+    if (setActive && tabToPage[tabId]) setActive(tabToPage[tabId]);
+  };
   const STEPS = ["사전요건 확인", "행위유형 진단", "피해 영향도", "반복성 판단", "결과 확인"];
   const _saved = loadChecklist();
   const [step, setStep] = useState(_saved?.step || 0);
@@ -56,7 +64,7 @@ export function ChecklistSection({ setActive, initialTab = "victim" }) {
             { id:"sanjae", label:"🩺 산재 체크", color:C.teal },
             { id:"company", label:"🏛️ 사내조사 체크", color:"#3D5A80" },
           ].map((tab, i, arr) => (
-            <button key={tab.id} onClick={() => setDiagTab(tab.id)} style={{
+            <button key={tab.id} onClick={() => handleTabClick(tab.id)} style={{
               padding:"12px 22px",
               borderRadius: i === 0 ? "10px 0 0 10px" : i === arr.length - 1 ? "0 10px 10px 0" : "0",
               fontSize:13, fontWeight:diagTab===tab.id?800:500, cursor:"pointer", fontFamily:"inherit",
