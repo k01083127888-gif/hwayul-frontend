@@ -28,14 +28,31 @@ export default function App() {
   const pageToPath = { home:"/", intro:"/intro", content:"/content", checklist:"/checklist", culture:"/culture", report:"/report", biz:"/biz", relief:"/relief", admin:"/admin", cases:"/cases" };
   const pathToPage = Object.fromEntries(Object.entries(pageToPath).map(([k,v])=>[v,k]));
 
-  // 현재 URL에서 초기 페이지 결정
-  const getPageFromURL = () => pathToPage[window.location.pathname] || "home";
+  // URL 전체 파싱 (콘텐츠 상세 /content/:id 포함)
+  const parseURL = () => {
+    const path = window.location.pathname;
+    const m = path.match(/^\/content\/(\d+)$/);
+    if (m) return { page: "content", contentId: parseInt(m[1], 10) };
+    return { page: pathToPage[path] || "home", contentId: null };
+  };
+  // 기존 호환용
+  const getPageFromURL = () => parseURL().page;
 
-  const [active, _setActive] = useState(getPageFromURL);
+  const initial = parseURL();
+  const [active, _setActive] = useState(initial.page);
+  const [contentId, _setContentId] = useState(initial.contentId);
   const setActive = (page) => {
     const path = pageToPath[page] || "/";
     window.history.pushState({ page }, "", path);
     _setActive(page);
+    _setContentId(null);
+  };
+  // 콘텐츠 상세 페이지로 이동 (/content/:id)
+  const setContentDetail = (id) => {
+    window.history.pushState({ page: "content", contentId: id }, "", `/content/${id}`);
+    _setActive("content");
+    _setContentId(id);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const [showFooterPrivacy, setShowFooterPrivacy] = useState(false);
   // 관리자 인증 상태를 전역으로 관리 → AdminSection과 NewFeaturesHub가 공유
@@ -44,8 +61,9 @@ export default function App() {
 // 모바일 뒤로가기 지원
   const isPopState = useRef(false);
 useEffect(() => {
-    const path = pageToPath[getPageFromURL()] || "/";
-    window.history.replaceState({ page: getPageFromURL() }, "", path);
+    const { page, contentId: cid } = parseURL();
+    const path = cid ? `/content/${cid}` : (pageToPath[page] || "/");
+    window.history.replaceState({ page, contentId: cid }, "", path);
   }, []);
   useEffect(() => {
     if (isPopState.current) {
@@ -56,16 +74,12 @@ useEffect(() => {
   }, [active]);
 
   useEffect(() => {
-   const handlePopState = (e) => {
+   const handlePopState = () => {
       isPopState.current = true;
-      if (e.state && e.state.page) {
-        if (e.state.page !== "contentDetail") {
-          _setActive(e.state.page);
-        }
-      } else {
-        // URL에서 페이지 결정 (뒤로가기로 외부에서 돌아왔을 때)
-        _setActive(getPageFromURL());
-      }
+      // 항상 URL을 재파싱 — 뒤로가기/앞으로가기 모두 URL이 진실의 원천
+      const { page, contentId: cid } = parseURL();
+      _setActive(page);
+      _setContentId(cid);
     };
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
@@ -293,7 +307,7 @@ useEffect(() => {
       <main style={{ paddingTop:62 }}>
         {active === "home"      && <HeroSection    setActive={setActive} />}
         {active === "intro"     && <IntroSection />}
-        {active === "content"   && <ContentSection />}
+        {active === "content"   && <ContentSection contentId={contentId} setContentDetail={setContentDetail} setActive={setActive} />}
         {(active === "checklist" || active === "checklist-accused" || active === "checklist-sanjae" || active === "checklist-company") && <ChecklistSection setActive={setActive} initialTab={active === "checklist-accused" ? "accused" : active === "checklist-sanjae" ? "sanjae" : active === "checklist-company" ? "company" : "victim"} />}
         {active === "culture"  && <CultureSection />}
         {active === "report"    && <ReportSection />}

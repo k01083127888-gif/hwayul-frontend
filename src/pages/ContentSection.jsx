@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import C from "../tokens/colors.js";
-import { _contents, _store } from "../utils/store.js";
+import { _contents, useStore } from "../utils/store.js";
 import { ContentDetailView } from "../components/ContentDetailView.jsx";
 import { SectionTag } from "../components/common/FormElements.jsx";
 
 // ── ContentSection ─────────────────────────────────────────────────────────────────
-export function ContentSection() {
+export function ContentSection({ contentId = null, setContentDetail, setActive }) {
+  useStore(); // _contents 변경 시 리렌더 (DB 비동기 로드 대응)
   const [filter, setFilter] = useState("all");
   const [showAll, setShowAll] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
   const typeIcon  = { news:"📰", video:"▶", resource:"📎", column:"✏️" };
   const typeColor = { news:C.teal, video:C.red, resource:C.gold, column:C.purple };
   const SANJAE_TAGS = ["산재통계","산재사례","판례"];
@@ -17,20 +17,29 @@ export function ContentSection() {
   const filtered = showAll ? allFiltered : allFiltered.slice(0, 6);
   const hasMore = allFiltered.length > 6 && !showAll;
 
-  // 관련 콘텐츠에서 상세보기로 이동하기 위한 글로벌 핸들러
+  // URL의 contentId로 선택된 아이템 결정
+  const selectedItem = contentId != null ? _contents.find(n => n.id === contentId) : null;
+
+  // 관련 콘텐츠에서 상세보기로 이동 — URL 기반 네비게이션 사용
   useEffect(() => {
     window.__safeworkOpenDetail = (id) => {
-      const item = _contents.find(n => n.id === id);
-      if (item) { setSelectedItem(item); window.history.pushState({page:"contentDetail"}, ""); }
+      if (typeof setContentDetail === "function") setContentDetail(id);
     };
-    const onPop = () => { if (selectedItem) { setSelectedItem(null); } };
-    window.addEventListener("popstate", onPop);
-    return () => { delete window.__safeworkOpenDetail; window.removeEventListener("popstate", onPop); };
-  }, [selectedItem]);
+    return () => { delete window.__safeworkOpenDetail; };
+  }, [setContentDetail]);
+
+  // 상세 보기 모드 — URL에 id는 있는데 아이템을 아직 못 찾음 (DB 로드 중)
+  if (contentId != null && !selectedItem) {
+    return (
+      <section style={{ padding:"120px 32px", background:C.cream, minHeight:"100vh", textAlign:"center" }}>
+        <div style={{ color:C.gray, fontSize:14 }}>콘텐츠를 불러오는 중입니다...</div>
+      </section>
+    );
+  }
 
   // 상세 보기 모드
   if (selectedItem) {
-    return <ContentDetailView item={selectedItem} onBack={() => setSelectedItem(null)} />;
+    return <ContentDetailView item={selectedItem} onBack={() => setActive && setActive("content")} />;
   }
 
   return (
@@ -57,7 +66,7 @@ export function ContentSection() {
             <article key={item.id} style={{ background:"white", borderRadius:12, padding:26, cursor:"pointer", border:"1px solid rgba(10,22,40,0.07)", boxShadow:"0 2px 10px rgba(10,22,40,0.05)", transition:"all 0.25s" }}
               onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 12px 36px rgba(10,22,40,0.11)"; }}
               onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 2px 10px rgba(10,22,40,0.05)"; }}
-              onClick={() => { setSelectedItem(item); window.history.pushState({page:"contentDetail"}, ""); window.scrollTo({ top:0, behavior:"smooth" }); }}
+              onClick={() => { if (setContentDetail) setContentDetail(item.id); }}
             >
               <div style={{ display:"flex", justifyContent:"space-between", marginBottom:12 }}>
                 <span style={{ padding:"3px 10px", borderRadius:4, background:typeColor[item.type]+"18", color:typeColor[item.type], fontSize:11, fontWeight:700 }}>
@@ -69,7 +78,7 @@ export function ContentSection() {
               <p style={{ fontSize:13, color:C.gray, lineHeight:1.65, marginBottom:14 }}>{item.summary}</p>
               <div style={{ display:"flex", justifyContent:"space-between", paddingTop:12, borderTop:"1px solid rgba(10,22,40,0.07)" }}>
                 <span style={{ fontSize:12, color:C.gray }}>👁 {item.views.toLocaleString()}</span>
-                <button onClick={(e) => { e.stopPropagation(); setSelectedItem(item); window.history.pushState({page:"contentDetail"}, ""); window.scrollTo({ top:0, behavior:"smooth" }); }} style={{ fontSize:12, color:C.teal, fontWeight:700, background:"none", border:"none", cursor:"pointer", fontFamily:"inherit" }}>자세히 보기 →</button>
+                <button onClick={(e) => { e.stopPropagation(); if (setContentDetail) setContentDetail(item.id); }} style={{ fontSize:12, color:C.teal, fontWeight:700, background:"none", border:"none", cursor:"pointer", fontFamily:"inherit" }}>자세히 보기 →</button>
               </div>
             </article>
           ))}
