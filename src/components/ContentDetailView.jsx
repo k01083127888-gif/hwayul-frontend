@@ -1,6 +1,20 @@
+import { useEffect } from "react";
 import C from "../tokens/colors.js";
 import { _contents } from "../utils/store.js";
 import { contentDetails } from "../data/contentDetails.js";
+
+// 특정 meta 태그의 content 값을 세팅 (없으면 생성), 기존 값 반환
+function setMeta(selector, attrName, attrValue, content) {
+  let el = document.head.querySelector(selector);
+  const prev = el ? el.getAttribute("content") : null;
+  if (!el) {
+    el = document.createElement("meta");
+    el.setAttribute(attrName, attrValue);
+    document.head.appendChild(el);
+  }
+  el.setAttribute("content", content);
+  return prev;
+}
 
 export function ContentDetailView({ item, onBack }) {
   const typeIcon  = { news:"📰", video:"▶", resource:"📎", column:"✏️" };
@@ -8,6 +22,36 @@ export function ContentDetailView({ item, onBack }) {
   const typeLabel = { news:"뉴스·판례", video:"교육영상", resource:"자료", column:"칼럼" };
   const detail = contentDetails[item.id] || { content: item.body, attachments: item.attachments };
   const relatedItems = detail?.related?.map(rid => _contents.find(n => n.id === rid)).filter(Boolean) || [];
+
+  // ── 동적 SEO 메타태그 (title / description / OG / Twitter) ──────────────
+  useEffect(() => {
+    const title = `${item.title} | 화율인사이드`;
+    // summary가 길면 160자까지만 (SEO 권장)
+    const description = (item.summary || "").replace(/\s+/g, " ").trim().slice(0, 160);
+    const url = `https://hwayul.kr/content/${item.id}`;
+
+    // 기존 값 백업
+    const prevTitle = document.title;
+    const prevDesc = setMeta('meta[name="description"]', "name", "description", description);
+    const prevOgTitle = setMeta('meta[property="og:title"]', "property", "og:title", title);
+    const prevOgDesc = setMeta('meta[property="og:description"]', "property", "og:description", description);
+    const prevOgUrl = setMeta('meta[property="og:url"]', "property", "og:url", url);
+    const prevTwTitle = setMeta('meta[name="twitter:title"]', "name", "twitter:title", title);
+    const prevTwDesc = setMeta('meta[name="twitter:description"]', "name", "twitter:description", description);
+
+    document.title = title;
+
+    // 언마운트 시 원래 값 복원
+    return () => {
+      document.title = prevTitle;
+      if (prevDesc !== null) setMeta('meta[name="description"]', "name", "description", prevDesc);
+      if (prevOgTitle !== null) setMeta('meta[property="og:title"]', "property", "og:title", prevOgTitle);
+      if (prevOgDesc !== null) setMeta('meta[property="og:description"]', "property", "og:description", prevOgDesc);
+      if (prevOgUrl !== null) setMeta('meta[property="og:url"]', "property", "og:url", prevOgUrl);
+      if (prevTwTitle !== null) setMeta('meta[name="twitter:title"]', "name", "twitter:title", prevTwTitle);
+      if (prevTwDesc !== null) setMeta('meta[name="twitter:description"]', "name", "twitter:description", prevTwDesc);
+    };
+  }, [item.id, item.title, item.summary]);
 
   return (
     <section style={{ padding:"80px 32px", background:C.cream, minHeight:"100vh" }}>
