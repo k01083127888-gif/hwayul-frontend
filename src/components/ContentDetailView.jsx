@@ -2,6 +2,7 @@ import C from "../tokens/colors.js";
 import { _contents } from "../utils/store.js";
 import { contentDetails } from "../data/contentDetails.js";
 import { usePageMeta } from "../utils/usePageMeta.js";
+import { ContentCTABox } from "./ContentCTABox.jsx";
 
 export function ContentDetailView({ item, onBack }) {
   const typeIcon  = { news:"📰", video:"▶", resource:"📎", column:"✏️" };
@@ -83,6 +84,9 @@ export function ContentDetailView({ item, onBack }) {
             ));
           })()}
         </div>
+
+        {/* ★ 진단 유도 CTA 박스 */}
+        <ContentCTABox item={item} />
 
         {/* 첨부파일 */}
         {detail?.attachments?.length > 0 && (

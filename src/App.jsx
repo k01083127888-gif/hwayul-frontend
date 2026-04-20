@@ -7,6 +7,7 @@ import { SideRequestPanel } from "./components/SideRequestPanel.jsx";
 import { NewsletterSection } from "./components/NewsletterSection.jsx";
 import { NewFeaturesHub } from "./components/NewFeaturesHub.jsx";
 import { PrivacyPolicyModal } from "./components/common/PrivacyPolicyModal.jsx";
+import { StickyScrollCTA } from "./components/StickyScrollCTA.jsx";
 
 import CasesManager from "./components/CasesManager.jsx";
 import { loadContentsFromDB } from "./utils/store.js";
@@ -331,6 +332,9 @@ useEffect(() => {
         {active === "admin"     && <AdminSection setActive={setActive} authed={isAdmin} setAuthed={setIsAdmin} />}
         {active === "cases"     && <CasesManager />}
       </main>
+
+      {/* ★ 콘텐츠 상세 페이지 스크롤 고정 배너 */}
+      {active === "content" && contentId != null && <StickyScrollCTA />}
 
       {active === "home" && <CulturePromoSection setActive={setActive} />}
       {active === "home" && <DifferentiationSection setActive={setActive} />}
