@@ -11,9 +11,25 @@ export function ContentDetailView({ item, onBack }) {
   const relatedItems = detail?.related?.map(rid => _contents.find(n => n.id === rid)).filter(Boolean) || [];
 
   // ── 동적 SEO 메타태그 ──
+  // description 우선순위: summary > body(HTML 태그 제거 후 첫 160자)
+  const stripHtml = (html) => (html || "")
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+  const bodyText = stripHtml(detail?.content || item.body || "");
+  const description = (item.summary && item.summary.trim()) ? item.summary.trim() : bodyText;
+
   usePageMeta({
     title: `${item.title} | 화율인사이드`,
-    description: item.summary || "",
+    description,
     url: `https://hwayul.kr/content/${item.id}`,
   });
 
