@@ -6,6 +6,7 @@ import { Input, DarkInput, SectionTag, DarkSectionTag } from "../components/comm
 import { ValidationMsg } from "../components/common/ValidationMsg.jsx";
 import { PrivacyConsent } from "../components/common/PrivacyConsent.jsx";
 import { PrivacyPolicyModal } from "../components/common/PrivacyPolicyModal.jsx";
+import { usePageMeta } from "../utils/usePageMeta.js";
 
 const API_BASE = "https://hwayul-backend-production-96cf.up.railway.app/api";
 
@@ -61,6 +62,11 @@ function sendConfirmEmail(form) {
 
 // ── BizSection ─────────────────────────────────────────────────────────────────
 export function BizSection() {
+  usePageMeta({
+    title: "심층 상담 신청 — 3단계 패키지 22만원 | 화율인사이드",
+    description: "전문 노무사 심층 상담 (1차 전화 → 2차 서류 검토 → 3차 대면) 22만원. 해결 의뢰 전환 시 상담료 전액 차감. 개인·기업 모두 이용 가능합니다.",
+    url: "https://hwayul.kr/biz",
+  });
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({ name:"", company:"", phone:"", email:"", position:"", size:"", consultType:"", note:"", date:"", time:"", consent:false });
   const F = k => e => setForm(f => ({ ...f, [k]: e.target.value }));

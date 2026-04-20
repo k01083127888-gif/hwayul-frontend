@@ -5,6 +5,7 @@ import { generateCulturePrintHtml } from "../utils/printTemplates.js";
 import { PrintModal } from "../components/PrintModal.jsx";
 import { ReportForm } from "../components/ReportForm.jsx";
 import { DarkSectionTag, SectionTag, Input } from "../components/common/FormElements.jsx";
+import { usePageMeta } from "../utils/usePageMeta.js";
 
 let _savedCulture = loadCulture();
 
@@ -73,6 +74,11 @@ const cultureCategories = [
 
 // ── CultureSection ─────────────────────────────────────────────────────────────────
 export function CultureSection() {
+  usePageMeta({
+    title: "조직문화 진단 — 6개 영역 무료 자가진단 | 화율인사이드",
+    description: "조직 구조·소통·공정성·심리적 안전감·제도·교육 6개 영역을 무료로 진단하고, 전문 노무사의 맞춤 리포트(33만원)로 조직문화 개선 방향을 받아보세요.",
+    url: "https://hwayul.kr/culture",
+  });
   const [answers, setAnswers] = useState(_savedCulture?.answers || {});
   const [showResult, setShowResult] = useState(_savedCulture?.showResult || false);
   const [orgInfo, setOrgInfo] = useState(_savedCulture?.orgInfo || { name:"", size:"", industry:"" });

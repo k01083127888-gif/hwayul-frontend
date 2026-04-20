@@ -2,9 +2,15 @@ import { useState } from "react";
 import C from "../tokens/colors.js";
 import { _members } from "../utils/store.js";
 import { SectionTag } from "../components/common/FormElements.jsx";
+import { usePageMeta } from "../utils/usePageMeta.js";
 
 // ── IntroSection ─────────────────────────────────────────────────────────────────
 export function IntroSection() {
+  usePageMeta({
+    title: "소개 — 전문 노무사 팀 | 화율인사이드",
+    description: "20년 경력 노무사가 이끄는 화율인사이드. 직장내 괴롭힘·산재·조직문화 전문가 팀을 소개합니다.",
+    url: "https://hwayul.kr/intro",
+  });
   const [selectedMember, setSelectedMember] = useState(null);
   const members = _members;
 

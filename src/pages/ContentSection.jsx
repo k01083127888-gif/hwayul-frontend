@@ -3,9 +3,16 @@ import C from "../tokens/colors.js";
 import { _contents, useStore } from "../utils/store.js";
 import { ContentDetailView } from "../components/ContentDetailView.jsx";
 import { SectionTag } from "../components/common/FormElements.jsx";
+import { usePageMeta } from "../utils/usePageMeta.js";
 
 // ── ContentSection ─────────────────────────────────────────────────────────────────
 export function ContentSection({ contentId = null, setContentDetail, setActive }) {
+  // 목록 페이지일 때만 메타 적용 (상세는 ContentDetailView에서 처리)
+  usePageMeta(contentId ? {} : {
+    title: "콘텐츠 — 판례·뉴스·자료 | 화율인사이드",
+    description: "직장내 괴롭힘·산재 관련 최신 판례, 뉴스, 교육 영상, 실무 자료를 한곳에서 확인하세요.",
+    url: "https://hwayul.kr/content",
+  });
   useStore(); // _contents 변경 시 리렌더 (DB 비동기 로드 대응)
   const [filter, setFilter] = useState("all");
   const [showAll, setShowAll] = useState(false);

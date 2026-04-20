@@ -6,6 +6,7 @@ import { DarkInput, DarkSectionTag } from "../components/common/FormElements.jsx
 import { ValidationMsg } from "../components/common/ValidationMsg.jsx";
 import { PrivacyConsent } from "../components/common/PrivacyConsent.jsx";
 import { PrivacyPolicyModal } from "../components/common/PrivacyPolicyModal.jsx";
+import { usePageMeta } from "../utils/usePageMeta.js";
 
 // ── 4개 트랙 서비스 정의 ─────────────────────────────────────────────────
 const TRACKS = [
@@ -119,6 +120,11 @@ const PROCESS_STEPS = [
 ];
 
 export function ReliefSection() {
+  usePageMeta({
+    title: "해결 의뢰 — 피해자 구제·산재·피지목인·회사 조사 | 화율인사이드",
+    description: "전문 노무사에게 사건 해결을 의뢰하세요. 피해자 구제·산재 신청·피지목인 항변·회사 조사처리 4개 트랙. 가격 투명성, 착수금부터 성공보수까지 명확히 안내합니다.",
+    url: "https://hwayul.kr/relief",
+  });
   const [selectedTrack, setSelectedTrack] = useState("victim");
   const [form, setForm] = useState({ name:"", phone:"", email:"", situation:"", urgency:"", consent:false });
   const [done, setDone] = useState(false);

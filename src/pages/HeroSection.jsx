@@ -1,8 +1,15 @@
 import { useState } from "react";
 import C from "../tokens/colors.js";
+import { usePageMeta } from "../utils/usePageMeta.js";
 
 // ── HeroSection ─────────────────────────────────────────────────────────────────
 export function HeroSection({ setActive }) {
+  usePageMeta({
+    title: "화율인사이드 — 직장 내 괴롭힘 & 조직문화 전문 플랫폼",
+    description: "20년 노무 전문성과 1,000건+ 실제 판례 DB. 피해자 구제·피지목인 항변·산재 신청·조직문화 개선을 전문 노무사가 함께합니다.",
+    url: "https://hwayul.kr/",
+  });
+
   // 실적 기반 통계 (허위 자동증가 카운터 제거)
   const stats = [
     { n:"675건+",  l:"산재 승인 누적 (2019~2024)", icon:"⚖️" },

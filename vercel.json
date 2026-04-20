@@ -1,5 +1,7 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+    { "source": "/sitemap.xml", "destination": "https://hwayul-backend-production-96cf.up.railway.app/api/sitemap.xml" },
+    { "source": "/robots.txt",  "destination": "https://hwayul-backend-production-96cf.up.railway.app/api/robots.txt" },
+    { "source": "/(.*)",        "destination": "/" }
   ]
 }
