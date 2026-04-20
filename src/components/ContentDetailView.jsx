@@ -85,9 +85,6 @@ export function ContentDetailView({ item, onBack }) {
           })()}
         </div>
 
-        {/* ★ 진단 유도 CTA 박스 */}
-        <ContentCTABox item={item} />
-
         {/* 첨부파일 */}
         {detail?.attachments?.length > 0 && (
           <div style={{ background:"white", borderRadius:16, padding:36, boxShadow:"0 4px 24px rgba(10,22,40,0.08)", border:"1px solid rgba(10,22,40,0.06)", marginBottom:28 }}>
@@ -134,6 +131,9 @@ export function ContentDetailView({ item, onBack }) {
             </div>
           </div>
         )}
+
+        {/* ★ 진단 유도 CTA 박스 (본문 + 첨부파일 다 본 후 노출) */}
+        <ContentCTABox item={item} />
 
         {/* 관련 콘텐츠 */}
         {relatedItems.length > 0 && (
