@@ -55,6 +55,34 @@ export function ContentCTABox({ item }) {
         {subtext}
       </p>
 
+      {/* 혜택 체크리스트 3개 */}
+      <div style={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: 14,
+        marginTop: 4,
+        marginBottom: 22,
+      }}>
+        {["괴롭힘 해당 여부", "증거 수집 방법", "다음 행동 가이드"].map(label => (
+          <span key={label} style={{
+            fontSize: 12,
+            color: C.navy,
+            fontWeight: 600,
+            display: "flex",
+            alignItems: "center",
+            gap: 5,
+            padding: "6px 12px",
+            borderRadius: 100,
+            background: "rgba(13,115,119,0.08)",
+            border: "1px solid rgba(13,115,119,0.15)",
+            whiteSpace: "nowrap",
+          }}>
+            <span style={{ color: C.teal, fontWeight: 900 }}>✓</span>
+            <span>{label}</span>
+          </span>
+        ))}
+      </div>
+
       {/* CTA 버튼 */}
       <button
         onClick={handleClick}
