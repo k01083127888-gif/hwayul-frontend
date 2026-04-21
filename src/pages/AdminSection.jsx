@@ -425,8 +425,13 @@ export function AdminSection({ setActive, authed, setAuthed }) {
 
     const handleSave = () => {
       if (!f.title) return;
-    const savedItem = { ...f, id: item?.id || Date.now(), views: Number(f.views)||0, body: body || "", attachments: attachments.length > 0 ? attachments : [] };
-      contentDetails[savedItem.id] = { ...(contentDetails[savedItem.id] || {}), content: body || "", attachments: attachments.length > 0 ? attachments : undefined };
+      // Quill 에디터의 최신 HTML을 직접 읽어온다 (onBlur 비동기 지연 회피)
+      const quill = quillRef.current?.getEditor?.() || quillRef.current;
+      const latestBody = quill?.root?.innerHTML ?? body ?? "";
+      if (latestBody !== body) setBody(latestBody);
+
+      const savedItem = { ...f, id: item?.id || Date.now(), views: Number(f.views)||0, body: latestBody, attachments: attachments.length > 0 ? attachments : [] };
+      contentDetails[savedItem.id] = { ...(contentDetails[savedItem.id] || {}), content: latestBody, attachments: attachments.length > 0 ? attachments : undefined };
       saveDetails();
       onSave(savedItem);
     };
