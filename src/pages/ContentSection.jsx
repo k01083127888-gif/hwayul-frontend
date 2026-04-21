@@ -75,17 +75,10 @@ export function ContentSection({ contentId = null, setContentDetail, setActive }
               onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 2px 10px rgba(10,22,40,0.05)"; }}
               onClick={() => { if (setContentDetail) setContentDetail(item.id); }}
             >
-              <div style={{ display:"flex", justifyContent:"space-between", marginBottom:12, gap:6, alignItems:"center", flexWrap:"wrap" }}>
-                <div style={{ display:"flex", gap:6, alignItems:"center", flexWrap:"wrap" }}>
-                  <span style={{ padding:"3px 10px", borderRadius:4, background:typeColor[item.type]+"18", color:typeColor[item.type], fontSize:11, fontWeight:700 }}>
-                    {typeIcon[item.type]} {item.tag}
-                  </span>
-                  {item.case_number && (
-                    <span style={{ padding:"3px 8px", borderRadius:4, background:"rgba(13,115,119,0.08)", color:C.teal, fontSize:10, fontWeight:700, border:"1px solid rgba(13,115,119,0.2)" }}>
-                      📋 {item.case_number}
-                    </span>
-                  )}
-                </div>
+              <div style={{ display:"flex", justifyContent:"space-between", marginBottom:12 }}>
+                <span style={{ padding:"3px 10px", borderRadius:4, background:typeColor[item.type]+"18", color:typeColor[item.type], fontSize:11, fontWeight:700 }}>
+                  {typeIcon[item.type]} {item.tag}
+                </span>
                 <span style={{ fontSize:11, color:C.gray }}>{item.date}</span>
               </div>
               <h3 style={{ fontSize:14, fontWeight:700, color:C.navy, lineHeight:1.55, marginBottom:10 }}>{item.title}</h3>

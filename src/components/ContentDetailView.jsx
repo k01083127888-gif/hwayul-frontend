@@ -47,18 +47,13 @@ export function ContentDetailView({ item, onBack }) {
 
         {/* 헤더 */}
         <div style={{ background:"white", borderRadius:16, padding:36, boxShadow:"0 4px 24px rgba(10,22,40,0.08)", border:"1px solid rgba(10,22,40,0.06)", marginBottom:28 }}>
-          <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:18, flexWrap:"wrap" }}>
+          <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:18 }}>
             <span style={{ padding:"5px 14px", borderRadius:6, background:typeColor[item.type]+"18", color:typeColor[item.type], fontSize:12, fontWeight:700 }}>
               {typeIcon[item.type]} {typeLabel[item.type]}
             </span>
             <span style={{ padding:"4px 12px", borderRadius:6, background:"rgba(10,22,40,0.06)", color:C.gray, fontSize:11, fontWeight:600 }}>
               {item.tag}
             </span>
-            {item.case_number && (
-              <span style={{ padding:"4px 12px", borderRadius:6, background:"rgba(13,115,119,0.1)", color:C.teal, fontSize:11, fontWeight:700, border:"1px solid rgba(13,115,119,0.25)" }}>
-                📋 {item.case_number}
-              </span>
-            )}
           </div>
 
           <h1 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"clamp(1.4rem, 2.5vw, 1.9rem)", fontWeight:900, color:C.navy, lineHeight:1.45, marginBottom:16, letterSpacing:"-0.3px" }}>
