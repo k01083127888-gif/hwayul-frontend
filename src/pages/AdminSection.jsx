@@ -608,6 +608,40 @@ export function AdminSection({ setActive, authed, setAuthed }) {
               }} style={{ padding:"10px 20px", borderRadius:8, background:"linear-gradient(135deg,#C9A84C,#E5C56A)", border:"none", color:"#0A1628", fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"inherit", display:"flex", alignItems:"center", gap:8 }}>
                 📄 콘텐츠 엑셀 다운로드
               </button>
+              <button onClick={async () => {
+                if (!confirm("기존 콘텐츠의 제목·요약·본문에서 판례번호를 자동 추출해 '판례번호' 컬럼으로 이동합니다.\n먼저 미리보기(dryRun)로 몇 건이 영향받는지 확인 후 진행합니다.")) return;
+                try {
+                  // 1) dryRun으로 미리보기
+                  const r1 = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/contents/extract-case-numbers", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ dryRun: true }),
+                  });
+                  const d1 = await r1.json();
+                  if (!d1.success) { alert("실패: " + (d1.error || "알 수 없는 오류")); return; }
+                  const msg = `전체 ${d1.total}건 중 ${d1.found}건에서 판례번호를 추출할 수 있습니다.\n\n샘플 (최대 5건):\n` +
+                    d1.sample.slice(0, 5).map(s => `· ${s.case_number}  →  ${s.newTitle}`).join("\n") +
+                    `\n\n실제로 반영하시겠습니까?`;
+                  if (!confirm(msg)) return;
+                  // 2) 실제 실행
+                  const r2 = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/contents/extract-case-numbers", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ dryRun: false }),
+                  });
+                  const d2 = await r2.json();
+                  if (d2.success) {
+                    alert(`완료! ${d2.updated}건 업데이트됨.`);
+                    loadContentsFromDB();
+                  } else {
+                    alert("실패: " + (d2.error || "알 수 없는 오류"));
+                  }
+                } catch (e) {
+                  alert("오류: " + e.message);
+                }
+              }} style={{ padding:"10px 20px", borderRadius:8, background:"rgba(13,115,119,0.12)", border:"1.5px solid rgba(13,115,119,0.4)", color:C.teal, fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"inherit", display:"flex", alignItems:"center", gap:8 }}>
+                🔍 판례번호 자동 추출
+              </button>
               <label style={{ padding:"10px 20px", borderRadius:8, background:"rgba(201,168,76,0.12)", border:"1.5px solid rgba(201,168,76,0.4)", color:"#8B7A40", fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"inherit", display:"flex", alignItems:"center", gap:8 }}>
                 📤 콘텐츠 엑셀 업로드
                 <input
