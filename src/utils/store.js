@@ -180,6 +180,7 @@ export async function saveContentsToDB(contents) {
             body: JSON.stringify({ contents: contents.map(c => ({
                 type: c.type || "news",
                 tag: c.tag || "",
+                case_number: c.case_number || "",
                 title: c.title || "",
                 date: c.date || "",
                 summary: c.summary || "",
