@@ -589,8 +589,8 @@ export function AdminSection({ setActive, authed, setAuthed }) {
 
           return (
           <div>
-            {/* ── 데이터 내보내기 ── */}
-            <div style={{ display:"flex", justifyContent:"flex-end", marginBottom:12 }}>
+            {/* ── 데이터 내보내기 / 가져오기 ── */}
+            <div style={{ display:"flex", justifyContent:"flex-end", gap:8, marginBottom:12, flexWrap:"wrap" }}>
               <button onClick={() => {
                 const a = document.createElement("a");
                 a.href = "https://hwayul-backend-production-96cf.up.railway.app/api/export-excel";
@@ -599,6 +599,45 @@ export function AdminSection({ setActive, authed, setAuthed }) {
               }} style={{ padding:"10px 20px", borderRadius:8, background:"linear-gradient(135deg,#0D7377,#4ECDC4)", border:"none", color:"white", fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"inherit", display:"flex", alignItems:"center", gap:8 }}>
                 📥 전체 데이터 엑셀 다운로드
               </button>
+              <button onClick={() => {
+                const a = document.createElement("a");
+                a.href = "https://hwayul-backend-production-96cf.up.railway.app/api/export-contents-excel";
+                a.download = "hwayul_contents.xlsx";
+                a.click();
+              }} style={{ padding:"10px 20px", borderRadius:8, background:"linear-gradient(135deg,#C9A84C,#E5C56A)", border:"none", color:"#0A1628", fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"inherit", display:"flex", alignItems:"center", gap:8 }}>
+                📄 콘텐츠 엑셀 다운로드
+              </button>
+              <label style={{ padding:"10px 20px", borderRadius:8, background:"rgba(201,168,76,0.12)", border:"1.5px solid rgba(201,168,76,0.4)", color:"#8B7A40", fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"inherit", display:"flex", alignItems:"center", gap:8 }}>
+                📤 콘텐츠 엑셀 업로드
+                <input
+                  type="file"
+                  accept=".xlsx,.xls"
+                  style={{ display:"none" }}
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    if (!confirm("엑셀 내용으로 콘텐츠를 일괄 업데이트합니다.\nID가 있는 행은 수정, 없는 행은 신규 추가됩니다.\n계속하시겠습니까?")) { e.target.value = ""; return; }
+                    try {
+                      const buf = await file.arrayBuffer();
+                      const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/import-contents-excel", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/octet-stream" },
+                        body: buf,
+                      });
+                      const data = await res.json();
+                      if (data.success) {
+                        alert(`업로드 완료!\n수정: ${data.updated}건\n신규 추가: ${data.inserted}건\n오류: ${data.errors}건${data.errorDetails?.length ? "\n\n" + data.errorDetails.map(er => `· ${er.row}: ${er.error}`).join("\n") : ""}`);
+                        loadContentsFromDB();
+                      } else {
+                        alert("업로드 실패: " + (data.error || "알 수 없는 오류"));
+                      }
+                    } catch (err) {
+                      alert("업로드 실패: " + err.message);
+                    }
+                    e.target.value = "";
+                  }}
+                />
+              </label>
             </div>
             {/* ── 핵심 KPI ── */}
             <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12, marginBottom:20 }}>
