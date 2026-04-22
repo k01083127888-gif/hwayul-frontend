@@ -4,6 +4,7 @@ import { _contents, useStore } from "../utils/store.js";
 import { ContentDetailView } from "../components/ContentDetailView.jsx";
 import { SectionTag } from "../components/common/FormElements.jsx";
 import { usePageMeta } from "../utils/usePageMeta.js";
+import { CONTENT_TYPES, normalizeContentType, getContentTypeMeta } from "../utils/contentType.js";
 
 // ── ContentSection ─────────────────────────────────────────────────────────────────
 export function ContentSection({ contentId = null, setContentDetail, setActive }) {
@@ -16,12 +17,11 @@ export function ContentSection({ contentId = null, setContentDetail, setActive }
   useStore(); // _contents 변경 시 리렌더 (DB 비동기 로드 대응)
   const [filter, setFilter] = useState("all");
   const [showAll, setShowAll] = useState(false);
-  const typeIcon  = { news:"📰", video:"▶", resource:"📎", column:"✏️" };
-  const typeColor = { news:C.teal, video:C.red, resource:C.gold, column:C.purple };
-  const SANJAE_TAGS = ["산재통계","산재사례","판례"];
   const visibleNews = _contents.filter(n => !n.hidden);
-  const allFiltered = filter === "all" ? visibleNews : filter === "sanjae" ? visibleNews.filter(n => SANJAE_TAGS.includes(n.tag)) : visibleNews.filter(n => n.type === filter);
+  const allFiltered = filter === "all" ? visibleNews : visibleNews.filter(n => normalizeContentType(n) === filter);
   const filtered = showAll ? allFiltered : allFiltered.slice(0, 6);
+  // 카테고리별 카운트 (탭 뒤 숫자)
+  const countByType = CONTENT_TYPES.reduce((acc, t) => { acc[t.id] = visibleNews.filter(n => normalizeContentType(n) === t.id).length; return acc; }, {});
   const hasMore = allFiltered.length > 6 && !showAll;
 
   // URL의 contentId로 선택된 아이템 결정
@@ -54,18 +54,25 @@ export function ContentSection({ contentId = null, setContentDetail, setActive }
       <div style={{ maxWidth:1100, margin:"0 auto" }}>
         <SectionTag>CONTENT ARCHIVE</SectionTag>
         <h2 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"2rem", fontWeight:800, color:C.navy, marginTop:8, marginBottom:8 }}>콘텐츠 아카이브</h2>
-        <p style={{ color:C.gray, marginBottom:32 }}>산업재해 판례·산재 승인 사례·뉴스·교육영상·서식자료를 한 곳에서 확인하세요.</p>
+        <p style={{ color:C.gray, marginBottom:32 }}>판례사례·산재사례·뉴스·서식자료·칼럼을 한 곳에서 확인하세요.</p>
 
         <div style={{ display:"flex", gap:8, marginBottom:32, flexWrap:"wrap" }}>
-          {[{ id:"all", label:"전체" }, { id:"sanjae", label:"⚖️ 산업재해·판례" }, { id:"news", label:"📰 뉴스·정책" }, { id:"video", label:"▶ 교육영상" }, { id:"resource", label:"📎 자료" }, { id:"column", label:"✏️ 칼럼" }].map(f => (
-            <button key={f.id} onClick={() => { setFilter(f.id); setShowAll(false); }} style={{
-              padding:"8px 20px", borderRadius:100,
-              border:`2px solid ${filter === f.id ? (f.id === "sanjae" ? C.teal : C.navy) : "rgba(10,22,40,0.15)"}`,
-              background:filter === f.id ? (f.id === "sanjae" ? C.teal : C.navy) : "white",
-              color:filter === f.id ? "white" : (f.id === "sanjae" ? C.teal : C.navy),
-              fontWeight:filter === f.id ? 700 : (f.id === "sanjae" ? 600 : 400), fontSize:13, cursor:"pointer", fontFamily:"inherit", transition:"all 0.2s",
-            }}>{f.label}{f.id === "sanjae" && <span style={{ marginLeft:6, padding:"1px 7px", borderRadius:100, background:filter === f.id ? "rgba(255,255,255,0.25)" : `${C.teal}18`, fontSize:10, fontWeight:700, color:filter === f.id ? "white" : C.teal }}>{visibleNews.filter(n => SANJAE_TAGS.includes(n.tag)).length}</span>}</button>
-          ))}
+          {[{ id:"all", label:"전체", color:C.navy }, ...CONTENT_TYPES.map(t => ({ id:t.id, label:`${t.icon} ${t.label}`, color:t.color }))].map(f => {
+            const active = filter === f.id;
+            const cnt = f.id === "all" ? visibleNews.length : countByType[f.id];
+            return (
+              <button key={f.id} onClick={() => { setFilter(f.id); setShowAll(false); }} style={{
+                padding:"8px 20px", borderRadius:100,
+                border:`2px solid ${active ? f.color : "rgba(10,22,40,0.15)"}`,
+                background:active ? f.color : "white",
+                color:active ? "white" : f.color,
+                fontWeight:active ? 700 : 500, fontSize:13, cursor:"pointer", fontFamily:"inherit", transition:"all 0.2s",
+              }}>
+                {f.label}
+                <span style={{ marginLeft:6, padding:"1px 7px", borderRadius:100, background:active ? "rgba(255,255,255,0.25)" : `${f.color}18`, fontSize:10, fontWeight:700, color:active ? "white" : f.color }}>{cnt}</span>
+              </button>
+            );
+          })}
         </div>
 
         <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(320px, 1fr))", gap:22 }}>
@@ -76,9 +83,14 @@ export function ContentSection({ contentId = null, setContentDetail, setActive }
               onClick={() => { if (setContentDetail) setContentDetail(item.id); }}
             >
               <div style={{ display:"flex", justifyContent:"space-between", marginBottom:12 }}>
-                <span style={{ padding:"3px 10px", borderRadius:4, background:typeColor[item.type]+"18", color:typeColor[item.type], fontSize:11, fontWeight:700 }}>
-                  {typeIcon[item.type]} {item.tag}
-                </span>
+                {(() => {
+                  const meta = getContentTypeMeta(item);
+                  return (
+                    <span style={{ padding:"3px 10px", borderRadius:4, background:meta.color+"18", color:meta.color, fontSize:11, fontWeight:700 }}>
+                      {meta.icon} {meta.label}
+                    </span>
+                  );
+                })()}
                 <span style={{ fontSize:11, color:C.gray }}>{item.date}</span>
               </div>
               <h3 style={{ fontSize:14, fontWeight:700, color:C.navy, lineHeight:1.55, marginBottom:10 }}>{item.title}</h3>

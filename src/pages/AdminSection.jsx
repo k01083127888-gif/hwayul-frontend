@@ -257,13 +257,11 @@ export function AdminSection({ setActive, authed, setAuthed }) {
     const removeAttachment = (id) => setAttachments(a => a.filter(x => x.id !== id));
 
     const AI_TOPICS = {
-      "판례":     { tag:"판례",     type:"news",     prompt:"최신 직장내 괴롭힘 관련 판례 1건을 선정하여 콘텐츠를 작성하세요. 판례명, 사건번호, 판결 요지, 실무적 시사점을 포함하세요." },
-      "산재사례": { tag:"산재사례", type:"news",     prompt:"직장내 괴롭힘으로 인한 산재 승인 사례 1건을 선정하여 콘텐츠를 작성하세요. 피해 상황, 승인 근거, 실무 팁을 포함하세요." },
-      "정책":     { tag:"정책",     type:"news",     prompt:"직장내 괴롭힘 관련 최신 법령·정책 변경 사항 1건을 선정하여 콘텐츠를 작성하세요. 개정 내용, 시행일, 기업 대응 방안을 포함하세요." },
-      "산재통계": { tag:"산재통계", type:"news",     prompt:"직장내 괴롭힘 산재 승인 통계를 분석하는 콘텐츠를 작성하세요. 연도별 추이, 주요 유형별 분석, 시사점을 포함하세요." },
-      "교육영상": { tag:"교육영상", type:"video",    prompt:"직장내 괴롭힘 예방교육 영상 콘텐츠의 제목과 설명을 작성하세요. 교육 대상, 주요 내용, 학습 목표를 포함하세요." },
-      "자료":     { tag:"자료",     type:"resource", prompt:"직장내 괴롭힘 관련 실무 자료의 제목과 설명을 작성하세요. 활용 대상, 포함 내용, 활용 방법을 포함하세요." },
-      "칼럼":     { tag:"칼럼",     type:"resource", prompt:"직장내 괴롭힘 관련 전문 칼럼을 작성하세요. 현장 경험과 실무적 시사점을 포함하세요." },
+      "판례사례": { tag:"판례",     type:"case",     prompt:"최신 직장내 괴롭힘 관련 법원 판례 1건을 선정하여 콘텐츠를 작성하세요. 사건번호, 사실관계, 판결 요지, 실무적 시사점을 포함하세요." },
+      "산재사례": { tag:"산재",     type:"sanjae",   prompt:"직장내 괴롭힘·업무 스트레스로 인한 산재 승인/불승인 사례 1건을 선정하여 콘텐츠를 작성하세요. 피해 상황, 인정/불인정 근거, 실무 팁을 포함하세요." },
+      "뉴스":     { tag:"뉴스",     type:"news",     prompt:"직장내 괴롭힘·산재 관련 최신 법령 개정·정책·보도자료 1건을 선정하여 작성하세요. 주요 내용, 시행일, 기업·근로자 대응 방안을 포함하세요." },
+      "자료":     { tag:"자료",     type:"resource", prompt:"직장내 괴롭힘·산재 관련 실무 자료(서식·가이드·체크리스트)의 제목과 설명을 작성하세요. 활용 대상, 포함 내용, 활용 방법을 포함하세요." },
+      "칼럼":     { tag:"칼럼",     type:"column",   prompt:"직장내 괴롭힘·산재 관련 전문 칼럼을 작성하세요. 20년 노무사 현장 경험과 실무적 시사점을 포함하세요." },
     };
 
     const handleAiGenerate = async () => {
@@ -460,7 +458,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
           {aiLoading && <div style={{ marginTop:10, padding:"10px 14px", background:"rgba(13,115,119,0.06)", borderRadius:8, fontSize:11, color:C.teal, lineHeight:1.7 }}>🤖 「{aiTopic}」 유형으로 작성 중… 완료 후 제목·요약·본문·참고링크에 자동 반영됩니다.</div>}
         </div>
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr 1fr", gap:12, marginBottom:12 }}>
-          <div><label style={{ fontSize:11, fontWeight:700, color:C.gray, display:"block", marginBottom:4 }}>유형</label><select value={f.type} onChange={U("type")} style={inputStyle}><option value="news">뉴스·판례</option><option value="video">교육영상</option><option value="resource">자료</option><option value="column">칼럼</option></select></div>
+          <div><label style={{ fontSize:11, fontWeight:700, color:C.gray, display:"block", marginBottom:4 }}>유형</label><select value={f.type} onChange={U("type")} style={inputStyle}><option value="case">⚖️ 판례사례</option><option value="sanjae">🏥 산재사례</option><option value="news">📰 뉴스</option><option value="resource">📎 자료</option><option value="column">✏️ 칼럼</option></select></div>
           <div><label style={{ fontSize:11, fontWeight:700, color:C.gray, display:"block", marginBottom:4 }}>태그</label><input value={f.tag} onChange={U("tag")} style={inputStyle} placeholder="판례, 정책, 서식 등" /></div>
           <div><label style={{ fontSize:11, fontWeight:700, color:C.gray, display:"block", marginBottom:4 }}>판례번호 <span style={{ fontWeight:400, color:"rgba(10,22,40,0.35)" }}>(선택)</span></label><input value={f.case_number || ""} onChange={U("case_number")} style={inputStyle} placeholder="2023다12345" /></div>
           <div><label style={{ fontSize:11, fontWeight:700, color:C.gray, display:"block", marginBottom:4 }}>날짜</label><input value={f.date} onChange={U("date")} style={inputStyle} placeholder="2025.01.01" /></div>
@@ -806,7 +804,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
               <table style={{ width:"100%", borderCollapse:"collapse" }}>
                 <thead><tr>{["유형","태그","제목","날짜","조회","상태",""].map(h => <th key={h} style={thStyle}>{h}</th>)}</tr></thead>
                 <tbody>{contentsState.map((c,i) => {
-                  const typeL = {news:"📰 뉴스",video:"▶ 영상",resource:"📎 자료",column:"✏️ 칼럼"};
+                  const typeL = {case:"⚖️ 판례사례",sanjae:"🏥 산재사례",news:"📰 뉴스",resource:"📎 자료",column:"✏️ 칼럼",video:"▶ 영상(레거시)"};
                   const isHidden = !!c.hidden;
                   return [
                     <tr key={c.id||i} style={{ background:isHidden ? "rgba(192,57,43,0.04)" : (i%2===0?"transparent":"rgba(10,22,40,0.015)"), opacity:isHidden?0.6:1 }}>

@@ -3,11 +3,10 @@ import { _contents } from "../utils/store.js";
 import { contentDetails } from "../data/contentDetails.js";
 import { usePageMeta } from "../utils/usePageMeta.js";
 import { ContentCTABox } from "./ContentCTABox.jsx";
+import { getContentTypeMeta } from "../utils/contentType.js";
 
 export function ContentDetailView({ item, onBack }) {
-  const typeIcon  = { news:"📰", video:"▶", resource:"📎", column:"✏️" };
-  const typeColor = { news:C.teal, video:C.red, resource:C.gold, column:C.purple };
-  const typeLabel = { news:"뉴스·판례", video:"교육영상", resource:"자료", column:"칼럼" };
+  const typeMeta = getContentTypeMeta(item);
   const detail = contentDetails[item.id] || { content: item.body, attachments: item.attachments };
   const relatedItems = detail?.related?.map(rid => _contents.find(n => n.id === rid)).filter(Boolean) || [];
 
@@ -48,8 +47,8 @@ export function ContentDetailView({ item, onBack }) {
         {/* 헤더 */}
         <div style={{ background:"white", borderRadius:16, padding:36, boxShadow:"0 4px 24px rgba(10,22,40,0.08)", border:"1px solid rgba(10,22,40,0.06)", marginBottom:28 }}>
           <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:18 }}>
-            <span style={{ padding:"5px 14px", borderRadius:6, background:typeColor[item.type]+"18", color:typeColor[item.type], fontSize:12, fontWeight:700 }}>
-              {typeIcon[item.type]} {typeLabel[item.type]}
+            <span style={{ padding:"5px 14px", borderRadius:6, background:typeMeta.color+"18", color:typeMeta.color, fontSize:12, fontWeight:700 }}>
+              {typeMeta.icon} {typeMeta.label}
             </span>
             <span style={{ padding:"4px 12px", borderRadius:6, background:"rgba(10,22,40,0.06)", color:C.gray, fontSize:11, fontWeight:600 }}>
               {item.tag}
@@ -65,7 +64,7 @@ export function ContentDetailView({ item, onBack }) {
             <span style={{ fontSize:13, color:C.gray }}>👁 조회 {item.views.toLocaleString()}</span>
           </div>
 
-          <div style={{ marginTop:24, padding:"16px 20px", background:`${typeColor[item.type]}08`, borderLeft:`4px solid ${typeColor[item.type]}`, borderRadius:"0 10px 10px 0" }}>
+          <div style={{ marginTop:24, padding:"16px 20px", background:`${typeMeta.color}08`, borderLeft:`4px solid ${typeMeta.color}`, borderRadius:"0 10px 10px 0" }}>
             <p style={{ fontSize:14, color:C.navy, lineHeight:1.7, margin:0, fontWeight:600 }}>{item.summary}</p>
           </div>
         </div>
@@ -146,7 +145,7 @@ export function ContentDetailView({ item, onBack }) {
                   onMouseEnter={e => { e.currentTarget.style.background = "rgba(13,115,119,0.06)"; e.currentTarget.style.borderColor = C.teal; }}
                   onMouseLeave={e => { e.currentTarget.style.background = "rgba(10,22,40,0.01)"; e.currentTarget.style.borderColor = "rgba(10,22,40,0.08)"; }}
                 >
-                  <span style={{ fontSize:22, flexShrink:0 }}>{typeIcon[rel.type]}</span>
+                  <span style={{ fontSize:22, flexShrink:0 }}>{getContentTypeMeta(rel).icon}</span>
                   <div style={{ flex:1, minWidth:0 }}>
                     <div style={{ fontSize:13, fontWeight:700, color:C.navy, lineHeight:1.4, marginBottom:3 }}>{rel.title}</div>
                     <div style={{ fontSize:11, color:C.gray }}>{rel.date} · 👁 {rel.views.toLocaleString()}</div>
