@@ -1,6 +1,8 @@
 import C from "../tokens/colors.js";
+import { useCaseCount } from "../utils/useCaseCount.js";
 
 export function DifferentiationSection({ setActive }) {
+  const { label: caseCountLabel } = useCaseCount();
   return (
     <section style={{
       background: C.navy,
@@ -72,7 +74,7 @@ export function DifferentiationSection({ setActive }) {
             lineHeight: 1.6,
             marginBottom: 18,
           }}>
-            "일반 AI가 모르는 <span style={{ color: C.gold }}>1,000건+의 진짜 판례</span>,<br />
+            "일반 AI가 모르는 <span style={{ color: C.gold }}>{caseCountLabel}의 진짜 판례</span>,<br />
             <span style={{ color: C.gold }}>20년 노무 전문가</span>가 직접 분석했습니다"
           </div>
           <div className="form-grid-2" style={{
@@ -84,7 +86,7 @@ export function DifferentiationSection({ setActive }) {
             textAlign: "left",
           }}>
             {[
-              { strong: "1,000건+의 실제 법원 판례", desc: "사건번호까지 인용해서 답변" },
+              { strong: `${caseCountLabel}의 실제 법원 판례`, desc: "사건번호까지 인용해서 답변" },
               { strong: "20년 경력 노무사가 직접 분석", desc: "단순 데이터가 아닌 전문가의 해석" },
               { strong: "직장 내 괴롭힘 특화", desc: "폭언·해고·산재·성희롱 모든 분야 커버" },
               { strong: "사실관계 기반 매칭", desc: "당신의 상황과 가장 비슷한 판례를 찾아줌" },
@@ -113,7 +115,7 @@ export function DifferentiationSection({ setActive }) {
           {[
             {
               icon: "⚖️",
-              num: "1,000건+",
+              num: caseCountLabel,
               label: "판례 데이터베이스",
               desc: "직장내 괴롭힘과 그로 인한\n부당해고, 산재 실제 법원\n판결문을 AI가 분석·학습",
             },
@@ -199,7 +201,7 @@ export function DifferentiationSection({ setActive }) {
 
           {/* 데이터 행 */}
           {[
-            { label: "답변 근거", general: "일반 상식", hwayul: "실제 법원 판례 1,000건+", icon: false },
+            { label: "답변 근거", general: "일반 상식", hwayul: `실제 법원 판례 ${caseCountLabel}`, icon: false },
             { label: "사건번호 인용", general: "✕", hwayul: "✓ 정확한 사건번호", icon: true },
             { label: "전문가 분석", general: "✕", hwayul: "✓ 20년 경력 노무사", icon: true },
             { label: "직장내 괴롭힘 특화", general: "✕", hwayul: "✓ 전문 플랫폼", icon: true },

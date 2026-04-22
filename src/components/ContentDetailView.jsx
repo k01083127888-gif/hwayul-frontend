@@ -1,9 +1,28 @@
+import DOMPurify from "dompurify";
 import C from "../tokens/colors.js";
 import { _contents } from "../utils/store.js";
 import { contentDetails } from "../data/contentDetails.js";
 import { usePageMeta } from "../utils/usePageMeta.js";
 import { ContentCTABox } from "./ContentCTABox.jsx";
 import { getContentTypeMeta } from "../utils/contentType.js";
+
+// XSS 방어: 본문 HTML을 렌더링하기 전 허용 태그·속성만 남기고 나머지 제거
+// 특히 <script>, onerror, onload 등 이벤트 핸들러, javascript: URL 완전 차단
+const sanitizeBody = (html) => DOMPurify.sanitize(html || "", {
+  ALLOWED_TAGS: [
+    "h1","h2","h3","h4","h5","h6",
+    "p","br","hr","strong","b","em","i","u","s","del","mark","small","sub","sup",
+    "ul","ol","li",
+    "blockquote","pre","code",
+    "a","img",
+    "table","thead","tbody","tr","th","td",
+    "span","div",
+    "input"   // 체크박스 [ ] / [x]
+  ],
+  ALLOWED_ATTR: ["href","src","alt","title","target","rel","style","class","type","checked","width","height"],
+  ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel):|[^a-z]|[a-z+.-]+(?:[^a-z+.\-:]|$))/i,
+  ADD_ATTR: ["target"],   // 외부 링크 target=_blank 허용
+});
 
 export function ContentDetailView({ item, onBack }) {
   const typeMeta = getContentTypeMeta(item);
@@ -101,14 +120,14 @@ export function ContentDetailView({ item, onBack }) {
             };
             // HTML 태그가 하나라도 있으면 HTML + 마크다운 잔재 변환
             if (bodyText.includes("<") && bodyText.includes(">")) {
-              return <div className="hwayul-content-body" style={{ fontSize:14, color:"#3A3530", lineHeight:1.9 }} dangerouslySetInnerHTML={{ __html: renderMarkdownSnippets(bodyText) }} />;
+              return <div className="hwayul-content-body" style={{ fontSize:14, color:"#3A3530", lineHeight:1.9 }} dangerouslySetInnerHTML={{ __html: sanitizeBody(renderMarkdownSnippets(bodyText)) }} />;
             }
             // 순수 텍스트인 경우 마크다운을 먼저 변환 후 줄바꿈을 <br>로
             const converted = renderMarkdownSnippets(bodyText)
               .split("\n\n")
               .map(p => `<p style="margin-bottom:16px;">${p.replace(/\n/g, "<br/>")}</p>`)
               .join("");
-            return <div className="hwayul-content-body" style={{ fontSize:14, color:"#3A3530", lineHeight:1.9 }} dangerouslySetInnerHTML={{ __html: converted }} />;
+            return <div className="hwayul-content-body" style={{ fontSize:14, color:"#3A3530", lineHeight:1.9 }} dangerouslySetInnerHTML={{ __html: sanitizeBody(converted) }} />;
           })()}
         </div>
 

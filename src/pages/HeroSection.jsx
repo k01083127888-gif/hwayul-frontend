@@ -1,12 +1,14 @@
 import { useState } from "react";
 import C from "../tokens/colors.js";
 import { usePageMeta } from "../utils/usePageMeta.js";
+import { useCaseCount } from "../utils/useCaseCount.js";
 
 // ── HeroSection ─────────────────────────────────────────────────────────────────
 export function HeroSection({ setActive }) {
+  const { label: caseCountLabel } = useCaseCount();
   usePageMeta({
     title: "화율인사이드 — 직장 내 괴롭힘 & 조직문화 전문 플랫폼",
-    description: "20년 노무 전문성과 1,000건+ 실제 판례 DB. 피해자 구제·피지목인 항변·산재 신청·조직문화 개선을 전문 노무사가 함께합니다.",
+    description: `20년 노무 전문성과 ${caseCountLabel} 실제 판례 DB. 피해자 구제·피지목인 항변·산재 신청·조직문화 개선을 전문 노무사가 함께합니다.`,
     url: "https://hwayul.kr/",
   });
 
@@ -59,7 +61,7 @@ export function HeroSection({ setActive }) {
           margin:"0 auto 52px",
           letterSpacing:"-0.3px",
         }}>
-          "1,000건+의 판례를 학습한 AI가 20년 전문가의 시선으로 답변합니다"
+          {`"${caseCountLabel}의 판례를 학습한 AI가 20년 전문가의 시선으로 답변합니다"`}
         </p>
 
         {/* 4개 고객 유형 CTA */}

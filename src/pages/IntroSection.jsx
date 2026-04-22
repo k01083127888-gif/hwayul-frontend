@@ -3,9 +3,11 @@ import C from "../tokens/colors.js";
 import { _members } from "../utils/store.js";
 import { SectionTag } from "../components/common/FormElements.jsx";
 import { usePageMeta } from "../utils/usePageMeta.js";
+import { useCaseCount } from "../utils/useCaseCount.js";
 
 // ── IntroSection ─────────────────────────────────────────────────────────────────
 export function IntroSection() {
+  const { label: caseCountLabel } = useCaseCount();
   usePageMeta({
     title: "소개 — 전문 노무사 팀 | 화율인사이드",
     description: "20년 경력 노무사가 이끄는 화율인사이드. 직장내 괴롭힘·산재·조직문화 전문가 팀을 소개합니다.",
@@ -175,7 +177,7 @@ export function IntroSection() {
 
             <p style={{ marginBottom:18 }}>저희 두 사람의 길은 서로 달랐습니다. <strong style={{ color:C.navy }}>한 사람은 오랜 시간 피해자 곁에서 직접 구제 절차를 진행해왔고, 또 한 사람은 기업의 조직문화 개선 프로젝트를 이끌어왔습니다.</strong> 피해자의 눈물과 기업의 고민을 양쪽에서 마주해온 두 시선이 만나는 자리, 그곳이 화율인사이드입니다.</p>
 
-            <p style={{ marginBottom:18 }}>저희는 직접 분석한 1,000건 이상의 실제 판례를 데이터베이스로 구축했습니다. 일반 AI가 그럴듯한 말을 만들어낼 때, 화율인사이드는 실제 사건번호와 법원의 판단을 근거로 답합니다.</p>
+            <p style={{ marginBottom:18 }}>저희는 직접 분석한 {caseCountLabel}의 실제 판례를 데이터베이스로 구축했습니다. 일반 AI가 그럴듯한 말을 만들어낼 때, 화율인사이드는 실제 사건번호와 법원의 판단을 근거로 답합니다.</p>
 
             <p style={{ marginBottom:18 }}>저희는 화율인사이드가 단순한 챗봇이 아니라, <strong style={{ color:C.navy }}>누군가의 일터가 무너지기 전에 닿을 수 있는 첫 번째 손</strong>이 되기를 원합니다. 정확한 분석으로, 그리고 끝까지 외면하지 않는 끈기로, 피해자와 기업 곁에 있겠습니다.</p>
 

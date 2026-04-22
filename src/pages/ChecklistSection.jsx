@@ -11,6 +11,7 @@ import { SanjaeCheckSection } from "./SanjaeCheckSection.jsx";
 import { CompanyCheckSection } from "./CompanyCheckSection.jsx";
 import { SectionTag, DarkSectionTag } from "../components/common/FormElements.jsx";
 import { usePageMeta } from "../utils/usePageMeta.js";
+import { useCaseCount } from "../utils/useCaseCount.js";
 
 const TAB_META = {
   victim:   { title:"괴롭힘 피해자 자가진단 | 화율인사이드",   desc:"직장내 괴롭힘 피해자 자가진단. 고용노동부 판단 매뉴얼 기반으로 3대 요건·행위유형·피해영향도를 무료로 진단받으세요.", url:"https://hwayul.kr/diagnosis?type=victim" },
@@ -22,6 +23,7 @@ const TAB_META = {
 // ── ChecklistSection ─────────────────────────────────────────────────────────────────
 export function ChecklistSection({ setActive, initialTab = "victim" }) {
   const [diagTab, setDiagTab] = useState(initialTab);
+  const { label: caseCountLabel } = useCaseCount();
   usePageMeta(TAB_META[diagTab] ? { title:TAB_META[diagTab].title, description:TAB_META[diagTab].desc, url:TAB_META[diagTab].url } : {});
   // 외부(App.jsx)에서 active가 바뀌어 initialTab이 달라지면 동기화 (뒤로가기/앞으로가기/URL 직접입력 대응)
   useEffect(() => { setDiagTab(initialTab); }, [initialTab]);
@@ -112,7 +114,7 @@ export function ChecklistSection({ setActive, initialTab = "victim" }) {
               </span>
             </li>
             <li>
-              <strong style={{ color: "rgba(244,241,235,0.95)" }}>1,000건 이상의 판례·사례와 작성해 주신 진단결과지</strong>를 근거로
+              <strong style={{ color: "rgba(244,241,235,0.95)" }}>{caseCountLabel}의 판례·사례와 작성해 주신 진단결과지</strong>를 근거로
               <span style={{ color: "rgba(244,241,235,0.6)", marginLeft: 4 }}>
                 답변드립니다
               </span>

@@ -8,6 +8,7 @@ import { _defaultMembers } from "../data/memberData.js";
 import { isValidEmail } from "../utils/validators.js";
 import { StatCard, BarChart, MiniTrend, StatusPie, getMonthly, StatSection, NlHistoryCard, hashPw, checkAdminPw, ADMIN_MAX_ATTEMPTS, LOCKOUT_KEY } from "../components/AdminStats.jsx";
 import { setAdminKey, clearAdminKey, adminFetch } from "../utils/adminApi.js";
+import DOMPurify from "dompurify";
 import { AdminEmailComposer } from "../components/AdminEmailComposer.jsx";
 import { ReportWriter } from "../components/ReportWriter.jsx";
 import { SectionTag } from "../components/common/FormElements.jsx";
@@ -924,7 +925,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                                     {(() => {
                                       const txt = contentDetails[c.id]?.content || c.body || "";
                                       if (txt.includes("<") && txt.includes(">")) {
-                                        return <div style={{ fontSize:12.5, color:"#3A3530", lineHeight:1.9 }} dangerouslySetInnerHTML={{ __html: txt }} />;
+                                        return <div style={{ fontSize:12.5, color:"#3A3530", lineHeight:1.9 }} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(txt) }} />;
                                       }
                                       return <div style={{ fontSize:12.5, color:"#3A3530", lineHeight:1.9, whiteSpace:"pre-wrap" }}>{txt}</div>;
                                     })()}
