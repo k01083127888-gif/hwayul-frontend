@@ -7,6 +7,7 @@ import {
 import { mockNews }         from "../data/mockNews.js";
 import { contentDetails }   from "../data/contentDetails.js";
 import { _defaultMembers }  from "../data/memberData.js";
+import { adminFetch }       from "./adminApi.js";
 
 const API_BASE = "https://hwayul-backend-production-96cf.up.railway.app/api";
 
@@ -41,19 +42,18 @@ export function addSubmission(type, data) {
     }).catch(e => console.log("DB 저장 실패(무시):", e.message));
 }
 
-// 접수 데이터 상태 변경 → DB 반영
+// 접수 데이터 상태 변경 → DB 반영 (관리자 전용)
 export function updateSubmissionStatus(submissionId, newStatus) {
-    fetch(`${API_BASE}/submissions/${submissionId}`, {
+    adminFetch(`${API_BASE}/submissions/${submissionId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus })
     }).catch(e => console.log("상태 DB 반영 실패:", e.message));
 }
 
-// DB에서 접수 데이터 불러오기
+// DB에서 접수 데이터 불러오기 (관리자 전용)
 export async function loadSubmissionsFromDB() {
     try {
-        const res = await fetch(`${API_BASE}/submissions`);
+        const res = await adminFetch(`${API_BASE}/submissions`);
         if (res.ok) {
             const dbData = await res.json();
             // DB에 데이터가 있으면 DB를 우선으로 사용
@@ -78,18 +78,17 @@ export async function syncSubmissionsToDB() {
         const hasLocal = Object.values(local).some(arr => arr.length > 0);
         if (!hasLocal) return; // localStorage에 데이터 없으면 스킵
 
-        // DB에 이미 데이터가 있는지 확인
-        const res = await fetch(`${API_BASE}/submissions`);
+        // DB에 이미 데이터가 있는지 확인 (관리자 전용)
+        const res = await adminFetch(`${API_BASE}/submissions`);
         if (res.ok) {
             const dbData = await res.json();
             const dbCount = Object.values(dbData).reduce((sum, arr) => sum + arr.length, 0);
             if (dbCount > 0) return; // DB에 이미 있으면 스킵 (중복 방지)
         }
 
-        // DB가 비어있고 localStorage에 데이터가 있으면 → 동기화
-        await fetch(`${API_BASE}/submissions/sync`, {
+        // DB가 비어있고 localStorage에 데이터가 있으면 → 동기화 (관리자 전용)
+        await adminFetch(`${API_BASE}/submissions/sync`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ submissions: local })
         });
         console.log("✅ localStorage → DB 동기화 완료!");
@@ -174,9 +173,8 @@ export async function saveContentsToDB(contents) {
         }
     } catch(e) {}
     try {
-        await fetch(`${API_BASE}/contents/bulk`, {
+        await adminFetch(`${API_BASE}/contents/bulk`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ contents: contents.map(c => ({
                 type: c.type || "news",
                 tag: c.tag || "",

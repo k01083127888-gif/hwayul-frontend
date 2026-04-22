@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import C from "../tokens/colors.js";
 import { addSubmission, _store, updateSubmissionStatus } from "../utils/store.js";
 import { saveToStorage } from "../utils/storage.js";
+import { adminFetch } from "../utils/adminApi.js";
 
 export function AdminEmailComposer({ data, onClose, onViewResult }) {
   const [greeting, setGreeting] = useState(data.greeting || "");
@@ -175,11 +176,10 @@ ${resultSummary || "(결과 데이터 없음)"}
                 if (!sendRes.ok) console.error("이메일 발송 실패:", sendResult.error);
               } catch(e) { console.error("이메일 발송 오류:", e); }
             }
-            // 2) DB에 이메일 내용 저장
+            // 2) DB에 이메일 내용 저장 (관리자 전용)
             try {
-              await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/sent-emails", {
+              await adminFetch("https://hwayul-backend-production-96cf.up.railway.app/api/sent-emails", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                   submission_id: data.data?.id || "",
                   submission_type: data.type || "",

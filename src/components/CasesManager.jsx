@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { adminFetch } from "../utils/adminApi.js";
 
 const API_URL = "https://hwayul-backend-production-96cf.up.railway.app/api/cases";
 
@@ -57,9 +58,8 @@ export default function CasesManager() {
       return;
     }
     try {
-      const res = await fetch(API_URL, {
+      const res = await adminFetch(API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form)
       });
       if (res.ok) {
@@ -77,9 +77,8 @@ export default function CasesManager() {
   // 수정
   const handleEdit = async () => {
     try {
-      const res = await fetch(`${API_URL}/${selectedCase.id}`, {
+      const res = await adminFetch(`${API_URL}/${selectedCase.id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form)
       });
       if (res.ok) {
@@ -95,7 +94,7 @@ export default function CasesManager() {
   const handleDelete = async (id) => {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
     try {
-      await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+      await adminFetch(`${API_URL}/${id}`, { method: "DELETE" });
       fetchCases();
       if (view === "detail") setView("list");
     } catch (e) {

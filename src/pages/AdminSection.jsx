@@ -7,6 +7,7 @@ import { mockNews } from "../data/mockNews.js";
 import { _defaultMembers } from "../data/memberData.js";
 import { isValidEmail } from "../utils/validators.js";
 import { StatCard, BarChart, MiniTrend, StatusPie, getMonthly, StatSection, NlHistoryCard, hashPw, checkAdminPw, ADMIN_MAX_ATTEMPTS, LOCKOUT_KEY } from "../components/AdminStats.jsx";
+import { setAdminKey, clearAdminKey, adminFetch } from "../utils/adminApi.js";
 import { AdminEmailComposer } from "../components/AdminEmailComposer.jsx";
 import { ReportWriter } from "../components/ReportWriter.jsx";
 import { SectionTag } from "../components/common/FormElements.jsx";
@@ -58,6 +59,8 @@ export function AdminSection({ setActive, authed, setAuthed }) {
       setAuthed(true);
       setAttempts(0);
       try { localStorage.removeItem(LOCKOUT_KEY); } catch {}
+      // 백엔드 관리 API 호출 시 자동 첨부될 키 저장 (세션 종료 시 사라짐)
+      setAdminKey(pw);
     } else {
       const next = attempts + 1;
       setAttempts(next);
@@ -100,7 +103,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
   const [emailHistory, setEmailHistory] = useState(null); // { submissionId, emails:[] }
   const fetchEmailHistory = async (submissionId) => {
     try {
-      const res = await fetch(`https://hwayul-backend-production-96cf.up.railway.app/api/sent-emails?submission_id=${submissionId}`);
+      const res = await adminFetch(`https://hwayul-backend-production-96cf.up.railway.app/api/sent-emails?submission_id=${submissionId}`);
       if (res.ok) {
         const emails = await res.json();
         setEmailHistory({ submissionId, emails });
@@ -573,7 +576,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
           </div>
           <div style={{ display:"flex", gap:10 }}>
             <button onClick={() => setActive("home")} style={{ padding:"8px 18px", borderRadius:6, border:`1px solid rgba(10,22,40,0.12)`, background:"white", color:C.navy, fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"inherit" }}>🏠 사이트 보기</button>
-            <button onClick={() => setAuthed(false)} style={{ ...btnDanger }}>로그아웃</button>
+            <button onClick={() => { clearAdminKey(); setAuthed(false); }} style={{ ...btnDanger }}>로그아웃</button>
           </div>
         </div>
 
@@ -605,19 +608,29 @@ export function AdminSection({ setActive, authed, setAuthed }) {
           <div>
             {/* ── 데이터 내보내기 / 가져오기 ── */}
             <div style={{ display:"flex", justifyContent:"flex-end", gap:8, marginBottom:12, flexWrap:"wrap" }}>
-              <button onClick={() => {
-                const a = document.createElement("a");
-                a.href = "https://hwayul-backend-production-96cf.up.railway.app/api/export-excel";
-                a.download = "hwayul_data.xlsx";
-                a.click();
+              <button onClick={async () => {
+                try {
+                  const res = await adminFetch("https://hwayul-backend-production-96cf.up.railway.app/api/export-excel");
+                  if (!res.ok) { alert("다운로드 실패: 권한이 없거나 서버 오류입니다."); return; }
+                  const blob = await res.blob();
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url; a.download = "hwayul_data.xlsx"; a.click();
+                  URL.revokeObjectURL(url);
+                } catch (e) { alert("다운로드 실패: " + e.message); }
               }} style={{ padding:"10px 20px", borderRadius:8, background:"linear-gradient(135deg,#0D7377,#4ECDC4)", border:"none", color:"white", fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"inherit", display:"flex", alignItems:"center", gap:8 }}>
                 📥 전체 데이터 엑셀 다운로드
               </button>
-              <button onClick={() => {
-                const a = document.createElement("a");
-                a.href = "https://hwayul-backend-production-96cf.up.railway.app/api/export-contents-excel";
-                a.download = "hwayul_contents.xlsx";
-                a.click();
+              <button onClick={async () => {
+                try {
+                  const res = await adminFetch("https://hwayul-backend-production-96cf.up.railway.app/api/export-contents-excel");
+                  if (!res.ok) { alert("다운로드 실패: 권한이 없거나 서버 오류입니다."); return; }
+                  const blob = await res.blob();
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url; a.download = "hwayul_contents.xlsx"; a.click();
+                  URL.revokeObjectURL(url);
+                } catch (e) { alert("다운로드 실패: " + e.message); }
               }} style={{ padding:"10px 20px", borderRadius:8, background:"linear-gradient(135deg,#C9A84C,#E5C56A)", border:"none", color:"#0A1628", fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"inherit", display:"flex", alignItems:"center", gap:8 }}>
                 📄 콘텐츠 엑셀 다운로드
               </button>
@@ -633,7 +646,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                     if (!confirm("엑셀 내용으로 콘텐츠를 일괄 업데이트합니다.\nID가 있는 행은 수정, 없는 행은 신규 추가됩니다.\n계속하시겠습니까?")) { e.target.value = ""; return; }
                     try {
                       const buf = await file.arrayBuffer();
-                      const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/import-contents-excel", {
+                      const res = await adminFetch("https://hwayul-backend-production-96cf.up.railway.app/api/import-contents-excel", {
                         method: "POST",
                         headers: { "Content-Type": "application/octet-stream" },
                         body: buf,
