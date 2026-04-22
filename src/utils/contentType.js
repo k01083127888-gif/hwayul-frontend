@@ -43,3 +43,19 @@ export function normalizeContentType(item) {
 
 // 편의 getter
 export const getContentTypeMeta = (item) => CONTENT_TYPE_MAP[normalizeContentType(item)] || CONTENT_TYPE_MAP.news;
+
+// ── 필터 탭용 그룹 (판례·산재를 하나의 탭으로 묶음) ───────────────────────
+// types: 이 그룹에 속하는 CONTENT_TYPES id 배열
+export const CONTENT_TAB_GROUPS = [
+  { id: "case_sanjae", label: "판결·산재 사례", icon: "⚖️", color: C.teal,   types: ["case", "sanjae"] },
+  { id: "news",        label: "뉴스",          icon: "📰", color: C.blue,   types: ["news"] },
+  { id: "resource",    label: "자료",          icon: "📎", color: C.gold,   types: ["resource"] },
+  { id: "column",      label: "칼럼",          icon: "✏️", color: C.purple, types: ["column"] },
+];
+
+// 아이템이 특정 그룹에 속하는지 판정
+export function itemInGroup(item, groupId) {
+  const g = CONTENT_TAB_GROUPS.find(x => x.id === groupId);
+  if (!g) return false;
+  return g.types.includes(normalizeContentType(item));
+}

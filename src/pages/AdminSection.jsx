@@ -77,6 +77,8 @@ export function AdminSection({ setActive, authed, setAuthed }) {
   const [editMember, setEditMember] = useState(null);
   const [editContent, setEditContent] = useState(null);
   const [contentPreview, setContentPreview] = useState(null);
+  const [contentQuery, setContentQuery] = useState("");
+  const [contentFilter, setContentFilter] = useState("all"); // all | case_sanjae | news | resource | column
   const [viewDetail, setViewDetail] = useState(null);
   const [emailCompose, setEmailCompose] = useState(null);
   const [viewResultHtml, setViewResultHtml] = useState(null);
@@ -768,9 +770,10 @@ export function AdminSection({ setActive, authed, setAuthed }) {
             {/* ── 통계 ── */}
             {contentsState.length > 0 && (() => {
               const typeGroups = [
-                { label:"📰 뉴스", count:contentsState.filter(c=>c.type==="news").length, color:C.teal },
-                { label:"▶ 영상", count:contentsState.filter(c=>c.type==="video").length, color:C.red },
-                { label:"📎 자료", count:contentsState.filter(c=>c.type==="resource").length, color:C.gold },
+                { label:"⚖️ 판결·산재 사례", count:contentsState.filter(c=>c.type==="case"||c.type==="sanjae").length, color:C.teal },
+                { label:"📰 뉴스",          count:contentsState.filter(c=>c.type==="news").length,                   color:C.blue },
+                { label:"📎 자료",          count:contentsState.filter(c=>c.type==="resource").length,               color:C.gold },
+                { label:"✏️ 칼럼",          count:contentsState.filter(c=>c.type==="column").length,                 color:C.purple },
               ].filter(t=>t.count>0);
               const totalViews = contentsState.reduce((s,c)=>s+(c.views||0),0);
               const topByViews = [...contentsState].sort((a,b)=>(b.views||0)-(a.views||0)).slice(0,3);
@@ -813,11 +816,52 @@ export function AdminSection({ setActive, authed, setAuthed }) {
               );
             })()}
 
+            {/* 검색 + 카테고리 필터 */}
+            <div style={{ ...cardStyle, marginBottom:12, padding:"14px 18px" }}>
+              <div style={{ display:"flex", gap:12, alignItems:"center", flexWrap:"wrap" }}>
+                <div style={{ position:"relative", flex:"1 1 280px", minWidth:220 }}>
+                  <input
+                    value={contentQuery}
+                    onChange={e => setContentQuery(e.target.value)}
+                    placeholder="제목·요약·태그·판례번호로 검색"
+                    style={{ width:"100%", padding:"9px 36px 9px 14px", borderRadius:8, border:"1.5px solid rgba(10,22,40,0.12)", background:"white", fontSize:12, fontFamily:"inherit", outline:"none", color:C.navy }}
+                    onFocus={e => e.target.style.borderColor = C.teal}
+                    onBlur={e => e.target.style.borderColor = "rgba(10,22,40,0.12)"}
+                  />
+                  <span style={{ position:"absolute", right:12, top:"50%", transform:"translateY(-50%)", fontSize:12, color:C.gray, pointerEvents:"none" }}>🔍</span>
+                </div>
+                {[
+                  { id:"all", label:"전체" },
+                  { id:"case_sanjae", label:"⚖️ 판결·산재" },
+                  { id:"news", label:"📰 뉴스" },
+                  { id:"resource", label:"📎 자료" },
+                  { id:"column", label:"✏️ 칼럼" },
+                ].map(b => {
+                  const active = contentFilter === b.id;
+                  return (
+                    <button key={b.id} onClick={() => setContentFilter(b.id)} style={{ padding:"6px 14px", borderRadius:100, fontSize:11, fontWeight:active?700:500, cursor:"pointer", fontFamily:"inherit", background:active?C.navy:"white", color:active?"white":C.navy, border:`1.5px solid ${active?C.navy:"rgba(10,22,40,0.15)"}`, transition:"all 0.15s" }}>{b.label}</button>
+                  );
+                })}
+              </div>
+            </div>
+
             <div style={cardStyle}>
+              {(() => {
+                const groupMatch = (c) => {
+                  if (contentFilter === "all") return true;
+                  if (contentFilter === "case_sanjae") return c.type === "case" || c.type === "sanjae";
+                  return c.type === contentFilter;
+                };
+                const qq = contentQuery.trim().toLowerCase();
+                const filteredContents = contentsState.filter(c => groupMatch(c) && (
+                  !qq || ((c.title||"") + " " + (c.summary||"") + " " + (c.tag||"") + " " + (c.case_number||"")).toLowerCase().includes(qq)
+                ));
+                return (<>
+              <div style={{ padding:"8px 14px 12px", fontSize:11, color:C.gray }}>총 {contentsState.length}건 중 <strong style={{ color:C.navy }}>{filteredContents.length}건</strong> 표시</div>
               <table style={{ width:"100%", borderCollapse:"collapse" }}>
                 <thead><tr>{["유형","태그","제목","날짜","조회","상태",""].map(h => <th key={h} style={thStyle}>{h}</th>)}</tr></thead>
-                <tbody>{contentsState.map((c,i) => {
-                  const typeL = {case:"⚖️ 판례사례",sanjae:"🏥 산재사례",news:"📰 뉴스",resource:"📎 자료",column:"✏️ 칼럼",video:"▶ 영상(레거시)"};
+                <tbody>{filteredContents.map((c,i) => {
+                  const typeL = {case:"⚖️ 판결",sanjae:"🏥 산재",news:"📰 뉴스",resource:"📎 자료",column:"✏️ 칼럼",video:"▶ 영상(레거시)"};
                   const isHidden = !!c.hidden;
                   return [
                     <tr key={c.id||i} style={{ background:isHidden ? "rgba(192,57,43,0.04)" : (i%2===0?"transparent":"rgba(10,22,40,0.015)"), opacity:isHidden?0.6:1 }}>
@@ -902,6 +946,8 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                   ];
                 })}</tbody>
               </table>
+                </>);
+              })()}
             </div>
           </div>
         )}

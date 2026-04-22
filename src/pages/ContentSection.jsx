@@ -4,7 +4,7 @@ import { _contents, useStore } from "../utils/store.js";
 import { ContentDetailView } from "../components/ContentDetailView.jsx";
 import { SectionTag } from "../components/common/FormElements.jsx";
 import { usePageMeta } from "../utils/usePageMeta.js";
-import { CONTENT_TYPES, normalizeContentType, getContentTypeMeta } from "../utils/contentType.js";
+import { CONTENT_TAB_GROUPS, normalizeContentType, getContentTypeMeta, itemInGroup } from "../utils/contentType.js";
 
 // ── ContentSection ─────────────────────────────────────────────────────────────────
 export function ContentSection({ contentId = null, setContentDetail, setActive }) {
@@ -17,11 +17,17 @@ export function ContentSection({ contentId = null, setContentDetail, setActive }
   useStore(); // _contents 변경 시 리렌더 (DB 비동기 로드 대응)
   const [filter, setFilter] = useState("all");
   const [showAll, setShowAll] = useState(false);
+  const [query, setQuery] = useState("");
   const visibleNews = _contents.filter(n => !n.hidden);
-  const allFiltered = filter === "all" ? visibleNews : visibleNews.filter(n => normalizeContentType(n) === filter);
+  const byGroup = filter === "all" ? visibleNews : visibleNews.filter(n => itemInGroup(n, filter));
+  const q = query.trim().toLowerCase();
+  const searched = q
+    ? byGroup.filter(n => ((n.title||"") + " " + (n.summary||"") + " " + (n.tag||"") + " " + (n.case_number||"")).toLowerCase().includes(q))
+    : byGroup;
+  const allFiltered = searched;
   const filtered = showAll ? allFiltered : allFiltered.slice(0, 6);
-  // 카테고리별 카운트 (탭 뒤 숫자)
-  const countByType = CONTENT_TYPES.reduce((acc, t) => { acc[t.id] = visibleNews.filter(n => normalizeContentType(n) === t.id).length; return acc; }, {});
+  // 그룹별 카운트 (탭 뒤 숫자)
+  const countByGroup = CONTENT_TAB_GROUPS.reduce((acc, g) => { acc[g.id] = visibleNews.filter(n => itemInGroup(n, g.id)).length; return acc; }, {});
   const hasMore = allFiltered.length > 6 && !showAll;
 
   // URL의 contentId로 선택된 아이템 결정
@@ -56,10 +62,24 @@ export function ContentSection({ contentId = null, setContentDetail, setActive }
         <h2 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"2rem", fontWeight:800, color:C.navy, marginTop:8, marginBottom:8 }}>콘텐츠 아카이브</h2>
         <p style={{ color:C.gray, marginBottom:32 }}>판례사례·산재사례·뉴스·서식자료·칼럼을 한 곳에서 확인하세요.</p>
 
+        {/* 검색창 */}
+        <div style={{ marginBottom:16, position:"relative", maxWidth:480 }}>
+          <input
+            value={query}
+            onChange={e => { setQuery(e.target.value); setShowAll(false); }}
+            placeholder="제목·요약·태그·판례번호로 검색"
+            style={{ width:"100%", padding:"11px 40px 11px 16px", borderRadius:10, border:"1.5px solid rgba(10,22,40,0.12)", background:"white", fontSize:13, fontFamily:"inherit", outline:"none", color:C.navy }}
+            onFocus={e => e.target.style.borderColor = C.teal}
+            onBlur={e => e.target.style.borderColor = "rgba(10,22,40,0.12)"}
+          />
+          <span style={{ position:"absolute", right:14, top:"50%", transform:"translateY(-50%)", fontSize:14, color:C.gray, pointerEvents:"none" }}>🔍</span>
+          {q && <div style={{ marginTop:6, fontSize:11, color:C.gray }}>"{query}" 검색 결과 {searched.length}건</div>}
+        </div>
+
         <div style={{ display:"flex", gap:8, marginBottom:32, flexWrap:"wrap" }}>
-          {[{ id:"all", label:"전체", color:C.navy }, ...CONTENT_TYPES.map(t => ({ id:t.id, label:`${t.icon} ${t.label}`, color:t.color }))].map(f => {
+          {[{ id:"all", label:"전체", color:C.navy }, ...CONTENT_TAB_GROUPS.map(g => ({ id:g.id, label:`${g.icon} ${g.label}`, color:g.color }))].map(f => {
             const active = filter === f.id;
-            const cnt = f.id === "all" ? visibleNews.length : countByType[f.id];
+            const cnt = f.id === "all" ? visibleNews.length : countByGroup[f.id];
             return (
               <button key={f.id} onClick={() => { setFilter(f.id); setShowAll(false); }} style={{
                 padding:"8px 20px", borderRadius:100,
