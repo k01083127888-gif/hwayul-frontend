@@ -215,6 +215,16 @@ ${conversionGuide[role] || conversionGuide.general}`;
     if (newCount >= 3) setShowCTA(true);
     try {
       const history = messages.map(m => ({ role: m.role === "assistant" ? "assistant" : "user", content: m.text }));
+      // 사용자가 콘텐츠 상세에서 "이 사례 참조" 체크했는지 확인 (30분 TTL)
+      let attachContentId = null;
+      try {
+        const raw = localStorage.getItem("hwayul_attach_content");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed?.id && parsed.expiresAt > Date.now()) attachContentId = parsed.id;
+          else localStorage.removeItem("hwayul_attach_content");
+        }
+      } catch {}
       const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/claude", {
         method: "POST",
         body: JSON.stringify({
@@ -222,6 +232,7 @@ ${conversionGuide[role] || conversionGuide.general}`;
           max_tokens: 1000,
           system: systemPrompt,
           messages: [...history, { role: "user", content: `[${newCount}번째 질문] ${q}` }],
+          ...(attachContentId ? { attach_content_id: attachContentId } : {}),
         }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

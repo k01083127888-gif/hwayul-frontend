@@ -5,6 +5,7 @@ import { getCTASettings, getCTAMessage } from "../utils/CTASettings.js";
 // ── 콘텐츠 본문 하단 인라인 CTA 박스 ──────────────────────────────────────
 export function ContentCTABox({ item }) {
   const [settings, setSettings] = useState(() => getCTASettings());
+  const [attachThis, setAttachThis] = useState(true); // 기본값 체크 (이 사례 참조)
 
   useEffect(() => {
     const handler = () => setSettings(getCTASettings());
@@ -17,6 +18,18 @@ export function ContentCTABox({ item }) {
   const { headline, subtext } = getCTAMessage(item);
 
   const handleClick = () => {
+    // 이 사례를 참조하게 할지 선택 — 30분 TTL localStorage 플래그
+    try {
+      if (attachThis && item?.id) {
+        localStorage.setItem("hwayul_attach_content", JSON.stringify({
+          id: item.id,
+          title: item.title || "",
+          expiresAt: Date.now() + 30 * 60 * 1000,
+        }));
+      } else {
+        localStorage.removeItem("hwayul_attach_content");
+      }
+    } catch {}
     window.dispatchEvent(new CustomEvent("hwayul-goto", { detail: "checklist" }));
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -82,6 +95,37 @@ export function ContentCTABox({ item }) {
           </span>
         ))}
       </div>
+
+      {/* 이 사례를 참조하여 상담받기 옵션 */}
+      {item?.id && (
+        <label style={{
+          display: "flex",
+          alignItems: "flex-start",
+          gap: 10,
+          padding: "12px 14px",
+          background: "white",
+          border: `1.5px solid ${attachThis ? C.teal : "rgba(10,22,40,0.12)"}`,
+          borderRadius: 10,
+          cursor: "pointer",
+          marginBottom: 16,
+          transition: "border-color 0.15s",
+        }}>
+          <input
+            type="checkbox"
+            checked={attachThis}
+            onChange={e => setAttachThis(e.target.checked)}
+            style={{ width: 16, height: 16, marginTop: 2, accentColor: C.teal, cursor: "pointer", flexShrink: 0 }}
+          />
+          <div style={{ lineHeight: 1.55 }}>
+            <div style={{ fontSize: 12.5, fontWeight: 700, color: C.navy, marginBottom: 2 }}>
+              진단 후 상담 시 이 사례를 함께 참조하기
+            </div>
+            <div style={{ fontSize: 11.5, color: C.gray }}>
+              체크하시면 체크리스트 결과와 함께 「{(item.title || "").slice(0, 28)}{(item.title || "").length > 28 ? "…" : ""}」 내용을 상담에 반영합니다. 내 상황과 다르다 싶으면 체크를 해제하세요.
+            </div>
+          </div>
+        </label>
+      )}
 
       {/* CTA 버튼 */}
       <button
