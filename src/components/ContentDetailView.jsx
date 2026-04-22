@@ -79,10 +79,17 @@ export function ContentDetailView({ item, onBack }) {
             const H2 = (t) => `<h2 style="font-size:20px;font-weight:900;color:#0A1628;margin:26px 0 14px;line-height:1.4;">${t}</h2>`;
             const renderMarkdownSnippets = (html) => {
               return html
-                // <p>### ...</p> 형태 (Quill이 감싼 케이스) — 먼저 처리
-                .replace(/<p[^>]*>\s*###\s+([\s\S]*?)\s*<\/p>/gi, (_, t) => H4(t))
-                .replace(/<p[^>]*>\s*##\s+([\s\S]*?)\s*<\/p>/gi, (_, t) => H3(t))
-                .replace(/<p[^>]*>\s*#\s+([\s\S]*?)\s*<\/p>/gi, (_, t) => H2(t))
+                // <p>…#…</p> 형태 (Quill이 <strong> 등으로 감싼 경우 포함) — 내부 텍스트 기준 판정
+                .replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, (full, inner) => {
+                  const text = inner.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").trim();
+                  const m = text.match(/^(#{1,3})\s+(.+)$/s);
+                  if (!m) return full;
+                  const lvl = m[1].length;
+                  const t = m[2].trim();
+                  if (lvl === 1) return H2(t);
+                  if (lvl === 2) return H3(t);
+                  return H4(t);
+                })
                 // 줄머리 ### / ## / # (순수 텍스트 케이스)
                 .replace(/^###\s+(.+)$/gm, (_, t) => H4(t))
                 .replace(/^##\s+(.+)$/gm, (_, t) => H3(t))
