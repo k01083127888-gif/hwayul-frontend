@@ -71,16 +71,32 @@ export function ContentDetailView({ item, onBack }) {
 
         {/* 본문 */}
         <div style={{ background:"white", borderRadius:16, padding:36, boxShadow:"0 4px 24px rgba(10,22,40,0.08)", border:"1px solid rgba(10,22,40,0.06)", marginBottom:28 }}>
-          <div style={{ fontSize:10, letterSpacing:"2px", color:C.teal, fontWeight:700, textTransform:"uppercase", marginBottom:16 }}>CONTENT DETAIL</div>
           {(() => {
             const bodyText = detail?.content || detail?.body || "";
-            // HTML 태그가 하나라도 있으면 HTML로 렌더링
+            // 마크다운 잔재 → HTML 변환 (# 헤딩, [ ]/[x] 체크박스)
+            const renderMarkdownSnippets = (html) => {
+              return html
+                // ### 헤딩
+                .replace(/^###\s+(.+)$/gm, '<h4 style="font-size:15px;font-weight:800;color:#0A1628;margin:18px 0 8px;">$1</h4>')
+                // ## 헤딩
+                .replace(/^##\s+(.+)$/gm, '<h3 style="font-size:17px;font-weight:800;color:#0A1628;margin:22px 0 10px;">$1</h3>')
+                // # 헤딩
+                .replace(/^#\s+(.+)$/gm, '<h2 style="font-size:19px;font-weight:900;color:#0A1628;margin:24px 0 12px;border-bottom:2px solid #E8E5DE;padding-bottom:8px;">$1</h2>')
+                // [x] / [X] 체크된 체크박스
+                .replace(/\[\s*[xX]\s*\]/g, '<span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:3px;background:#0D7377;color:white;font-size:11px;font-weight:900;margin-right:6px;vertical-align:middle;">✓</span>')
+                // [ ] 빈 체크박스
+                .replace(/\[\s*\]/g, '<span style="display:inline-block;width:16px;height:16px;border-radius:3px;border:2px solid #8B8680;margin-right:6px;vertical-align:middle;"></span>');
+            };
+            // HTML 태그가 하나라도 있으면 HTML + 마크다운 잔재 변환
             if (bodyText.includes("<") && bodyText.includes(">")) {
-              return <div className="hwayul-content-body" style={{ fontSize:14, color:"#3A3530", lineHeight:1.9 }} dangerouslySetInnerHTML={{ __html: bodyText }} />;
+              return <div className="hwayul-content-body" style={{ fontSize:14, color:"#3A3530", lineHeight:1.9 }} dangerouslySetInnerHTML={{ __html: renderMarkdownSnippets(bodyText) }} />;
             }
-            return bodyText.split("\n\n").map((para, i) => (
-              <p key={i} style={{ fontSize:14, color:"#3A3530", lineHeight:1.9, marginBottom:16, whiteSpace:"pre-wrap" }}>{para}</p>
-            ));
+            // 순수 텍스트인 경우 마크다운을 먼저 변환 후 줄바꿈을 <br>로
+            const converted = renderMarkdownSnippets(bodyText)
+              .split("\n\n")
+              .map(p => `<p style="margin-bottom:16px;">${p.replace(/\n/g, "<br/>")}</p>`)
+              .join("");
+            return <div className="hwayul-content-body" style={{ fontSize:14, color:"#3A3530", lineHeight:1.9 }} dangerouslySetInnerHTML={{ __html: converted }} />;
           })()}
         </div>
 
