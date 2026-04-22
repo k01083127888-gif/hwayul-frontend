@@ -240,6 +240,15 @@ export function AdminSection({ setActive, authed, setAuthed }) {
     const [f, setF] = useState(item || { type:"news", tag:"", title:"", date:new Date().toISOString().slice(0,10).replace(/-/g,"."), summary:"", views:0 });
     const [body, setBody] = useState(existingDetail?.content || item?.body || "");
     const [attachments, setAttachments] = useState(existingDetail?.attachments || item?.attachments || []);
+    // Quill 에디터 지연 마운트 — 폼이 먼저 그려진 후 에디터가 붙도록 해서 초기 커서 버벅임 제거
+    const [quillReady, setQuillReady] = useState(false);
+    useEffect(() => {
+      const id = (window.requestIdleCallback || window.requestAnimationFrame)(() => setQuillReady(true));
+      return () => {
+        if (window.cancelIdleCallback) window.cancelIdleCallback(id);
+        else window.cancelAnimationFrame(id);
+      };
+    }, []);
     const [newUrl, setNewUrl] = useState("");
     const [newLabel, setNewLabel] = useState("");
     const U = k => e => setF(v => ({ ...v, [k]: e.target.value }));
@@ -476,19 +485,23 @@ export function AdminSection({ setActive, authed, setAuthed }) {
               </div>
             </div>
           )}
-          <div style={{ background:"white", borderRadius:6, border:"2px solid rgba(10,22,40,0.1)" }}>
-            <ReactQuill
-              ref={quillRef}
-              theme="snow"
-              defaultValue={body}
-              onBlur={() => {
-                const quill = quillRef.current?.getEditor?.() || quillRef.current;
-                if (quill?.root) setBody(quill.root.innerHTML);
-              }}
-              modules={quillModules}
-              placeholder="콘텐츠 본문을 입력하세요. 이미지와 유튜브 영상을 바로 삽입할 수 있어요."
-              style={{ minHeight: 300, fontSize: 13 }}
-            />
+          <div style={{ background:"white", borderRadius:6, border:"2px solid rgba(10,22,40,0.1)", minHeight:340 }}>
+            {quillReady ? (
+              <ReactQuill
+                ref={quillRef}
+                theme="snow"
+                defaultValue={body}
+                onBlur={() => {
+                  const quill = quillRef.current?.getEditor?.() || quillRef.current;
+                  if (quill?.root) setBody(quill.root.innerHTML);
+                }}
+                modules={quillModules}
+                placeholder="콘텐츠 본문을 입력하세요. 이미지와 유튜브 영상을 바로 삽입할 수 있어요."
+                style={{ minHeight: 300, fontSize: 13 }}
+              />
+            ) : (
+              <div style={{ padding:"18px 20px", fontSize:12, color:C.gray }}>에디터 로딩 중…</div>
+            )}
           </div>
         </div>
         {/* ── 첨부파일 관리 ── */}
