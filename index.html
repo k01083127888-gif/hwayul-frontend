@@ -7,6 +7,16 @@
     <title>뷰인사이드</title>
     <!-- 위성 배경 이미지 프리로드 (화면 깜빡임 방지) -->
     <link rel="preload" as="image" href="/seoul-satellite.jpg" />
+
+    <!-- 브랜드 로고 전용 커스텀 폰트 (Hahmlet — 현대적 세리프, 뷰인사이드 브랜드 마크) -->
+    <!-- 교체: 아래 font-family 이름을 'Hahmlet' → 'GowunBatang' 등으로 변경 -->
+    <style>
+      @font-face {
+        font-family: 'BrandFont';
+        src: url('/fonts/Hahmlet.ttf') format('truetype');
+        font-display: swap;
+      }
+    </style>
     <!-- 기본 SEO -->
 <meta name="description" content="직장 내 괴롭힘 & 조직문화 전문 플랫폼. 20년 경력 노무사가 만든 1,000건+ 실제 판례 DB 기반 AI 상담." />
 
@@ -15,7 +25,7 @@
 <meta property="og:site_name" content="뷰인사이드" />
 <meta property="og:title" content="뷰인사이드 — 직장 내 괴롭힘 & 조직문화 전문 플랫폼" />
 <meta property="og:description" content="20년 노무 전문성과 1,300건+ 실제 판례 DB. 일반 AI와는 차원이 다른 전문 노무 상담을 경험하세요." />
-<meta property="og:image" content="https://hwayul.kr/og-image.png?v=20260422b" />
+<meta property="og:image" content="https://hwayul.kr/og-image.png?v=20260422c" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:url" content="https://hwayul.kr" />
@@ -25,7 +35,7 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="뷰인사이드 — 직장 내 괴롭힘 & 조직문화 전문 플랫폼" />
 <meta name="twitter:description" content="20년 노무 전문성과 1,300건+ 실제 판례 DB." />
-<meta name="twitter:image" content="https://hwayul.kr/og-image.png?v=20260422b" />
+<meta name="twitter:image" content="https://hwayul.kr/og-image.png?v=20260422c" />
   </head>
   <body>
     <div id="root"></div>

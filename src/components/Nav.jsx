@@ -48,7 +48,7 @@ export function Nav({ active, setActive }) {
         </svg>
       </div>
       <div>
-        <div style={{ fontFamily:"'Noto Sans KR', sans-serif", fontSize:17, fontWeight:800, letterSpacing:"-0.3px", lineHeight:1.2 }}>
+        <div style={{ fontFamily:"'BrandFont', 'Noto Sans KR', sans-serif", fontSize:18, fontWeight:800, letterSpacing:"-0.3px", lineHeight:1.2 }}>
           <span style={{ color:"#E8E5DE" }}>뷰</span><span style={{ color:C.tealLight, marginLeft:3 }}>인사이드</span>
         </div>
         <div style={{ fontSize:9, color:"rgba(244,241,235,0.5)", letterSpacing:"1.5px", marginTop:1, fontFamily:"'Noto Sans KR', sans-serif", fontWeight:400 }}>View Inside</div>

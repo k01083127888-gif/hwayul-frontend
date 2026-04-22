@@ -4,6 +4,7 @@
 const path = require("path");
 const fs = require("fs");
 const sharp = require("sharp");
+const opentype = require("opentype.js");
 
 const W = 1200, H = 630;
 const NAVY = "#0A1628";
@@ -11,6 +12,26 @@ const NAVY_DEEP = "#06101F";
 const GOLD = "#C9A84C";
 const TEAL = "#0D7377";
 const CREAM = "#F4F1EB";
+
+// ── 브랜드 로고 폰트: Hahmlet (바꾸려면 아래 BRAND_FONT_ID 수정)
+// 옵션: "Hahmlet" | "GowunBatang" | "BlackHanSans" | "Jua" | "Hahmlet" 등
+const BRAND_FONT_ID = "Hahmlet";
+const brandFontPath = path.join(__dirname, "..", "public", "fonts", `${BRAND_FONT_ID}.ttf`);
+const brandFont = fs.existsSync(brandFontPath) ? opentype.loadSync(brandFontPath) : null;
+
+function brandText(text, x, y, size, color) {
+  if (!brandFont) {
+    // 폴백: 시스템 폰트
+    return `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle"
+              fill="${color}" font-family="'Malgun Gothic','Noto Serif KR',serif"
+              font-size="${size}" font-weight="900" letter-spacing="-2">${text}</text>`;
+  }
+  const p = brandFont.getPath(text, 0, 0, size);
+  const bb = p.getBoundingBox();
+  const tx = x - bb.x1 - (bb.x2 - bb.x1) / 2;
+  const ty = y - bb.y1 - (bb.y2 - bb.y1) / 2;
+  return `<path d="${p.toPathData()}" fill="${color}" transform="translate(${tx} ${ty})"/>`;
+}
 
 const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
@@ -39,10 +60,8 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
   <circle cx="${W/2}"    cy="145" r="2.5" fill="${GOLD}"/>
   <circle cx="${W/2+14}" cy="145" r="2.5" fill="${GOLD}"/>
 
-  <!-- 메인 타이틀 -->
-  <text x="${W/2}" y="260" text-anchor="middle"
-        fill="${CREAM}" font-family="'Malgun Gothic','Noto Serif KR',serif"
-        font-size="84" font-weight="900" letter-spacing="-2">뷰인사이드</text>
+  <!-- 메인 타이틀 (브랜드 폰트) -->
+  ${brandText("뷰인사이드", W/2, 250, 96, CREAM)}
 
   <!-- 태그라인 -->
   <text x="${W/2}" y="320" text-anchor="middle"
