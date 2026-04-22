@@ -1485,7 +1485,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                   ? <div style={{ textAlign:"center", padding:40, color:C.gray }}>📭 접수된 내역이 없습니다.</div>
                   : (
                     <table style={{ width:"100%", borderCollapse:"collapse" }}>
-                      <thead><tr>{["요청일시","분류","신청자","기업명","이메일","연락처","요청내용(요약)","상태",""].map(h=><th key={h} style={thStyle}>{h}</th>)}</tr></thead>
+                      <thead><tr>{["요청일시","분류","신청자","기업명","이메일","연락처","요청내용(요약)","참조 사례","상태",""].map(h=><th key={h} style={thStyle}>{h}</th>)}</tr></thead>
                       <tbody>{bizServices.map((r,i)=>(
                         <tr key={r.id} style={{ background:i%2===0?"transparent":"rgba(10,22,40,0.015)" }}>
                           <td style={tdStyle}>{new Date(r.submittedAt).toLocaleString("ko-KR")}</td>
@@ -1494,7 +1494,16 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                           <td style={tdStyle}>{r.company||"-"}</td>
                           <td style={tdStyle}>{r.email||"-"}</td>
                           <td style={tdStyle}>{r.phone||"-"}</td>
-                          <td style={{ ...tdStyle, maxWidth:150, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{r.detail?.slice(0,25)||"-"}</td>
+                          <td style={{ ...tdStyle, maxWidth:150, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{r.detail?.slice(0,25)||r.note?.slice(0,25)||"-"}</td>
+                          <td style={{ ...tdStyle, maxWidth:180 }}>
+                            {r.referencedContent?.id ? (
+                              <a href={`/content/${r.referencedContent.id}`} target="_blank" rel="noopener noreferrer"
+                                title={r.referencedContent.title}
+                                style={{ padding:"3px 9px", borderRadius:100, background:"rgba(13,115,119,0.1)", color:C.teal, border:"1px solid rgba(13,115,119,0.25)", fontSize:10, fontWeight:700, cursor:"pointer", fontFamily:"inherit", maxWidth:170, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", display:"inline-block", textDecoration:"none" }}>
+                                📄 {(r.referencedContent.title||"").slice(0,14)}{(r.referencedContent.title||"").length > 14 ? "…" : ""}
+                              </a>
+                            ) : <span style={{ fontSize:10, color:"rgba(10,22,40,0.3)" }}>-</span>}
+                          </td>
                           <td style={tdStyle}>
                             <select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;updateSubmissionStatus(r.id,e.target.value);_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}>
                               <option>신규</option><option>진행중</option><option>완료</option>
