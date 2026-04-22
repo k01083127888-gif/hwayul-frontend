@@ -866,7 +866,12 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                   return [
                     <tr key={c.id||i} style={{ background:isHidden ? "rgba(192,57,43,0.04)" : (i%2===0?"transparent":"rgba(10,22,40,0.015)"), opacity:isHidden?0.6:1 }}>
                       <td style={tdStyle}>{typeL[c.type]||c.type}</td>
-                      <td style={tdStyle}>{c.tag}</td>
+                      <td style={tdStyle}>
+                        {c.tag}
+                        {c.case_number && (
+                          <span style={{ display:"inline-block", marginLeft:6, padding:"1px 7px", borderRadius:4, background:"rgba(13,115,119,0.08)", color:C.teal, fontSize:10, fontWeight:700, fontFamily:"'Courier New', monospace", verticalAlign:"middle" }}>{c.case_number}</span>
+                        )}
+                      </td>
                       <td style={{ ...tdStyle, maxWidth:300, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{isHidden && <span style={{ fontSize:9, color:C.red, fontWeight:700, marginRight:4 }}>숨김</span>}{c.title}</td>
                       <td style={tdStyle}>{c.date}</td>
                       <td style={tdStyle}>{c.views?.toLocaleString()}</td>
