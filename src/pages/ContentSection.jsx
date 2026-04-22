@@ -20,9 +20,11 @@ export function ContentSection({ contentId = null, setContentDetail, setActive }
   const [query, setQuery] = useState("");
   const visibleNews = _contents.filter(n => !n.hidden);
   const byGroup = filter === "all" ? visibleNews : visibleNews.filter(n => itemInGroup(n, filter));
-  const q = query.trim().toLowerCase();
+  // 공백 무시 검색: "직장내 괴롭힘" = "직장 내 괴롭힘" 같게 인식
+  const normalize = (s) => (s || "").toLowerCase().replace(/\s+/g, "");
+  const q = normalize(query);
   const searched = q
-    ? byGroup.filter(n => ((n.title||"") + " " + (n.summary||"") + " " + (n.tag||"") + " " + (n.case_number||"")).toLowerCase().includes(q))
+    ? byGroup.filter(n => normalize((n.title||"") + (n.summary||"") + (n.tag||"") + (n.case_number||"")).includes(q))
     : byGroup;
   const allFiltered = searched;
   const filtered = showAll ? allFiltered : allFiltered.slice(0, 6);

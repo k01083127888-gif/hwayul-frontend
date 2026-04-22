@@ -866,9 +866,11 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                   if (contentFilter === "case_sanjae") return c.type === "case" || c.type === "sanjae";
                   return c.type === contentFilter;
                 };
-                const qq = contentQuery.trim().toLowerCase();
+                // 공백 무시 검색: "직장내 괴롭힘" = "직장 내 괴롭힘" 같게 처리
+                const normalize = (s) => (s || "").toLowerCase().replace(/\s+/g, "");
+                const qq = normalize(contentQuery);
                 const filteredContents = contentsState.filter(c => groupMatch(c) && (
-                  !qq || ((c.title||"") + " " + (c.summary||"") + " " + (c.tag||"") + " " + (c.case_number||"")).toLowerCase().includes(qq)
+                  !qq || normalize((c.title||"") + (c.summary||"") + (c.tag||"") + (c.case_number||"")).includes(qq)
                 ));
                 return (<>
               <div style={{ padding:"8px 14px 12px", fontSize:11, color:C.gray }}>총 {contentsState.length}건 중 <strong style={{ color:C.navy }}>{filteredContents.length}건</strong> 표시</div>
