@@ -30,7 +30,7 @@ const PRINT_HEADER = `
       </div>
     </div>
     <div style="text-align:right;font-size:11px;color:#8B8680;line-height:1.8">
-      <div><strong style="color:#0A1628">뷰인사이드</strong></div>
+      <div><strong style="color:#0A1628;font-family:'Gowun Batang','Noto Sans KR',sans-serif;font-size:14px">뷰인사이드</strong></div>
       <div>Tel. 02-2088-1767</div>
       <div>Email. hwayulinside@gmail.com</div>
       <div>Web. www.hwayul.kr</div>
