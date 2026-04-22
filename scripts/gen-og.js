@@ -15,7 +15,7 @@ const CREAM = "#F4F1EB";
 
 // ── 브랜드 로고 폰트: Hahmlet (바꾸려면 아래 BRAND_FONT_ID 수정)
 // 옵션: "Hahmlet" | "GowunBatang" | "BlackHanSans" | "Jua" | "Hahmlet" 등
-const BRAND_FONT_ID = "Hahmlet";
+const BRAND_FONT_ID = "GowunBatang";
 const brandFontPath = path.join(__dirname, "..", "public", "fonts", `${BRAND_FONT_ID}.ttf`);
 const brandFont = fs.existsSync(brandFontPath) ? opentype.loadSync(brandFontPath) : null;
 
