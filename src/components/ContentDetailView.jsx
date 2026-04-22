@@ -74,14 +74,19 @@ export function ContentDetailView({ item, onBack }) {
           {(() => {
             const bodyText = detail?.content || detail?.body || "";
             // 마크다운 잔재 → HTML 변환 (# 헤딩, [ ]/[x] 체크박스)
+            const H4 = (t) => `<h4 style="font-size:15px;font-weight:800;color:#0A1628;margin:18px 0 8px;">${t}</h4>`;
+            const H3 = (t) => `<h3 style="font-size:17px;font-weight:800;color:#0A1628;margin:22px 0 10px;">${t}</h3>`;
+            const H2 = (t) => `<h2 style="font-size:20px;font-weight:900;color:#0A1628;margin:26px 0 14px;line-height:1.4;">${t}</h2>`;
             const renderMarkdownSnippets = (html) => {
               return html
-                // ### 헤딩
-                .replace(/^###\s+(.+)$/gm, '<h4 style="font-size:15px;font-weight:800;color:#0A1628;margin:18px 0 8px;">$1</h4>')
-                // ## 헤딩
-                .replace(/^##\s+(.+)$/gm, '<h3 style="font-size:17px;font-weight:800;color:#0A1628;margin:22px 0 10px;">$1</h3>')
-                // # 헤딩
-                .replace(/^#\s+(.+)$/gm, '<h2 style="font-size:19px;font-weight:900;color:#0A1628;margin:24px 0 12px;border-bottom:2px solid #E8E5DE;padding-bottom:8px;">$1</h2>')
+                // <p>### ...</p> 형태 (Quill이 감싼 케이스) — 먼저 처리
+                .replace(/<p[^>]*>\s*###\s+([\s\S]*?)\s*<\/p>/gi, (_, t) => H4(t))
+                .replace(/<p[^>]*>\s*##\s+([\s\S]*?)\s*<\/p>/gi, (_, t) => H3(t))
+                .replace(/<p[^>]*>\s*#\s+([\s\S]*?)\s*<\/p>/gi, (_, t) => H2(t))
+                // 줄머리 ### / ## / # (순수 텍스트 케이스)
+                .replace(/^###\s+(.+)$/gm, (_, t) => H4(t))
+                .replace(/^##\s+(.+)$/gm, (_, t) => H3(t))
+                .replace(/^#\s+(.+)$/gm, (_, t) => H2(t))
                 // [x] / [X] 체크된 체크박스 (클릭 가능)
                 .replace(/\[\s*[xX]\s*\]/g, '<input type="checkbox" checked style="width:16px;height:16px;margin-right:8px;vertical-align:middle;accent-color:#0D7377;cursor:pointer;" />')
                 // [ ] 빈 체크박스 (클릭 가능)
