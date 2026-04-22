@@ -114,7 +114,7 @@ export function ChecklistSection({ setActive, initialTab = "victim" }) {
             <li>
               <strong style={{ color: "rgba(244,241,235,0.95)" }}>1,000건 이상의 판례·사례와 작성해 주신 진단결과지</strong>를 근거로
               <span style={{ color: "rgba(244,241,235,0.6)", marginLeft: 4 }}>
-                AI가 답변드립니다
+                답변드립니다
               </span>
             </li>
           </ol>
