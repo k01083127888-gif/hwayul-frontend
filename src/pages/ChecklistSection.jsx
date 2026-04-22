@@ -84,6 +84,42 @@ export function ChecklistSection({ setActive, initialTab = "victim" }) {
           ))}
         </div>
 
+        {/* 진단 이용 안내 — 분류 선택 + 상세 작성 권장 (전체 탭 공통) */}
+        <div style={{
+          maxWidth: 760,
+          margin: "0 auto 24px",
+          padding: "14px 18px",
+          background: "rgba(13,115,119,0.08)",
+          border: "1px solid rgba(13,115,119,0.28)",
+          borderRadius: 10,
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
+            <span style={{ fontSize: 12, fontWeight: 800, color: C.gold, letterSpacing: "0.5px" }}>
+              💡 진단을 정확히 받으시려면
+            </span>
+          </div>
+          <ol style={{ margin: 0, paddingLeft: 20, fontSize: 12.5, color: "rgba(244,241,235,0.92)", lineHeight: 1.75 }}>
+            <li style={{ marginBottom: 5 }}>
+              위 <strong style={{ color: C.gold }}>분류 탭</strong>을 먼저 선택하세요 —
+              <span style={{ color: "rgba(244,241,235,0.6)", marginLeft: 4 }}>
+                😟 피해자 · 😰 피지목인 · 🩺 산재 · 🏛 사내조사 중 본인 상황에 맞는 것
+              </span>
+            </li>
+            <li style={{ marginBottom: 5 }}>
+              상담 내용은 <strong style={{ color: C.gold }}>구체적으로</strong> 작성해 주세요 —
+              <span style={{ color: "rgba(244,241,235,0.6)", marginLeft: 4 }}>
+                언제·누가·어떤 행위·얼마나 반복되었는지 상세할수록 정확한 답변
+              </span>
+            </li>
+            <li>
+              <strong style={{ color: "rgba(244,241,235,0.95)" }}>판례 1,300건 + 실무 해설·칼럼</strong>을 근거로
+              <span style={{ color: "rgba(244,241,235,0.6)", marginLeft: 4 }}>
+                AI가 사건번호를 인용하며 답변드립니다
+              </span>
+            </li>
+          </ol>
+        </div>
+
         {/* 탭별 콘텐츠 렌더링 */}
         {diagTab === "accused" ? (
           <AccusedChecklistSection setActive={setActive} />
