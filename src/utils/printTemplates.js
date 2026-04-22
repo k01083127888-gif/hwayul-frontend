@@ -25,7 +25,7 @@ const PRINT_HEADER = `
       </svg>
       <div>
         <div style="font-size:22px;font-weight:800;color:#0A1628;font-family:'Noto Sans KR',sans-serif">뷰 <span style="color:#0D7377">인사이드</span></div>
-        <div style="font-size:9px;color:#8B8680;margin-top:1px;letter-spacing:1.5px">Hwayul Inside</div>
+        <div style="font-size:9px;color:#8B8680;margin-top:1px;letter-spacing:1.5px">View Inside</div>
         <div style="font-size:8px;color:#B0ADA6;letter-spacing:0.5px">직장내괴롭힘 & 조직문화 플랫폼</div>
       </div>
     </div>

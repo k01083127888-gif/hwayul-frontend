@@ -51,7 +51,7 @@ export function Nav({ active, setActive }) {
         <div style={{ fontFamily:"'Noto Sans KR', sans-serif", fontSize:17, fontWeight:800, letterSpacing:"-0.3px", lineHeight:1.2 }}>
           <span style={{ color:"#E8E5DE" }}>뷰</span><span style={{ color:C.tealLight, marginLeft:3 }}>인사이드</span>
         </div>
-        <div style={{ fontSize:9, color:"rgba(244,241,235,0.5)", letterSpacing:"1.5px", marginTop:1, fontFamily:"'Noto Sans KR', sans-serif", fontWeight:400 }}>Hwayul Inside</div>
+        <div style={{ fontSize:9, color:"rgba(244,241,235,0.5)", letterSpacing:"1.5px", marginTop:1, fontFamily:"'Noto Sans KR', sans-serif", fontWeight:400 }}>View Inside</div>
         <div style={{ fontSize:7, color:"rgba(244,241,235,0.3)", letterSpacing:"0.5px", marginTop:0, fontFamily:"'Noto Sans KR', sans-serif" }}>직장내괴롭힘 & 조직문화 플랫폼</div>
       </div>
     </div>

@@ -1651,7 +1651,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
 <div class="wrap">
   <div style="background:#0A1628;padding:28px 32px;text-align:center">
     <div style="font-size:20px;font-weight:800;font-family:'Noto Sans KR',sans-serif"><span style="color:#E8E5DE">뷰</span> <span style="color:#4ECDC4">인사이드</span></div>
-    <div style="font-size:9px;color:rgba(244,241,235,0.5);margin-top:2px;letter-spacing:1.5px">Hwayul Inside Newsletter</div>
+    <div style="font-size:9px;color:rgba(244,241,235,0.5);margin-top:2px;letter-spacing:1.5px">View Inside Newsletter</div>
   </div>
   <div style="padding:36px 32px">
     <h2 style="font-size:20px;font-weight:800;color:#0A1628;margin-bottom:20px;line-height:1.5">${nlForm.title||"(제목 없음)"}</h2>

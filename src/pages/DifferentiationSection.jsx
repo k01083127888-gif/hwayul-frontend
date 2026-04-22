@@ -30,7 +30,7 @@ export function DifferentiationSection({ setActive }) {
           color: C.gold,
           letterSpacing: "3px",
           marginBottom: 8,
-        }}>WHY HWAYUL INSIDE</div>
+        }}>WHY VIEW INSIDE</div>
 
         {/* 메인 타이틀 */}
         <h2 style={{

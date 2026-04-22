@@ -132,7 +132,7 @@ h2{color:#0D7377;margin-top:32px;font-size:16px;border-left:4px solid #C9A84C;pa
 <div class="wrap">
   <div style="background:#0A1628;padding:28px 32px;text-align:center">
     <div style="font-size:20px;font-weight:800"><span style="color:#E8E5DE">뷰</span> <span style="color:#4ECDC4">인사이드</span></div>
-    <div style="font-size:9px;color:rgba(244,241,235,0.5);margin-top:2px;letter-spacing:1.5px">Hwayul Inside</div>
+    <div style="font-size:9px;color:rgba(244,241,235,0.5);margin-top:2px;letter-spacing:1.5px">View Inside</div>
   </div>
   <div style="padding:36px 32px">
     <div style="font-size:14px;color:#0A1628;line-height:1.9;white-space:pre-wrap;margin-bottom:24px">${emailBody || `${r.name||""} 님 안녕하세요.\n뷰인사이드입니다.\n\n요청하신 ${diagType} 전문 노무사 검토 리포트를 첨부파일로 보내드립니다.\n상세 내용은 첨부된 리포트를 확인해 주시기 바랍니다.\n\n리포트 내용에 대한 문의사항이 있으시면 언제든 연락 주세요.`}</div>

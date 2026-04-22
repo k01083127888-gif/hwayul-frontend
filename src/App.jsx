@@ -361,7 +361,7 @@ useEffect(() => {
               </svg>
               <div>
                 <div style={{ fontFamily:"'Noto Sans KR', sans-serif", fontSize:19, fontWeight:800 }}><span style={{ color:C.cream }}>뷰</span> <span style={{ color:C.tealLight }}>인사이드</span></div>
-                <div style={{ fontSize:9, color:"rgba(244,241,235,0.45)", letterSpacing:"1.5px", fontFamily:"'Noto Sans KR', sans-serif" }}>Hwayul Inside</div>
+                <div style={{ fontSize:9, color:"rgba(244,241,235,0.45)", letterSpacing:"1.5px", fontFamily:"'Noto Sans KR', sans-serif" }}>View Inside</div>
                 <div style={{ fontSize:7, color:"rgba(244,241,235,0.28)", letterSpacing:"0.5px", marginTop:0 }}>직장내괴롭힘 & 조직문화 플랫폼</div>
               </div>
             </div>
