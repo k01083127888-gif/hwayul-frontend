@@ -106,15 +106,15 @@ export function ChecklistSection({ setActive, initialTab = "victim" }) {
               </span>
             </li>
             <li style={{ marginBottom: 5 }}>
-              상담 내용은 <strong style={{ color: C.gold }}>구체적으로</strong> 작성해 주세요 —
+              진단 후 상담 시 <strong style={{ color: C.gold }}>상담 내용은 상세히</strong> 작성해 주세요 —
               <span style={{ color: "rgba(244,241,235,0.6)", marginLeft: 4 }}>
                 언제·누가·어떤 행위·얼마나 반복되었는지 상세할수록 정확한 답변
               </span>
             </li>
             <li>
-              <strong style={{ color: "rgba(244,241,235,0.95)" }}>판례 1,300건 + 실무 해설·칼럼</strong>을 근거로
+              <strong style={{ color: "rgba(244,241,235,0.95)" }}>1,000건 이상의 판례·사례와 작성해 주신 진단결과지</strong>를 근거로
               <span style={{ color: "rgba(244,241,235,0.6)", marginLeft: 4 }}>
-                AI가 사건번호를 인용하며 답변드립니다
+                AI가 답변드립니다
               </span>
             </li>
           </ol>
