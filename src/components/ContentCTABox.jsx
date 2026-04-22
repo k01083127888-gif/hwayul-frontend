@@ -61,7 +61,7 @@ export function ContentCTABox({ item }) {
         flexWrap: "wrap",
         gap: 14,
         marginTop: 4,
-        marginBottom: 18,
+        marginBottom: 22,
       }}>
         {["괴롭힘 해당 여부", "증거 수집 방법", "다음 행동 가이드"].map(label => (
           <span key={label} style={{
@@ -81,41 +81,6 @@ export function ContentCTABox({ item }) {
             <span>{label}</span>
           </span>
         ))}
-      </div>
-
-      {/* 진단 이용 안내 — 분류 선택 + 상세 작성 권장 */}
-      <div style={{
-        background: "white",
-        border: "1px solid rgba(13,115,119,0.18)",
-        borderRadius: 10,
-        padding: "14px 18px",
-        marginBottom: 20,
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}>
-          <span style={{ fontSize: 12, fontWeight: 800, color: C.teal, letterSpacing: "0.5px" }}>
-            💡 진단을 정확히 받으시려면
-          </span>
-        </div>
-        <ol style={{ margin: 0, paddingLeft: 20, fontSize: 12.5, color: C.navy, lineHeight: 1.75 }}>
-          <li style={{ marginBottom: 6 }}>
-            상단 <strong style={{ color: C.teal }}>분류 탭</strong>을 먼저 선택하세요 —
-            <span style={{ color: C.gray, marginLeft: 4 }}>
-              😣 피해자 · 😥 피지목인 · 🩹 산재 · 🏛 사내조사 중 본인 상황에 맞는 것
-            </span>
-          </li>
-          <li style={{ marginBottom: 6 }}>
-            상담 내용은 <strong style={{ color: C.teal }}>구체적으로</strong> 작성해 주세요 —
-            <span style={{ color: C.gray, marginLeft: 4 }}>
-              언제·누가·어떤 행위·얼마나 반복되었는지 상세할수록 정확한 답변
-            </span>
-          </li>
-          <li>
-            <strong style={{ color: C.navy }}>판례 1,300건 + 실무 해설·칼럼</strong>을 근거로
-            <span style={{ color: C.gray, marginLeft: 4 }}>
-              AI가 사건번호를 인용하며 답변드립니다
-            </span>
-          </li>
-        </ol>
       </div>
 
       {/* CTA 버튼 */}
