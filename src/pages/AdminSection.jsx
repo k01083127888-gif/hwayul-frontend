@@ -573,7 +573,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:28 }}>
           <div>
             <div style={{ fontSize:10, letterSpacing:"3px", color:C.teal, fontWeight:700, textTransform:"uppercase" }}>ADMIN PANEL</div>
-            <h2 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:24, fontWeight:900, color:C.navy, marginTop:4 }}>뷰인사이드 관리자</h2>
+            <h2 style={{ fontFamily:"'BrandFont', 'Noto Serif KR', serif", fontSize:24, fontWeight:900, color:C.navy, marginTop:4 }}>뷰인사이드 관리자</h2>
           </div>
           <div style={{ display:"flex", gap:10 }}>
             <button onClick={() => setActive("home")} style={{ padding:"8px 18px", borderRadius:6, border:`1px solid rgba(10,22,40,0.12)`, background:"white", color:C.navy, fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"inherit" }}>🏠 사이트 보기</button>
@@ -1644,13 +1644,13 @@ export function AdminSection({ setActive, authed, setAuthed }) {
 
           const nlHtml = `<!DOCTYPE html><html><head><meta charset="utf-8">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&family=Gowun+Batang:wght@400;700&display=swap');
   body{font-family:'Noto Sans KR',sans-serif;margin:0;padding:0;background:#F5F3EF;}
   .wrap{max-width:640px;margin:0 auto;background:white;}
 </style></head><body>
 <div class="wrap">
   <div style="background:#0A1628;padding:28px 32px;text-align:center">
-    <div style="font-size:20px;font-weight:800;font-family:'Noto Sans KR',sans-serif"><span style="color:#E8E5DE">뷰</span> <span style="color:#4ECDC4">인사이드</span></div>
+    <div style="font-size:22px;font-weight:800;font-family:'Gowun Batang','Noto Sans KR',sans-serif"><span style="color:#E8E5DE">뷰</span> <span style="color:#4ECDC4">인사이드</span></div>
     <div style="font-size:9px;color:rgba(244,241,235,0.5);margin-top:2px;letter-spacing:1.5px">View Inside Newsletter</div>
   </div>
   <div style="padding:36px 32px">

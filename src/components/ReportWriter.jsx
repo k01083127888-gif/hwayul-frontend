@@ -127,11 +127,12 @@ h2{color:#0D7377;margin-top:32px;font-size:16px;border-left:4px solid #C9A84C;pa
   const handleSendEmail = async () => {
     // 1) 이메일 본문 HTML (간단한 안내만)
     const summaryEmailHtml = `<!DOCTYPE html><html><head><meta charset="utf-8">
-<style>body{font-family:'Noto Sans KR',sans-serif;margin:0;padding:0;background:#F5F3EF}
+<style>@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&family=Gowun+Batang:wght@400;700&display=swap');
+body{font-family:'Noto Sans KR',sans-serif;margin:0;padding:0;background:#F5F3EF}
 .wrap{max-width:640px;margin:0 auto;background:white}</style></head><body>
 <div class="wrap">
   <div style="background:#0A1628;padding:28px 32px;text-align:center">
-    <div style="font-size:20px;font-weight:800"><span style="color:#E8E5DE">뷰</span> <span style="color:#4ECDC4">인사이드</span></div>
+    <div style="font-size:22px;font-weight:800;font-family:'Gowun Batang','Noto Sans KR',sans-serif"><span style="color:#E8E5DE">뷰</span> <span style="color:#4ECDC4">인사이드</span></div>
     <div style="font-size:9px;color:rgba(244,241,235,0.5);margin-top:2px;letter-spacing:1.5px">View Inside</div>
   </div>
   <div style="padding:36px 32px">

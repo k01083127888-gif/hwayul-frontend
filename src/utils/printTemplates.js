@@ -24,7 +24,7 @@ const PRINT_HEADER = `
         <circle cx="78" cy="52" r="3" fill="#4ECDC4" opacity="0.5"/>
       </svg>
       <div>
-        <div style="font-size:22px;font-weight:800;color:#0A1628;font-family:'Noto Sans KR',sans-serif">뷰 <span style="color:#0D7377">인사이드</span></div>
+        <div style="font-size:24px;font-weight:800;color:#0A1628;font-family:'Gowun Batang','Noto Sans KR',sans-serif">뷰 <span style="color:#0D7377">인사이드</span></div>
         <div style="font-size:9px;color:#8B8680;margin-top:1px;letter-spacing:1.5px">View Inside</div>
         <div style="font-size:8px;color:#B0ADA6;letter-spacing:0.5px">직장내괴롭힘 & 조직문화 플랫폼</div>
       </div>
@@ -52,7 +52,7 @@ const PRINT_FOOTER = `
   </div>
 `;
 const PRINT_STYLE = `<style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&family=Gowun+Batang:wght@400;700&display=swap');
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Noto Sans KR',sans-serif; color:#0A1628; background:white; padding:32px; max-width:800px; margin:0 auto; font-size:13px; line-height:1.7; }
   @media print { body { padding:20px; } @page { margin:15mm; } }

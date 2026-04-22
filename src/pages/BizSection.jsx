@@ -26,9 +26,10 @@ function sendConfirmEmail(form) {
   if (!form.email) return;
   const today = new Date().toISOString().slice(0, 10).replace(/-/g, ".");
   const html = `
+    <style>@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&family=Gowun+Batang:wght@400;700&display=swap');</style>
     <div style="max-width:600px;margin:0 auto;font-family:'Noto Sans KR',sans-serif;color:#333;line-height:1.8;">
       <div style="background:#0A1628;padding:28px 24px;border-radius:12px 12px 0 0;">
-        <h2 style="color:#F4F1EB;margin:0;font-size:18px;">뷰인사이드</h2>
+        <h2 style="color:#F4F1EB;margin:0;font-size:20px;font-family:'Gowun Batang','Noto Sans KR',sans-serif;">뷰인사이드</h2>
         <p style="color:rgba(244,241,235,0.6);margin:4px 0 0;font-size:12px;">직장내 괴롭힘 & 조직문화 전문 플랫폼</p>
       </div>
       <div style="padding:28px 24px;border:1px solid #eee;border-top:none;border-radius:0 0 12px 12px;">

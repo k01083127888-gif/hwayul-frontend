@@ -90,14 +90,14 @@ ${resultSummary || "(결과 데이터 없음)"}
 
   const emailHtml = `<!DOCTYPE html><html><head><meta charset="utf-8">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&family=Gowun+Batang:wght@400;700&display=swap');
   body { font-family:'Noto Sans KR',sans-serif; margin:0; padding:0; background:#F5F3EF; }
   .wrap { max-width:640px; margin:0 auto; background:white; }
 </style></head><body>
 <div class="wrap">
   <div style="background:#0A1628;padding:28px 32px;text-align:center">
     <svg width="48" height="48" viewBox="0 0 100 100" style="margin-bottom:8px"><defs><linearGradient id="eN" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#1E3A5F"/><stop offset="100%" stop-color="#2A4A70"/></linearGradient><linearGradient id="eM" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0D7377"/><stop offset="100%" stop-color="#4ECDC4"/></linearGradient></defs><line x1="18" y1="10" x2="18" y2="90" stroke="url(#eN)" stroke-width="10" stroke-linecap="round"/><line x1="50" y1="10" x2="50" y2="55" stroke="url(#eN)" stroke-width="10" stroke-linecap="round"/><line x1="78" y1="52" x2="78" y2="90" stroke="url(#eN)" stroke-width="10" stroke-linecap="round"/><path d="M18,46 C28,46 32,33 40,33 C48,33 44,46 50,46" stroke="url(#eM)" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M50,12 C52,30 60,42 70,48 C74,50 78,52 78,52" stroke="url(#eM)" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M96,12 C94,28 88,40 82,47 C80,50 78,52 78,52" stroke="url(#eM)" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M18,90 C34,82 62,82 78,90" stroke="url(#eM)" stroke-width="4.5" fill="none" stroke-linecap="round" opacity="0.45"/><circle cx="50" cy="46" r="3" fill="#4ECDC4" opacity="0.5"/><circle cx="78" cy="52" r="3" fill="#4ECDC4" opacity="0.5"/></svg>
-    <div style="font-size:20px;font-weight:800;font-family:'Noto Sans KR',sans-serif"><span style="color:#E8E5DE">뷰</span> <span style="color:#4ECDC4">인사이드</span></div>
+    <div style="font-size:22px;font-weight:800;font-family:'Gowun Batang','Noto Sans KR',sans-serif"><span style="color:#E8E5DE">뷰</span> <span style="color:#4ECDC4">인사이드</span></div>
     <div style="font-size:9px;color:rgba(244,241,235,0.5);margin-top:2px;letter-spacing:1.5px">View Inside</div>
     <div style="font-size:8px;color:rgba(244,241,235,0.3);letter-spacing:0.5px;margin-top:1px">직장내괴롭힘 & 조직문화 플랫폼</div>
   </div>
