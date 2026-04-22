@@ -1153,27 +1153,28 @@ export function AdminSection({ setActive, authed, setAuthed }) {
             <div style={cardStyle}>
               <h3 style={{ fontSize:15, fontWeight:800, color:C.navy, marginBottom:14 }}>💼 심층상담 접수 내역 ({d.length}건)</h3>
               {d.length === 0 ? <div style={{ textAlign:"center", padding:48, color:C.gray }}>📭 접수된 내역이 없습니다.</div> : (
-                <table style={{ width:"100%", borderCollapse:"collapse" }}>
+                <div style={{ overflowX:"auto", WebkitOverflowScrolling:"touch" }}>
+                <table style={{ width:"100%", borderCollapse:"collapse", minWidth:1100 }}>
                   <thead><tr>{["접수일시","담당자","기업명","연락처","이메일","진단결과","참조 사례","상태",""].map(h=><th key={h} style={thStyle}>{h}</th>)}</tr></thead>
                   <tbody>{d.map((r,i)=>(
                     <tr key={r.id} style={{ background:i%2===0?"transparent":"rgba(10,22,40,0.015)" }}>
-                      <td style={tdStyle}>{new Date(r.submittedAt).toLocaleString("ko-KR")}</td>
-                      <td style={{ ...tdStyle, fontWeight:700 }}>{r.name||"-"}</td>
-                      <td style={tdStyle}>{r.company||"-"}</td>
-                      <td style={tdStyle}>{r.phone||"-"}</td>
-                      <td style={tdStyle}>{r.email||"-"}</td>
-                      <td style={tdStyle}>{r.diagResult ? <button onClick={()=>{const w=window.open("","_blank","width=900,height=700");if(w){const isHtml=r.diagResult.trim().startsWith("<");w.document.write(isHtml?r.diagResult:`<html><body style="font-family:sans-serif;padding:24px;"><h3>진단 결과 데이터</h3><pre style="white-space:pre-wrap;line-height:1.8;">${typeof r.diagResult==="string"?r.diagResult:JSON.stringify(JSON.parse(r.diagResult),null,2)}</pre></body></html>`);w.document.close();}}} style={{ padding:"4px 10px", borderRadius:4, background:"rgba(13,115,119,0.1)", border:"1px solid rgba(13,115,119,0.25)", color:C.teal, fontSize:10, fontWeight:700, cursor:"pointer", fontFamily:"inherit" }}>📄 결과보기</button> : <span style={{ fontSize:10, color:C.gray }}>없음</span>}</td>
-                      <td style={{ ...tdStyle, maxWidth:180 }}>
+                      <td style={{ ...tdStyle, whiteSpace:"nowrap" }}>{new Date(r.submittedAt).toLocaleString("ko-KR")}</td>
+                      <td style={{ ...tdStyle, fontWeight:700, whiteSpace:"nowrap" }}>{r.name||"-"}</td>
+                      <td style={{ ...tdStyle, whiteSpace:"nowrap" }}>{r.company||"-"}</td>
+                      <td style={{ ...tdStyle, whiteSpace:"nowrap" }}>{r.phone||"-"}</td>
+                      <td style={{ ...tdStyle, whiteSpace:"nowrap" }}>{r.email||"-"}</td>
+                      <td style={{ ...tdStyle, whiteSpace:"nowrap" }}>{r.diagResult ? <button onClick={()=>{const w=window.open("","_blank","width=900,height=700");if(w){const isHtml=r.diagResult.trim().startsWith("<");w.document.write(isHtml?r.diagResult:`<html><body style="font-family:sans-serif;padding:24px;"><h3>진단 결과 데이터</h3><pre style="white-space:pre-wrap;line-height:1.8;">${typeof r.diagResult==="string"?r.diagResult:JSON.stringify(JSON.parse(r.diagResult),null,2)}</pre></body></html>`);w.document.close();}}} style={{ padding:"4px 10px", borderRadius:4, background:"rgba(13,115,119,0.1)", border:"1px solid rgba(13,115,119,0.25)", color:C.teal, fontSize:10, fontWeight:700, cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" }}>📄 결과보기</button> : <span style={{ fontSize:10, color:C.gray }}>없음</span>}</td>
+                      <td style={{ ...tdStyle, whiteSpace:"nowrap" }}>
                         {r.referencedContent?.id ? (
                           <a href={`/content/${r.referencedContent.id}`} target="_blank" rel="noopener noreferrer"
                             title={r.referencedContent.title}
-                            style={{ padding:"3px 9px", borderRadius:100, background:"rgba(13,115,119,0.1)", color:C.teal, border:"1px solid rgba(13,115,119,0.25)", fontSize:10, fontWeight:700, cursor:"pointer", fontFamily:"inherit", maxWidth:170, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", display:"inline-block", textDecoration:"none" }}>
-                            📄 {(r.referencedContent.title||"").slice(0,14)}{(r.referencedContent.title||"").length > 14 ? "…" : ""}
+                            style={{ padding:"3px 9px", borderRadius:100, background:"rgba(13,115,119,0.1)", color:C.teal, border:"1px solid rgba(13,115,119,0.25)", fontSize:10, fontWeight:700, cursor:"pointer", fontFamily:"inherit", maxWidth:150, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", display:"inline-block", textDecoration:"none", verticalAlign:"middle" }}>
+                            📄 {(r.referencedContent.title||"").slice(0,10)}{(r.referencedContent.title||"").length > 10 ? "…" : ""}
                           </a>
                         ) : <span style={{ fontSize:10, color:"rgba(10,22,40,0.3)" }}>-</span>}
                       </td>
-                      <td style={tdStyle}><select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;updateSubmissionStatus(r.id,e.target.value);_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}><option>신규</option><option>진행중</option><option>완료</option></select></td>
-                      <td style={{ ...tdStyle, textAlign:"right" }}>
+                      <td style={{ ...tdStyle, whiteSpace:"nowrap" }}><select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;updateSubmissionStatus(r.id,e.target.value);_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}><option>신규</option><option>진행중</option><option>완료</option></select></td>
+                      <td style={{ ...tdStyle, textAlign:"right", whiteSpace:"nowrap" }}>
                         <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 12px", marginRight:6 }}>상세보기</button>
                         <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:"biz", data:r, greeting:`${r.name||""} 님${r.company?` (${r.company})`:""} 안녕하세요,\n화율인사이드입니다.\n\n요청하신 심층 상담 건에 대해 안내드립니다.`, body:"" })} style={{ padding:"5px 12px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
                         <button onClick={()=>fetchEmailHistory(r.id)} style={{ padding:"5px 10px", borderRadius:6, background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", color:C.teal, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit", marginLeft:4 }}>📬 이력</button>
@@ -1181,6 +1182,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                     </tr>
                   ))}</tbody>
                 </table>
+                </div>
               )}
             </div>
           </div>
