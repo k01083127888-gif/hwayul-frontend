@@ -82,10 +82,10 @@ export function ContentDetailView({ item, onBack }) {
                 .replace(/^##\s+(.+)$/gm, '<h3 style="font-size:17px;font-weight:800;color:#0A1628;margin:22px 0 10px;">$1</h3>')
                 // # 헤딩
                 .replace(/^#\s+(.+)$/gm, '<h2 style="font-size:19px;font-weight:900;color:#0A1628;margin:24px 0 12px;border-bottom:2px solid #E8E5DE;padding-bottom:8px;">$1</h2>')
-                // [x] / [X] 체크된 체크박스
-                .replace(/\[\s*[xX]\s*\]/g, '<span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:3px;background:#0D7377;color:white;font-size:11px;font-weight:900;margin-right:6px;vertical-align:middle;">✓</span>')
-                // [ ] 빈 체크박스
-                .replace(/\[\s*\]/g, '<span style="display:inline-block;width:16px;height:16px;border-radius:3px;border:2px solid #8B8680;margin-right:6px;vertical-align:middle;"></span>');
+                // [x] / [X] 체크된 체크박스 (클릭 가능)
+                .replace(/\[\s*[xX]\s*\]/g, '<input type="checkbox" checked style="width:16px;height:16px;margin-right:8px;vertical-align:middle;accent-color:#0D7377;cursor:pointer;" />')
+                // [ ] 빈 체크박스 (클릭 가능)
+                .replace(/\[\s*\]/g, '<input type="checkbox" style="width:16px;height:16px;margin-right:8px;vertical-align:middle;accent-color:#0D7377;cursor:pointer;" />');
             };
             // HTML 태그가 하나라도 있으면 HTML + 마크다운 잔재 변환
             if (bodyText.includes("<") && bodyText.includes(">")) {
