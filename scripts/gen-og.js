@@ -42,7 +42,7 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
   <!-- 메인 타이틀 -->
   <text x="${W/2}" y="260" text-anchor="middle"
         fill="${CREAM}" font-family="'Malgun Gothic','Noto Serif KR',serif"
-        font-size="84" font-weight="900" letter-spacing="-2">화율인사이드</text>
+        font-size="84" font-weight="900" letter-spacing="-2">뷰인사이드</text>
 
   <!-- 태그라인 -->
   <text x="${W/2}" y="320" text-anchor="middle"

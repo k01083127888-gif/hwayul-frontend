@@ -10,7 +10,7 @@ import { CONTENT_TAB_GROUPS, normalizeContentType, getContentTypeMeta, itemInGro
 export function ContentSection({ contentId = null, setContentDetail, setActive }) {
   // 목록 페이지일 때만 메타 적용 (상세는 ContentDetailView에서 처리)
   usePageMeta(contentId ? {} : {
-    title: "콘텐츠 — 판례·뉴스·자료 | 화율인사이드",
+    title: "콘텐츠 — 판례·뉴스·자료 | 뷰인사이드",
     description: "직장내 괴롭힘·산재 관련 최신 판례, 뉴스, 교육 영상, 실무 자료를 한곳에서 확인하세요.",
     url: "https://hwayul.kr/content",
   });

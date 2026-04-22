@@ -47,7 +47,7 @@ export function ContentDetailView({ item, onBack }) {
   const description = (item.summary && item.summary.trim()) ? item.summary.trim() : bodyText;
 
   usePageMeta({
-    title: `${item.title} | 화율인사이드`,
+    title: `${item.title} | 뷰인사이드`,
     description,
     url: `https://hwayul.kr/content/${item.id}`,
   });

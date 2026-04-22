@@ -28,12 +28,12 @@ function sendConfirmEmail(form) {
   const html = `
     <div style="max-width:600px;margin:0 auto;font-family:'Noto Sans KR',sans-serif;color:#333;line-height:1.8;">
       <div style="background:#0A1628;padding:28px 24px;border-radius:12px 12px 0 0;">
-        <h2 style="color:#F4F1EB;margin:0;font-size:18px;">화율인사이드</h2>
+        <h2 style="color:#F4F1EB;margin:0;font-size:18px;">뷰인사이드</h2>
         <p style="color:rgba(244,241,235,0.6);margin:4px 0 0;font-size:12px;">직장내 괴롭힘 & 조직문화 전문 플랫폼</p>
       </div>
       <div style="padding:28px 24px;border:1px solid #eee;border-top:none;border-radius:0 0 12px 12px;">
         <p style="font-size:15px;font-weight:700;margin-bottom:16px;">${form.name}님, 안녕하세요.</p>
-        <p>화율인사이드 <strong>심층 상담 신청</strong>이 정상적으로 접수되었습니다.</p>
+        <p>뷰인사이드 <strong>심층 상담 신청</strong>이 정상적으로 접수되었습니다.</p>
 
         <div style="background:#f8f7f5;padding:16px 18px;border-radius:8px;margin:20px 0;">
           <p style="font-size:13px;font-weight:700;color:#0A1628;margin:0 0 8px;">📋 신청 정보</p>
@@ -52,7 +52,7 @@ function sendConfirmEmail(form) {
         <div style="background:#FFF8E7;padding:16px 18px;border-radius:8px;border:1px solid #F0E6C8;margin:20px 0;">
           <p style="font-size:13px;font-weight:700;color:#8B7A40;margin:0 0 8px;">💳 입금 안내</p>
           <p style="font-size:13px;margin:4px 0;">• 금액: <strong>22만원 (VAT 포함)</strong></p>
-          <p style="font-size:13px;margin:4px 0;">• 계좌: <strong>하나은행 824-910010-97104 (화율랩스)</strong></p>
+          <p style="font-size:13px;margin:4px 0;">• 계좌: <strong>하나은행 824-910010-97104 (뷰랩스)</strong></p>
           <p style="font-size:13px;margin:4px 0;">• 입금 확인 후 1차 전화 상담이 예약됩니다</p>
         </div>
 
@@ -66,7 +66,7 @@ function sendConfirmEmail(form) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       to: form.email,
-      subject: "[화율인사이드] 심층 상담 신청이 접수되었습니다",
+      subject: "[뷰인사이드] 심층 상담 신청이 접수되었습니다",
       html,
     }),
   }).catch(e => console.log("확인 이메일 발송 실패(무시):", e.message));
@@ -75,7 +75,7 @@ function sendConfirmEmail(form) {
 // ── BizSection ─────────────────────────────────────────────────────────────────
 export function BizSection() {
   usePageMeta({
-    title: "심층 상담 신청 — 3단계 패키지 22만원 | 화율인사이드",
+    title: "심층 상담 신청 — 3단계 패키지 22만원 | 뷰인사이드",
     description: "전문 노무사 심층 상담 (1차 전화 → 2차 서류 검토 → 3차 대면) 22만원. 해결 의뢰 전환 시 상담료 전액 차감. 개인·기업 모두 이용 가능합니다.",
     url: "https://hwayul.kr/biz",
   });
@@ -117,7 +117,7 @@ export function BizSection() {
         <div style={{ padding:"14px 18px", background:"rgba(201,168,76,0.1)", border:"1px solid rgba(201,168,76,0.28)", borderRadius:10, marginBottom:22, lineHeight:1.8, textAlign:"left" }}>
           <div style={{ fontSize:12, fontWeight:700, color:C.gold, marginBottom:4 }}>💳 입금 계좌 안내 (VAT 포함 22만원)</div>
           <div style={{ fontSize:13, fontWeight:800, color:C.cream }}>하나은행 824-910010-97104</div>
-          <div style={{ fontSize:12, color:"rgba(244,241,235,0.6)" }}>예금주: 화율랩스 · 입금 확인 후 1차 전화 상담 예약</div>
+          <div style={{ fontSize:12, color:"rgba(244,241,235,0.6)" }}>예금주: 뷰랩스 · 입금 확인 후 1차 전화 상담 예약</div>
         </div>
         <div style={{ padding:"18px 24px", background:"rgba(201,168,76,0.1)", border:"1px solid rgba(201,168,76,0.25)", borderRadius:10, marginBottom:28 }}>
           <div style={{ fontSize:13, color:C.gold, fontWeight:700 }}>신청 정보</div>

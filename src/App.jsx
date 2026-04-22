@@ -360,7 +360,7 @@ useEffect(() => {
                 <circle cx="78" cy="52" r="3" fill="#4ECDC4" opacity="0.5" />
               </svg>
               <div>
-                <div style={{ fontFamily:"'Noto Sans KR', sans-serif", fontSize:19, fontWeight:800 }}><span style={{ color:C.cream }}>화율</span> <span style={{ color:C.tealLight }}>인사이드</span></div>
+                <div style={{ fontFamily:"'Noto Sans KR', sans-serif", fontSize:19, fontWeight:800 }}><span style={{ color:C.cream }}>뷰</span> <span style={{ color:C.tealLight }}>인사이드</span></div>
                 <div style={{ fontSize:9, color:"rgba(244,241,235,0.45)", letterSpacing:"1.5px", fontFamily:"'Noto Sans KR', sans-serif" }}>Hwayul Inside</div>
                 <div style={{ fontSize:7, color:"rgba(244,241,235,0.28)", letterSpacing:"0.5px", marginTop:0 }}>직장내괴롭힘 & 조직문화 플랫폼</div>
               </div>
@@ -391,7 +391,7 @@ useEffect(() => {
           ))}
         </div>
         <div style={{ maxWidth:1200, margin:"24px auto 0", paddingTop:24, borderTop:"1px solid rgba(255,255,255,0.06)", textAlign:"center", fontSize:11, color:"rgba(244,241,235,0.22)" }}>
-          © 2025 화율인사이드. 본 플랫폼의 진단 결과는 참고용이며 법적 효력이 없습니다. 최종 판단은 전문 노무사와 확인하시기 바랍니다.
+          © 2025 뷰인사이드. 본 플랫폼의 진단 결과는 참고용이며 법적 효력이 없습니다. 최종 판단은 전문 노무사와 확인하시기 바랍니다.
         </div>
         <div style={{ textAlign:"center", marginTop:12, height:16 }}>
           <span onDoubleClick={() => setActive("admin")} style={{ fontSize:10, color:"rgba(244,241,235,0.06)", cursor:"default", userSelect:"none" }}>© HI</span>
