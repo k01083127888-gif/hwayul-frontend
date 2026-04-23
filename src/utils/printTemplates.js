@@ -112,7 +112,7 @@ export function generateChecklistPrintHtml(prereq, behavior, impact, continuity,
   const contLabel = continuity ? continuityOptions.find(c => c.id === continuity)?.label || "-" : "-";
 
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>직장내 괴롭힘 진단 결과 - Q인사이드</title>${PRINT_STYLE}</head><body>
-    <div class="q-wrap">
+    <div style="max-width:780px;margin:0 auto;padding:32px;background:white;box-shadow:0 4px 20px rgba(10,22,40,0.06)">
     ${PRINT_HEADER}
     <div style="text-align:center;margin-bottom:24px">
       <h2>직장내 괴롭힘 진단 결과 보고서</h2>
@@ -125,12 +125,26 @@ export function generateChecklistPrintHtml(prereq, behavior, impact, continuity,
       <p style="font-size:12px;color:#8B8680;line-height:1.7">${result.summary}</p>
     </div>
     <div class="section">
-      <div class="stat-row">
-        <div class="stat-cell"><div class="lab">3대 요건 충족</div><div class="val" style="color:${result.prereqMet>=2?C.red:C.green}">${result.prereqMet}/3</div></div>
-        <div class="stat-cell"><div class="lab">행위유형 점수</div><div class="val" style="color:#C9A84C">${result.behaviorScore}점</div></div>
-        <div class="stat-cell"><div class="lab">피해 영향도</div><div class="val" style="color:#D4740A">${result.impactScore}점</div></div>
-        <div class="stat-cell"><div class="lab">반복성</div><div class="val" style="color:#0A1628;font-size:14px">${contLabel}</div></div>
-      </div>
+      <table style="width:100%;table-layout:fixed;border-collapse:separate;border-spacing:6px 0;margin-bottom:16px">
+        <tr>
+          <td style="width:25%;border:1px solid #E8E5DE;border-radius:10px;padding:14px 6px;text-align:center;background:white;vertical-align:middle">
+            <div style="font-size:11px;color:#8B8680;margin-bottom:6px;white-space:nowrap">3대 요건 충족</div>
+            <div style="font-size:20px;font-weight:900;line-height:1.2;color:${result.prereqMet>=2?C.red:C.green}">${result.prereqMet}/3</div>
+          </td>
+          <td style="width:25%;border:1px solid #E8E5DE;border-radius:10px;padding:14px 6px;text-align:center;background:white;vertical-align:middle">
+            <div style="font-size:11px;color:#8B8680;margin-bottom:6px;white-space:nowrap">행위유형 점수</div>
+            <div style="font-size:20px;font-weight:900;line-height:1.2;color:#C9A84C">${result.behaviorScore}점</div>
+          </td>
+          <td style="width:25%;border:1px solid #E8E5DE;border-radius:10px;padding:14px 6px;text-align:center;background:white;vertical-align:middle">
+            <div style="font-size:11px;color:#8B8680;margin-bottom:6px;white-space:nowrap">피해 영향도</div>
+            <div style="font-size:20px;font-weight:900;line-height:1.2;color:#D4740A">${result.impactScore}점</div>
+          </td>
+          <td style="width:25%;border:1px solid #E8E5DE;border-radius:10px;padding:14px 6px;text-align:center;background:white;vertical-align:middle">
+            <div style="font-size:11px;color:#8B8680;margin-bottom:6px;white-space:nowrap">반복성</div>
+            <div style="font-size:14px;font-weight:900;line-height:1.2;color:#0A1628">${contLabel}</div>
+          </td>
+        </tr>
+      </table>
     </div>
     <div class="section"><h2>1. 사전요건 (3대 요건) 점검</h2><table><thead><tr><th style="width:40px"></th><th style="width:80px">요건</th><th>내용</th></tr></thead><tbody>${prereqRows}</tbody></table></div>
     <div class="section"><h2>2. 해당 행위유형 상세</h2>${behaviorRows || '<div style="color:#8B8680;padding:12px">해당 없음</div>'}</div>
@@ -169,7 +183,7 @@ export function generateCulturePrintHtml(totalRisk, catResults, highRiskItems, a
     </div>` : "";
 
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>조직문화 진단 결과 - Q인사이드</title>${PRINT_STYLE}</head><body>
-    <div class="q-wrap">
+    <div style="max-width:780px;margin:0 auto;padding:32px;background:white;box-shadow:0 4px 20px rgba(10,22,40,0.06)">
     ${PRINT_HEADER}
     <div style="text-align:center;margin-bottom:24px">
       <h2>직장내 괴롭힘 발생 위험도 진단 보고서</h2>
@@ -224,7 +238,7 @@ export function generateAccusedPrintHtml(relation, superiority, behavior, justif
     : `<div style="color:#8B8680;font-size:12px">영향 없음 또는 미확인</div>`;
 
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>피지목인 자가진단 결과 - Q인사이드</title>${PRINT_STYLE}</head><body>
-    <div class="q-wrap">
+    <div style="max-width:780px;margin:0 auto;padding:32px;background:white;box-shadow:0 4px 20px rgba(10,22,40,0.06)">
     ${PRINT_HEADER}
     <div style="text-align:center;margin-bottom:24px">
       <h2>피지목인 자가진단 결과 보고서</h2>
@@ -237,13 +251,28 @@ export function generateAccusedPrintHtml(relation, superiority, behavior, justif
       <p style="font-size:12px;color:#8B8680;line-height:1.7">${result.summary}</p>
     </div>
     <div class="section">
-      <table style="width:100%;table-layout:fixed;border-spacing:6px 0;border-collapse:separate;margin-bottom:16px">
+      <table style="width:100%;table-layout:fixed;border-collapse:separate;border-spacing:5px 0;margin-bottom:16px">
         <tr>
-          <td class="stat-cell"><div class="lab">관계 우위</div><div class="val" style="color:#C9A84C">${result.positionScore}</div></td>
-          <td class="stat-cell"><div class="lab">행위 점수</div><div class="val" style="color:#D4740A">${result.behaviorScore}</div></td>
-          <td class="stat-cell"><div class="lab">적정성</div><div class="val" style="color:#C0392B">${result.justScore}</div></td>
-          <td class="stat-cell"><div class="lab">반복성</div><div class="val" style="color:#0A1628">${result.repScore}</div></td>
-          <td class="stat-cell"><div class="lab">영향도</div><div class="val" style="color:#8E44AD">${result.impactScore}</div></td>
+          <td style="width:20%;border:1px solid #E8E5DE;border-radius:10px;padding:12px 4px;text-align:center;background:white;vertical-align:middle">
+            <div style="font-size:10px;color:#8B8680;margin-bottom:4px;white-space:nowrap">관계 우위</div>
+            <div style="font-size:18px;font-weight:900;line-height:1.2;color:#C9A84C">${result.positionScore}</div>
+          </td>
+          <td style="width:20%;border:1px solid #E8E5DE;border-radius:10px;padding:12px 4px;text-align:center;background:white;vertical-align:middle">
+            <div style="font-size:10px;color:#8B8680;margin-bottom:4px;white-space:nowrap">행위 점수</div>
+            <div style="font-size:18px;font-weight:900;line-height:1.2;color:#D4740A">${result.behaviorScore}</div>
+          </td>
+          <td style="width:20%;border:1px solid #E8E5DE;border-radius:10px;padding:12px 4px;text-align:center;background:white;vertical-align:middle">
+            <div style="font-size:10px;color:#8B8680;margin-bottom:4px;white-space:nowrap">적정성</div>
+            <div style="font-size:18px;font-weight:900;line-height:1.2;color:#C0392B">${result.justScore}</div>
+          </td>
+          <td style="width:20%;border:1px solid #E8E5DE;border-radius:10px;padding:12px 4px;text-align:center;background:white;vertical-align:middle">
+            <div style="font-size:10px;color:#8B8680;margin-bottom:4px;white-space:nowrap">반복성</div>
+            <div style="font-size:18px;font-weight:900;line-height:1.2;color:#0A1628">${result.repScore}</div>
+          </td>
+          <td style="width:20%;border:1px solid #E8E5DE;border-radius:10px;padding:12px 4px;text-align:center;background:white;vertical-align:middle">
+            <div style="font-size:10px;color:#8B8680;margin-bottom:4px;white-space:nowrap">영향도</div>
+            <div style="font-size:18px;font-weight:900;line-height:1.2;color:#8E44AD">${result.impactScore}</div>
+          </td>
         </tr>
       </table>
     </div>
@@ -289,7 +318,7 @@ export function generateSanjaePrintHtml(situation, medical, workCond, result) {
     : `<div style="color:#8B8680;font-size:12px">해당 없음</div>`;
 
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>산재 상담 필요성 체크 결과 - Q인사이드</title>${PRINT_STYLE}</head><body>
-    <div class="q-wrap">
+    <div style="max-width:780px;margin:0 auto;padding:32px;background:white;box-shadow:0 4px 20px rgba(10,22,40,0.06)">
     ${PRINT_HEADER}
     <div style="text-align:center;margin-bottom:24px">
       <h2>산재 상담 필요성 체크 결과 보고서</h2>
@@ -332,7 +361,7 @@ export function generateCompanyPrintHtml(report, org, actions, result) {
     : `<div style="color:#8B8680;font-size:12px">해당 없음</div>`;
 
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>사내 괴롭힘 조사 필요성 체크 결과 - Q인사이드</title>${PRINT_STYLE}</head><body>
-    <div class="q-wrap">
+    <div style="max-width:780px;margin:0 auto;padding:32px;background:white;box-shadow:0 4px 20px rgba(10,22,40,0.06)">
     ${PRINT_HEADER}
     <div style="text-align:center;margin-bottom:24px">
       <h2>사내 괴롭힘 조사 필요성 체크 결과 보고서</h2>
