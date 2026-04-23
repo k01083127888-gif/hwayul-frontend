@@ -378,16 +378,7 @@ export function ChecklistSection({ setActive, initialTab = "victim" }) {
               ))}
             </div>
 
-            <div style={{ marginBottom:20, padding:"16px 18px", background:"rgba(201,168,76,0.06)", border:"1px solid rgba(201,168,76,0.2)", borderRadius:10 }}>
-              <div style={{ fontSize:11, fontWeight:700, color:C.gold, marginBottom:10 }}>📋 관련 법령 및 구제 절차</div>
-              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
-                {[["근거 법령","근로기준법 제76조의2~4"],["신고 기관","고용노동부 지방관서, 노동위원회"],["조사 의무","사업주 즉시 조사 의무(14일 내)"],["피해자 보호","불이익 처우 금지 (제76조의3 ⑥)"],["형사 연계","폭행·모욕죄 형사 고소 가능"],["손해배상","민법 제750조 불법행위 손해배상"]].map(([l, v]) => (
-                  <div key={l}><div style={{ fontSize:10, color:"rgba(244,241,235,0.36)" }}>{l}</div><div style={{ fontSize:12, color:C.cream, fontWeight:600, marginTop:2 }}>{v}</div></div>
-                ))}
-              </div>
-            </div>
-
-            <div style={{ padding:"12px 18px", background:"rgba(255,255,255,0.02)", borderRadius:8, marginBottom:22, fontSize:11, color:"rgba(244,241,235,0.35)", lineHeight:1.7 }}>
+<div style={{ padding:"12px 18px", background:"rgba(255,255,255,0.02)", borderRadius:8, marginBottom:22, fontSize:11, color:"rgba(244,241,235,0.35)", lineHeight:1.7 }}>
               ⚠️ 본 결과는 참고용이며 법적 판단의 효력이 없습니다. 최종 성립 여부는 담당 노무사와 확인하세요.
             </div>
 

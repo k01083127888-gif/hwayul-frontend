@@ -111,9 +111,6 @@ export function generateChecklistPrintHtml(prereq, behavior, impact, continuity,
     <div class="section"><h2>2. 해당 행위유형 상세</h2>${behaviorRows || '<div style="color:#8B8680;padding:12px">해당 없음</div>'}</div>
     <div class="section"><h2>3. 피해 영향도</h2>${impactRows || '<div style="color:#8B8680;padding:12px">해당 없음</div>'}</div>
     <div class="section"><h2>4. 권고 조치</h2><div class="card">${result.actions.map((a,i) => `<div style="padding:4px 0"><strong style="color:${result.color}">${i+1}.</strong> ${a}</div>`).join("")}</div></div>
-    <div class="section"><h2>5. 관련 법령</h2><div class="card"><table><tbody>
-      ${[["근거 법령","근로기준법 제76조의2~4"],["신고 기관","고용노동부 지방관서, 노동위원회"],["조사 의무","사업주 즉시 조사 의무(14일 내)"],["피해자 보호","불이익 처우 금지 (제76조의3 ⑥)"]].map(([l,v]) => `<tr><td style="width:120px;font-weight:700">${l}</td><td>${v}</td></tr>`).join("")}
-    </tbody></table></div></div>
     ${PRINT_FOOTER}
     <script>window.onload = function() { window.print(); }</script>
   </body></html>`;
