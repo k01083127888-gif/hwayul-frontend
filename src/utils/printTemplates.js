@@ -67,16 +67,17 @@ const PRINT_STYLE = `<style>
     h2 { font-size:15px !important; }
     h3 { font-size:13px !important; }
   }
-  .section { margin-bottom:24px; }
-  .card { border:1px solid #E8E5DE; border-radius:10px; padding:18px; margin-bottom:14px; }
+  .section { margin-bottom:40px; }
+  .section + .section { margin-top:8px; }
+  .card { border:1px solid #E8E5DE; border-radius:10px; padding:22px; margin-bottom:16px; }
   .badge { display:inline-block; padding:3px 12px; border-radius:100px; font-size:11px; font-weight:700; }
-  h2 { font-size:17px; font-weight:900; margin-bottom:12px; color:#0A1628; }
-  h3 { font-size:14px; font-weight:800; margin-bottom:8px; color:#0A1628; }
+  h2 { font-size:17px; font-weight:900; margin-bottom:18px; margin-top:8px; color:#0A1628; padding-bottom:10px; border-bottom:2px solid #F0EDE6; }
+  h3 { font-size:14px; font-weight:800; margin-bottom:10px; margin-top:4px; color:#0A1628; }
   .bar-bg { height:8px; background:#E8E5DE; border-radius:4px; overflow:hidden; }
   .bar-fill { height:100%; border-radius:4px; }
   table { width:100%; border-collapse:collapse; margin-top:8px; }
-  th { background:#F5F3EF; padding:8px 12px; font-size:11px; font-weight:700; text-align:left; border-bottom:2px solid #E8E5DE; }
-  td { padding:8px 12px; font-size:12px; border-bottom:1px solid #F0EDE6; vertical-align:top; }
+  th { background:#F5F3EF; padding:10px 14px; font-size:11px; font-weight:700; text-align:left; border-bottom:2px solid #E8E5DE; }
+  td { padding:10px 14px; font-size:12px; border-bottom:1px solid #F0EDE6; vertical-align:top; line-height:1.7; }
   .check { color:#1A7A4A; font-weight:700; }
   .uncheck { color:#C0C0C0; }
   /* 4개 통계 박스 — 테이블로 (이메일 호환 최고) */
@@ -102,12 +103,12 @@ export function generateChecklistPrintHtml(prereq, behavior, impact, continuity,
     if (checked.length === 0) return "";
     return `<div class="card"><h3>${cat.icon} ${cat.category} <span class="badge" style="background:${cat.color}20;color:${cat.color}">${checked.length}건 해당</span></h3>
       <div style="font-size:11px;color:#8B8680;margin-bottom:8px">법적 근거: ${cat.basis}</div>
-      ${checked.map(i => `<div style="padding:4px 0;font-size:12px">✅ ${i.text}</div>`).join("")}
+      ${checked.map(i => `<div style="padding:7px 0;font-size:12px">✅ ${i.text}</div>`).join("")}
     </div>`;
   }).join("");
   const impactRows = impactItems.map(cat => {
     const checked = cat.items.filter(i => impact[i.id]);
-    return checked.length > 0 ? `<div style="margin-bottom:8px"><strong style="font-size:12px">${cat.category}</strong>${checked.map(i => `<div style="padding:2px 0;font-size:12px">✅ ${i.text}</div>`).join("")}</div>` : "";
+    return checked.length > 0 ? `<div style="margin-bottom:14px"><strong style="font-size:12px">${cat.category}</strong>${checked.map(i => `<div style="padding:5px 0;font-size:12px">✅ ${i.text}</div>`).join("")}</div>` : "";
   }).join("");
   const contLabel = continuity ? continuityOptions.find(c => c.id === continuity)?.label || "-" : "-";
 
@@ -149,7 +150,7 @@ export function generateChecklistPrintHtml(prereq, behavior, impact, continuity,
     <div class="section"><h2>1. 사전요건 (3대 요건) 점검</h2><table><thead><tr><th style="width:40px"></th><th style="width:80px">요건</th><th>내용</th></tr></thead><tbody>${prereqRows}</tbody></table></div>
     <div class="section"><h2>2. 해당 행위유형 상세</h2>${behaviorRows || '<div style="color:#8B8680;padding:12px">해당 없음</div>'}</div>
     <div class="section"><h2>3. 피해 영향도</h2>${impactRows || '<div style="color:#8B8680;padding:12px">해당 없음</div>'}</div>
-    <div class="section"><h2>4. 권고 조치</h2><div class="card">${result.actions.map((a,i) => `<div style="padding:4px 0"><strong style="color:${result.color}">${i+1}.</strong> ${a}</div>`).join("")}</div></div>
+    <div class="section"><h2>4. 권고 조치</h2><div class="card">${result.actions.map((a,i) => `<div style="padding:7px 0"><strong style="color:${result.color}">${i+1}.</strong> ${a}</div>`).join("")}</div></div>
     ${PRINT_FOOTER}
     </div>
     <script>window.onload = function() { try { window.print(); } catch(e){} }</script>
@@ -209,14 +210,14 @@ export function generateAccusedPrintHtml(relation, superiority, behavior, justif
   const relationLabel = relation ? accusedRelationItems.find(r => r.id === relation.id)?.label || "-" : "-";
   const supChecked = accusedSuperiorityItems.filter(s => superiority[s.id]);
   const supHtml = supChecked.length > 0
-    ? supChecked.map(s => `<div style="padding:2px 0;font-size:12px">✅ ${s.label}</div>`).join("")
+    ? supChecked.map(s => `<div style="padding:5px 0;font-size:12px">✅ ${s.label}</div>`).join("")
     : `<div style="color:#8B8680;font-size:12px">해당 없음</div>`;
 
   const behaviorRows = accusedBehaviorCategories.map(cat => {
     const checked = cat.items.filter(i => behavior[i.id]);
     if (checked.length === 0) return "";
     return `<div class="card"><h3>${cat.icon} ${cat.category} <span class="badge" style="background:${cat.color}20;color:${cat.color}">${checked.length}건 해당</span></h3>
-      ${checked.map(i => `<div style="padding:4px 0;font-size:12px">✅ ${i.text}</div>`).join("")}
+      ${checked.map(i => `<div style="padding:7px 0;font-size:12px">✅ ${i.text}</div>`).join("")}
     </div>`;
   }).join("");
 
@@ -234,7 +235,7 @@ export function generateAccusedPrintHtml(relation, superiority, behavior, justif
 
   const impactChecked = accusedImpactItems.filter(i => impact[i.id]);
   const impactHtml = impactChecked.length > 0
-    ? impactChecked.map(i => `<div style="padding:2px 0;font-size:12px">✅ ${i.text}</div>`).join("")
+    ? impactChecked.map(i => `<div style="padding:5px 0;font-size:12px">✅ ${i.text}</div>`).join("")
     : `<div style="color:#8B8680;font-size:12px">영향 없음 또는 미확인</div>`;
 
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>피지목인 자가진단 결과 - Q인사이드</title>${PRINT_STYLE}</head><body>
@@ -285,7 +286,7 @@ export function generateAccusedPrintHtml(relation, superiority, behavior, justif
     <div class="section"><h2>3. 업무 적정성 판단</h2><table><tbody>${justRows}</tbody></table></div>
     <div class="section"><h2>4. 반복성·상대방 반응</h2><table><tbody>${repRows}</tbody></table></div>
     <div class="section"><h2>5. 상대방 영향도</h2><div class="card">${impactHtml}</div></div>
-    <div class="section"><h2>6. 권고 조치</h2><div class="card">${result.actions.map((a,i) => `<div style="padding:4px 0"><strong style="color:${result.color}">${i+1}.</strong> ${a}</div>`).join("")}</div></div>
+    <div class="section"><h2>6. 권고 조치</h2><div class="card">${result.actions.map((a,i) => `<div style="padding:7px 0"><strong style="color:${result.color}">${i+1}.</strong> ${a}</div>`).join("")}</div></div>
     <div class="section"><h2>7. 유의사항</h2><div class="card" style="background:#FFF8E7">
       <div style="font-size:12px;color:#8B5A00;line-height:1.8">
         • 본 진단은 참고용이며 법적 판단이 아닙니다<br/>
@@ -309,12 +310,12 @@ export function generateSanjaePrintHtml(situation, medical, workCond, result) {
 
   const medicalChecked = sanjaeMedicalOptions.filter(m => medical[m.id]);
   const medicalHtml = medicalChecked.length > 0
-    ? medicalChecked.map(m => `<div style="padding:2px 0;font-size:12px">✅ ${m.label}</div>`).join("")
+    ? medicalChecked.map(m => `<div style="padding:5px 0;font-size:12px">✅ ${m.label}</div>`).join("")
     : `<div style="color:#8B8680;font-size:12px">해당 없음</div>`;
 
   const workChecked = sanjaeWorkConditions.filter(w => workCond[w.id]);
   const workHtml = workChecked.length > 0
-    ? workChecked.map(w => `<div style="padding:2px 0;font-size:12px">✅ ${w.label}</div>`).join("")
+    ? workChecked.map(w => `<div style="padding:5px 0;font-size:12px">✅ ${w.label}</div>`).join("")
     : `<div style="color:#8B8680;font-size:12px">해당 없음</div>`;
 
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>산재 상담 필요성 체크 결과 - Q인사이드</title>${PRINT_STYLE}</head><body>
@@ -332,7 +333,7 @@ export function generateSanjaePrintHtml(situation, medical, workCond, result) {
     <div class="section"><h2>1. 상황 분류</h2>${situationHtml}</div>
     <div class="section"><h2>2. 현재 의료·건강 상태</h2><div class="card">${medicalHtml}</div></div>
     <div class="section"><h2>3. 근무 환경</h2><div class="card">${workHtml}</div></div>
-    <div class="section"><h2>4. 권고 조치</h2><div class="card">${result.actions.map((a,i) => `<div style="padding:4px 0"><strong style="color:${result.recommend ? C.teal : C.gold}">${i+1}.</strong> ${a}</div>`).join("")}</div></div>
+    <div class="section"><h2>4. 권고 조치</h2><div class="card">${result.actions.map((a,i) => `<div style="padding:7px 0"><strong style="color:${result.recommend ? C.teal : C.gold}">${i+1}.</strong> ${a}</div>`).join("")}</div></div>
     <div class="section"><h2>5. 관련 법령·기관</h2><div class="card"><table><tbody>
       ${[["근거 법령","산업재해보상보험법"],["심사 기관","근로복지공단"],["신청 시효","업무상 재해 발생일로부터 3년"],["불승인 시","심사청구 → 재심사청구 → 행정소송"]].map(([l,v]) => `<tr><td style="width:130px;font-weight:700">${l}</td><td>${v}</td></tr>`).join("")}
     </tbody></table></div></div>
@@ -357,7 +358,7 @@ export function generateCompanyPrintHtml(report, org, actions, result) {
   const actionsChecked = companyCurrentActions.filter(a => actions[a.id]);
 
   const toList = (arr) => arr.length > 0
-    ? arr.map(i => `<div style="padding:2px 0;font-size:12px">✅ ${i.label}</div>`).join("")
+    ? arr.map(i => `<div style="padding:5px 0;font-size:12px">✅ ${i.label}</div>`).join("")
     : `<div style="color:#8B8680;font-size:12px">해당 없음</div>`;
 
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>사내 괴롭힘 조사 필요성 체크 결과 - Q인사이드</title>${PRINT_STYLE}</head><body>
@@ -375,7 +376,7 @@ export function generateCompanyPrintHtml(report, org, actions, result) {
     <div class="section"><h2>1. 신고·제보 접수 현황</h2><div class="card">${toList(reportChecked)}</div></div>
     <div class="section"><h2>2. 조직 상황</h2><div class="card">${toList(orgChecked)}</div></div>
     <div class="section"><h2>3. 현재 조치 상태</h2><div class="card">${toList(actionsChecked)}</div></div>
-    <div class="section"><h2>4. 권고 조치</h2><div class="card">${result.actions.map((a,i) => `<div style="padding:4px 0"><strong style="color:${result.color}">${i+1}.</strong> ${a}</div>`).join("")}</div></div>
+    <div class="section"><h2>4. 권고 조치</h2><div class="card">${result.actions.map((a,i) => `<div style="padding:7px 0"><strong style="color:${result.color}">${i+1}.</strong> ${a}</div>`).join("")}</div></div>
     <div class="section"><h2>5. 사업주 법적 의무</h2><div class="card"><table><tbody>
       ${[
         ["근거 법령","근로기준법 제76조의2·제76조의3"],
