@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import C from "../tokens/colors.js";
+import { saveAIChat } from "../utils/aiChatBridge.js";
 
 // ── 진단 결과 기반 인라인 AI 챗봇 (괴롭힘 자가진단 전용) ──────────────────
 // 기본은 피해자 입장으로 시작, 다른 입장이면 역할 변경 가능
@@ -327,7 +328,12 @@ ${conversionGuide[role] || conversionGuide.general}`;
               <strong style={{ color: "rgba(244,241,235,0.85)" }}>전문 노무사 심층 상담(22만원, 3단계 패키지)</strong>에서 직접 검토해 드립니다.
             </div>
             <button
-              onClick={() => { if (setActive) setActive("biz"); else window.dispatchEvent(new CustomEvent("hwayul-goto", { detail: "biz" })); }}
+              onClick={() => {
+                // 진단 AI 대화 내용을 심층상담 페이지로 전달
+                saveAIChat({ source: "diagnosis", topic: cfg?.label || role, messages });
+                if (setActive) setActive("biz");
+                else window.dispatchEvent(new CustomEvent("hwayul-goto", { detail: "biz" }));
+              }}
               style={{ width: "100%", padding: "10px", borderRadius: 8, background: C.gold, border: "none", color: C.navy, fontWeight: 800, fontSize: 12, cursor: "pointer", fontFamily: "inherit" }}
             >
               💼 심층 상담 신청하기 →

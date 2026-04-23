@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import C from "../tokens/colors.js";
+import { saveAIChat } from "../utils/aiChatBridge.js";
 
 const STORAGE_KEY = "hwayul-chat-session";
 
@@ -622,6 +623,8 @@ ${conversionGuides.general}`,
               </div>
               <button
                 onClick={() => {
+                  // AI 대화 내용을 심층상담 페이지로 전달 (BizSection이 읽음)
+                  saveAIChat({ source: "ai", topic: roleConfig[role]?.label || role, messages });
                   onClose();
                   window.dispatchEvent(new CustomEvent("hwayul-goto", { detail:"biz" }));
                 }}

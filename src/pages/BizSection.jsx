@@ -7,6 +7,7 @@ import { ValidationMsg } from "../components/common/ValidationMsg.jsx";
 import { PrivacyConsent } from "../components/common/PrivacyConsent.jsx";
 import { PrivacyPolicyModal } from "../components/common/PrivacyPolicyModal.jsx";
 import { usePageMeta } from "../utils/usePageMeta.js";
+import { readAIChat, clearAIChat, chatToPlainText } from "../utils/aiChatBridge.js";
 
 const API_BASE = "https://hwayul-backend-production-96cf.up.railway.app/api";
 
@@ -82,6 +83,10 @@ export function BizSection() {
   });
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({ name:"", company:"", phone:"", email:"", position:"", size:"", consultType:"", note:"", date:"", time:"", consent:false });
+  // AI 상담에서 넘어온 대화 내역 (있으면 참고용으로 표시 + 제출에 포함)
+  const [aiChat, setAiChat] = useState(null);
+  const [showAiChat, setShowAiChat] = useState(true);
+  useEffect(() => { setAiChat(readAIChat()); }, []);
   const F = k => e => setForm(f => ({ ...f, [k]: e.target.value }));
   const [done, setDone] = useState(false);
   const [errors, setErrors] = useState({});
@@ -272,8 +277,46 @@ export function BizSection() {
                 작성해주신 내용을 바탕으로 담당 노무사가 사전에 사안을 검토합니다.<br/>
                 구체적으로 적어주실수록 1차 전화 상담 시간이 효율적으로 활용됩니다.
               </p>
+              {/* AI 상담 대화 내역 (넘어온 경우에만 표시) */}
+              {aiChat && aiChat.messages && aiChat.messages.length > 1 && (
+                <div style={{ marginBottom:22, padding:"16px 18px", background:"rgba(13,115,119,0.12)", border:"1px solid rgba(13,115,119,0.35)", borderRadius:10 }}>
+                  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:showAiChat ? 12 : 0 }}>
+                    <div style={{ fontSize:12, fontWeight:800, color:C.tealLight, letterSpacing:"0.5px" }}>
+                      🤖 AI 상담 내역 {aiChat.topic ? `· ${aiChat.topic}` : ""} <span style={{ fontSize:10, fontWeight:400, color:"rgba(244,241,235,0.4)", marginLeft:6 }}>({aiChat.messages.length}개 메시지)</span>
+                    </div>
+                    <button
+                      onClick={() => setShowAiChat(v => !v)}
+                      style={{ padding:"4px 12px", borderRadius:6, border:"1px solid rgba(13,115,119,0.4)", background:"rgba(13,115,119,0.08)", color:C.tealLight, fontSize:11, fontWeight:700, cursor:"pointer", fontFamily:"inherit" }}
+                    >{showAiChat ? "접기 ▲" : "펼치기 ▼"}</button>
+                  </div>
+                  {showAiChat && (
+                    <>
+                      <div style={{ fontSize:11, color:"rgba(244,241,235,0.5)", marginBottom:10, lineHeight:1.7 }}>
+                        이전 AI 상담 내용입니다. 노무사가 이 대화를 참고해 사전 검토합니다. 아래 "상담 요청 내용"에는 <strong style={{ color:C.cream }}>추가로 전달할 내용</strong>만 적어주세요.
+                      </div>
+                      <div style={{ maxHeight:240, overflowY:"auto", padding:"10px 14px", background:"rgba(10,22,40,0.4)", borderRadius:8, fontSize:12, lineHeight:1.75 }}>
+                        {aiChat.messages.map((m, i) => (
+                          <div key={i} style={{ marginBottom:10, display:"flex", gap:8 }}>
+                            <span style={{ flexShrink:0, fontSize:10, fontWeight:800, color:m.role === "assistant" ? C.tealLight : C.gold, minWidth:34 }}>
+                              {m.role === "assistant" ? "AI" : "나"}
+                            </span>
+                            <span style={{ color:"rgba(244,241,235,0.85)", whiteSpace:"pre-wrap" }}>{m.text}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <button
+                        onClick={() => { clearAIChat(); setAiChat(null); }}
+                        style={{ marginTop:10, padding:"4px 10px", borderRadius:6, border:"1px solid rgba(192,57,43,0.3)", background:"transparent", color:"rgba(244,241,235,0.5)", fontSize:10, cursor:"pointer", fontFamily:"inherit" }}
+                      >대화 제외하고 신청</button>
+                    </>
+                  )}
+                </div>
+              )}
+
               <div style={{ marginBottom:24 }}>
-                <label style={{ display:"block", fontSize:12, fontWeight:700, color:"rgba(244,241,235,0.55)", marginBottom:8, letterSpacing:"0.5px", textTransform:"uppercase" }}>상담 요청 내용</label>
+                <label style={{ display:"block", fontSize:12, fontWeight:700, color:"rgba(244,241,235,0.55)", marginBottom:8, letterSpacing:"0.5px", textTransform:"uppercase" }}>
+                  {aiChat ? "추가로 전달할 내용" : "상담 요청 내용"}
+                </label>
                 <textarea
                   value={form.note}
                   onChange={F("note")}
@@ -293,11 +336,16 @@ export function BizSection() {
               </div>
               <div style={{ display:"flex", gap:12 }}>
                 <button onClick={() => setStep(1)} style={{ padding:"14px 22px", background:"rgba(255,255,255,0.06)", border:"none", borderRadius:8, color:"rgba(244,241,235,0.65)", fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>← 이전</button>
-                <button onClick={() => form.note.trim() && setStep(3)} style={{ flex:1, padding:"14px", background:form.note.trim() ? C.gold : "rgba(255,255,255,0.08)", border:"none", borderRadius:8, color:form.note.trim() ? C.navy : "rgba(255,255,255,0.28)", fontWeight:800, fontSize:14, cursor:form.note.trim() ? "pointer" : "not-allowed", fontFamily:"inherit" }}>일정 선택 →</button>
+                {(() => {
+                  const canProceed = form.note.trim() || (aiChat && aiChat.messages && aiChat.messages.length > 1);
+                  return (
+                    <button onClick={() => canProceed && setStep(3)} style={{ flex:1, padding:"14px", background:canProceed ? C.gold : "rgba(255,255,255,0.08)", border:"none", borderRadius:8, color:canProceed ? C.navy : "rgba(255,255,255,0.28)", fontWeight:800, fontSize:14, cursor:canProceed ? "pointer" : "not-allowed", fontFamily:"inherit" }}>일정 선택 →</button>
+                  );
+                })()}
               </div>
-              {form.note.trim() && (
+              {(form.note.trim() || (aiChat && aiChat.messages && aiChat.messages.length > 1)) && (
                 <div style={{ textAlign:"center", marginTop:10 }}>
-                  <button onClick={() => { const diagData = (() => { try { const d = localStorage.getItem("hwayul_diag_for_biz"); localStorage.removeItem("hwayul_diag_for_biz"); return d || ""; } catch { return ""; } })(); const ref = readAttachedContent(); try { localStorage.removeItem("hwayul_attach_content"); } catch {} addSubmission("biz", {...form, diagResult: diagData, ...(ref ? { referencedContent: ref } : {})}); sendConfirmEmail(form); setDone(true); }} style={{ fontSize:12, color:"rgba(244,241,235,0.4)", background:"none", border:"none", cursor:"pointer", fontFamily:"inherit", textDecoration:"underline" }}>일정 선택 없이 바로 신청하기 →</button>
+                  <button onClick={() => { const diagData = (() => { try { const d = localStorage.getItem("hwayul_diag_for_biz"); localStorage.removeItem("hwayul_diag_for_biz"); return d || ""; } catch { return ""; } })(); const ref = readAttachedContent(); try { localStorage.removeItem("hwayul_attach_content"); } catch {} const aiChatSnapshot = aiChat ? { source: aiChat.source, topic: aiChat.topic, messages: aiChat.messages } : null; clearAIChat(); addSubmission("biz", {...form, diagResult: diagData, ...(ref ? { referencedContent: ref } : {}), ...(aiChatSnapshot ? { aiChat: aiChatSnapshot } : {})}); sendConfirmEmail(form); setDone(true); }} style={{ fontSize:12, color:"rgba(244,241,235,0.4)", background:"none", border:"none", cursor:"pointer", fontFamily:"inherit", textDecoration:"underline" }}>일정 선택 없이 바로 신청하기 →</button>
                 </div>
               )}
             </div>
@@ -326,7 +374,7 @@ export function BizSection() {
               )}
               <div style={{ display:"flex", gap:12 }}>
                 <button onClick={() => setStep(2)} style={{ padding:"14px 22px", background:"rgba(255,255,255,0.06)", border:"none", borderRadius:8, color:"rgba(244,241,235,0.65)", fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>← 이전</button>
-                <button onClick={() => { const diagData = (() => { try { const d = localStorage.getItem("hwayul_diag_for_biz"); localStorage.removeItem("hwayul_diag_for_biz"); return d || ""; } catch { return ""; } })(); const ref = readAttachedContent(); try { localStorage.removeItem("hwayul_attach_content"); } catch {} addSubmission("biz", {...form, diagResult: diagData, ...(ref ? { referencedContent: ref } : {})}); sendConfirmEmail(form); setDone(true); }} style={{ flex:1, padding:"14px", background:C.gold, border:"none", borderRadius:8, color:C.navy, fontWeight:800, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>{form.date && form.time ? "예약 확정하기 ✓" : "일정 없이 상담 신청하기 →"}</button>
+                <button onClick={() => { const diagData = (() => { try { const d = localStorage.getItem("hwayul_diag_for_biz"); localStorage.removeItem("hwayul_diag_for_biz"); return d || ""; } catch { return ""; } })(); const ref = readAttachedContent(); try { localStorage.removeItem("hwayul_attach_content"); } catch {} const aiChatSnapshot = aiChat ? { source: aiChat.source, topic: aiChat.topic, messages: aiChat.messages } : null; clearAIChat(); addSubmission("biz", {...form, diagResult: diagData, ...(ref ? { referencedContent: ref } : {}), ...(aiChatSnapshot ? { aiChat: aiChatSnapshot } : {})}); sendConfirmEmail(form); setDone(true); }} style={{ flex:1, padding:"14px", background:C.gold, border:"none", borderRadius:8, color:C.navy, fontWeight:800, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>{form.date && form.time ? "예약 확정하기 ✓" : "일정 없이 상담 신청하기 →"}</button>
               </div>
               {!form.date && !form.time && (
                 <div style={{ textAlign:"center", fontSize:11, color:"rgba(244,241,235,0.35)", marginTop:10 }}>일정을 선택하지 않으시면 담당 노무사가 연락하여 일정을 조율합니다.</div>

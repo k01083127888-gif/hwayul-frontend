@@ -1050,12 +1050,40 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                 <h3 style={{ fontSize:16, fontWeight:800, color:C.navy }}>📋 상세 내용</h3>
                 <button onClick={() => setViewDetail(null)} style={{ background:"none", border:"none", fontSize:18, color:C.gray, cursor:"pointer" }}>✕</button>
               </div>
-              {Object.entries(viewDetail).filter(([k]) => !["id","submittedAt","status","resultHtml","resultData"].includes(k)).map(([k,v]) => v ? (
+              {Object.entries(viewDetail).filter(([k]) => !["id","submittedAt","status","resultHtml","resultData","aiChat","referencedContent"].includes(k)).map(([k,v]) => v ? (
                 <div key={k} style={{ marginBottom:12, paddingBottom:12, borderBottom:"1px solid rgba(10,22,40,0.06)" }}>
                   <div style={{ fontSize:10, fontWeight:700, color:C.gray, textTransform:"uppercase", marginBottom:3 }}>{k}</div>
                   <div style={{ fontSize:13, color:C.navy, whiteSpace:"pre-wrap", lineHeight:1.7 }}>{typeof v === "boolean" ? (v ? "✅ 예" : "아니오") : String(v)}</div>
                 </div>
               ) : null)}
+              {/* 참조 콘텐츠 — 사용자가 특정 사례를 보고 심층상담 신청한 경우 */}
+              {viewDetail.referencedContent && viewDetail.referencedContent.id && (
+                <div style={{ marginBottom:12, paddingBottom:12, borderBottom:"1px solid rgba(10,22,40,0.06)" }}>
+                  <div style={{ fontSize:10, fontWeight:700, color:C.gray, textTransform:"uppercase", marginBottom:6 }}>참조 사례</div>
+                  <a href={`/content/${viewDetail.referencedContent.id}`} target="_blank" rel="noopener noreferrer"
+                    style={{ display:"inline-block", padding:"6px 12px", borderRadius:6, background:"rgba(13,115,119,0.1)", color:C.teal, border:"1px solid rgba(13,115,119,0.25)", fontSize:12, fontWeight:700, textDecoration:"none" }}>
+                    📄 {viewDetail.referencedContent.title || "(제목 없음)"}
+                  </a>
+                </div>
+              )}
+              {/* AI 상담 대화 내역 — 고객이 AI 상담 거쳐 심층상담까지 온 경우 */}
+              {viewDetail.aiChat && Array.isArray(viewDetail.aiChat.messages) && viewDetail.aiChat.messages.length > 0 && (
+                <div style={{ marginBottom:12, paddingBottom:12, borderBottom:"1px solid rgba(10,22,40,0.06)" }}>
+                  <div style={{ fontSize:10, fontWeight:700, color:C.teal, textTransform:"uppercase", marginBottom:6 }}>
+                    🤖 AI 상담 내역 {viewDetail.aiChat.topic ? `· ${viewDetail.aiChat.topic}` : ""} ({viewDetail.aiChat.messages.length}개 메시지)
+                  </div>
+                  <div style={{ maxHeight:320, overflowY:"auto", padding:"12px 14px", background:"rgba(13,115,119,0.04)", border:"1px solid rgba(13,115,119,0.15)", borderRadius:8, fontSize:12, lineHeight:1.75 }}>
+                    {viewDetail.aiChat.messages.map((m, i) => (
+                      <div key={i} style={{ marginBottom:10, display:"flex", gap:8 }}>
+                        <span style={{ flexShrink:0, fontSize:10, fontWeight:800, color:m.role === "assistant" ? C.teal : C.gold, minWidth:34 }}>
+                          {m.role === "assistant" ? "AI" : "고객"}
+                        </span>
+                        <span style={{ color:C.navy, whiteSpace:"pre-wrap" }}>{m.text}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               {viewDetail.resultHtml && (
                 <button onClick={() => { setViewDetail(null); setViewResultHtml(viewDetail.resultHtml); }} style={{ ...btnPrimary, marginTop:8 }}>📄 진단결과지 보기</button>
               )}
