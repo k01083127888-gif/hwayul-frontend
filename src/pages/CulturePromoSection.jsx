@@ -25,7 +25,7 @@ export function CulturePromoSection({ setActive }) {
           <div style={{ fontFamily:"'Noto Serif KR', serif", fontSize:17, fontWeight:800, color:C.cream, textAlign:"center", marginBottom:20, lineHeight:1.6 }}>
             "괴롭힘이 발생하는 조직의 <strong style={{ color:C.gold }}>87%</strong>는<br/>구조적 문화 문제를 갖고 있습니다"
           </div>
-          <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", gap:20, alignItems:"center" }}>
+          <div className="culture-compare" style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", gap:20, alignItems:"center" }}>
             <div style={{ padding:"16px 18px", background:"rgba(192,57,43,0.08)", border:"1px solid rgba(192,57,43,0.2)", borderRadius:12 }}>
               <div style={{ fontSize:12, fontWeight:800, color:"#FF8A80", marginBottom:8 }}>🚨 방치하면</div>
               <div style={{ fontSize:12, color:"rgba(244,241,235,0.65)", lineHeight:1.75 }}>
@@ -36,7 +36,7 @@ export function CulturePromoSection({ setActive }) {
                 • 과태료 부과 (500만원 이하)
               </div>
             </div>
-            <div style={{ fontSize:24, color:"rgba(244,241,235,0.3)" }}>→</div>
+            <div className="culture-compare-arrow" style={{ fontSize:24, color:"rgba(244,241,235,0.3)" }}>→</div>
             <div style={{ padding:"16px 18px", background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", borderRadius:12 }}>
               <div style={{ fontSize:12, fontWeight:800, color:C.tealLight, marginBottom:8 }}>✅ 개선하면</div>
               <div style={{ fontSize:12, color:"rgba(244,241,235,0.65)", lineHeight:1.75 }}>

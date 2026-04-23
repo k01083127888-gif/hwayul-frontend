@@ -240,6 +240,18 @@ useEffect(() => {
           }
         }
 
+        /* ── 조직문화 방치/개선 비교 — 모바일 세로 적층 ── */
+        @media (max-width: 600px) {
+          .culture-compare {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+          }
+          .culture-compare-arrow {
+            transform: rotate(90deg);
+            text-align: center;
+          }
+        }
+
         /* ── 폼 내부 2열 그리드 → 1열 ── */
         @media (max-width: 600px) {
           .form-grid-2 {
