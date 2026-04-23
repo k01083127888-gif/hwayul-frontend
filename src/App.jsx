@@ -362,7 +362,7 @@ useEffect(() => {
                 <circle cx="78" cy="52" r="3" fill="#4ECDC4" opacity="0.5" />
               </svg>
               <div>
-                <div style={{ fontFamily:"'BrandFont', 'Noto Sans KR', sans-serif", fontSize:20, fontWeight:800, color:C.cream }}><span>Q</span> <span>인사이드</span></div>
+                <div style={{ fontFamily:"'BrandFont', 'Noto Sans KR', sans-serif", fontSize:20, fontWeight:800 }}><span style={{ color:C.cream }}>Q</span> <span style={{ color:C.tealLight }}>인사이드</span></div>
                 <div style={{ fontSize:9, color:C.gold, letterSpacing:"2px", fontWeight:700, fontFamily:"'Noto Sans KR', sans-serif" }}>Q INSIDE LABS</div>
                 <div style={{ fontSize:7, color:"rgba(244,241,235,0.28)", letterSpacing:"0.5px", marginTop:0 }}>직장내괴롭힘 & 조직문화 플랫폼</div>
               </div>
