@@ -200,6 +200,7 @@ export async function saveContentsToDB(contents) {
         await adminFetch(`${API_BASE}/contents/bulk`, {
             method: "POST",
             body: JSON.stringify({ contents: contents.map(c => ({
+                id: c.id != null ? c.id : null,          // ★ id 보존: 기존 콘텐츠 /content/:id 링크 깨짐 방지
                 type: c.type || "news",
                 tag: c.tag || "",
                 case_number: c.case_number || "",
