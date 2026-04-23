@@ -133,25 +133,46 @@ export function setContents(val) {
     // DB 저장은 handleSave에서 직접 호출
 }
 // 데이터베이스에서 콘텐츠 불러오기
+// - cache: "no-cache" 로 브라우저 304 캐시 이슈 회피 (항상 body 있는 200 응답 보장)
+// - 성공/실패 관계없이 마지막에 리렌더 알림 (React 구독자 업데이트)
 export async function loadContentsFromDB() {
     try {
-        const res = await fetch(`${API_BASE}/contents`);
+        const res = await fetch(`${API_BASE}/contents`, { cache: "no-cache" });
         if (res.ok) {
             const data = await res.json();
-            if (data.length > 0) {
+            if (Array.isArray(data) && data.length > 0) {
                 _contents = data;
                 try { localStorage.setItem(CONTENTS_KEY, JSON.stringify(data)); } catch {}
                 _dbReady = true;
-                // ★ React 컴포넌트에 리렌더 알림 (useStore로 구독한 곳들)
-                // 이게 없으면 /content/123 직접 진입 시 "불러오는 중..."에서 멈춤
-                _store.listeners.forEach(fn => fn());
-                return data;
             }
         }
     } catch (e) {
         console.log("DB 로드 실패, localStorage 사용:", e.message);
     }
+    // ★ 성공·실패 상관없이 리렌더 알림
+    // /content/:id 직접 진입 시 구독 컴포넌트가 업데이트되도록
+    _store.listeners.forEach(fn => fn());
     return _contents;
+}
+
+// 단일 콘텐츠 fetch (리스트 로드 실패 시 폴백)
+export async function loadSingleContentFromDB(id) {
+    try {
+        const res = await fetch(`${API_BASE}/contents/${id}`, { cache: "no-cache" });
+        if (!res.ok) return null;
+        const item = await res.json();
+        if (!item || !item.id) return null;
+        // 기존 _contents에 없으면 추가
+        if (!_contents.find(c => c.id === item.id)) {
+            _contents = [..._contents, item];
+            try { localStorage.setItem(CONTENTS_KEY, JSON.stringify(_contents)); } catch {}
+            _store.listeners.forEach(fn => fn());
+        }
+        return item;
+    } catch (e) {
+        console.log("단일 콘텐츠 로드 실패:", e.message);
+        return null;
+    }
 }
 
 // 데이터베이스에 콘텐츠 저장

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import C from "../tokens/colors.js";
-import { _contents, useStore } from "../utils/store.js";
+import { _contents, useStore, loadSingleContentFromDB } from "../utils/store.js";
 import { ContentDetailView } from "../components/ContentDetailView.jsx";
 import { SectionTag } from "../components/common/FormElements.jsx";
 import { usePageMeta } from "../utils/usePageMeta.js";
@@ -43,11 +43,27 @@ export function ContentSection({ contentId = null, setContentDetail, setActive }
     return () => { delete window.__safeworkOpenDetail; };
   }, [setContentDetail]);
 
-  // 상세 보기 모드 — URL에 id는 있는데 아이템을 아직 못 찾음 (DB 로드 중)
+  // 콘텐츠 ID가 있는데 리스트에 없으면 단일 fetch 시도 (직접 URL 진입 대응)
+  const [singleFetchTried, setSingleFetchTried] = useState(false);
+  useEffect(() => {
+    if (contentId != null && !selectedItem && !singleFetchTried) {
+      setSingleFetchTried(true);
+      loadSingleContentFromDB(contentId);
+    }
+  }, [contentId, selectedItem, singleFetchTried]);
+
+  // 상세 보기 모드 — URL에 id는 있는데 아이템을 아직 못 찾음 (DB 로드 중 or 없는 ID)
   if (contentId != null && !selectedItem) {
     return (
       <section style={{ padding:"120px 32px", background:C.cream, minHeight:"100vh", textAlign:"center" }}>
-        <div style={{ color:C.gray, fontSize:14 }}>콘텐츠를 불러오는 중입니다...</div>
+        <div style={{ color:C.gray, fontSize:14 }}>
+          {singleFetchTried ? "콘텐츠를 찾을 수 없습니다. 삭제되었거나 잘못된 링크일 수 있어요." : "콘텐츠를 불러오는 중입니다..."}
+        </div>
+        {singleFetchTried && (
+          <button onClick={() => setActive && setActive("content")} style={{ marginTop:20, padding:"10px 24px", borderRadius:8, border:`2px solid ${C.navy}`, background:"white", color:C.navy, fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"inherit" }}>
+            ← 콘텐츠 목록으로
+          </button>
+        )}
       </section>
     );
   }
