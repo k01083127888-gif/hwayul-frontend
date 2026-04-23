@@ -142,6 +142,9 @@ export async function loadContentsFromDB() {
                 _contents = data;
                 try { localStorage.setItem(CONTENTS_KEY, JSON.stringify(data)); } catch {}
                 _dbReady = true;
+                // ★ React 컴포넌트에 리렌더 알림 (useStore로 구독한 곳들)
+                // 이게 없으면 /content/123 직접 진입 시 "불러오는 중..."에서 멈춤
+                _store.listeners.forEach(fn => fn());
                 return data;
             }
         }
