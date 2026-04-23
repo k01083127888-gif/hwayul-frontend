@@ -48,10 +48,10 @@ export function Nav({ active, setActive }) {
         </svg>
       </div>
       <div>
-        <div style={{ fontFamily:"'BrandFont', 'Noto Sans KR', sans-serif", fontSize:18, fontWeight:800, letterSpacing:"-0.3px", lineHeight:1.2 }}>
-          <span style={{ color:"#E8E5DE" }}>Q</span><span style={{ color:C.tealLight, marginLeft:3 }}>인사이드</span>
+        <div style={{ fontFamily:"'BrandFont', 'Noto Sans KR', sans-serif", fontSize:18, fontWeight:800, letterSpacing:"-0.3px", lineHeight:1.2, color:C.cream }}>
+          <span>Q</span><span style={{ marginLeft:3 }}>인사이드</span>
         </div>
-        <div style={{ fontSize:9, color:"rgba(244,241,235,0.5)", letterSpacing:"1.5px", marginTop:1, fontFamily:"'Noto Sans KR', sans-serif", fontWeight:400 }}>Q Inside Labs</div>
+        <div style={{ fontSize:9, color:C.gold, letterSpacing:"2px", marginTop:2, fontFamily:"'Noto Sans KR', sans-serif", fontWeight:700 }}>Q INSIDE LABS</div>
         <div style={{ fontSize:7, color:"rgba(244,241,235,0.3)", letterSpacing:"0.5px", marginTop:0, fontFamily:"'Noto Sans KR', sans-serif" }}>직장내괴롭힘 & 조직문화 플랫폼</div>
       </div>
     </div>
