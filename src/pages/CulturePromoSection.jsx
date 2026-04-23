@@ -21,9 +21,9 @@ export function CulturePromoSection({ setActive }) {
         </div>
 
         {/* 괴롭힘 ↔ 조직문화 관계 */}
-        <div style={{ padding:"28px 32px", background:"rgba(201,168,76,0.06)", border:"1px solid rgba(201,168,76,0.2)", borderRadius:16, marginBottom:40 }}>
-          <div style={{ fontFamily:"'Noto Serif KR', serif", fontSize:17, fontWeight:800, color:C.cream, textAlign:"center", marginBottom:20, lineHeight:1.6 }}>
-            "괴롭힘이 발생하는 조직의 <strong style={{ color:C.gold }}>87%</strong>는<br/>구조적 문화 문제를 갖고 있습니다"
+        <div className="culture-compare-box" style={{ padding:"28px 32px", background:"rgba(201,168,76,0.06)", border:"1px solid rgba(201,168,76,0.2)", borderRadius:16, marginBottom:40 }}>
+          <div style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"clamp(14px, 2.2vw, 17px)", fontWeight:800, color:C.cream, textAlign:"center", marginBottom:20, lineHeight:1.6, wordBreak:"keep-all" }}>
+            "괴롭힘이 발생하는 조직의 <strong style={{ color:C.gold }}>87%</strong>는 구조적 문화 문제를 갖고 있습니다"
           </div>
           <div className="culture-compare" style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", gap:20, alignItems:"center" }}>
             <div style={{ padding:"16px 18px", background:"rgba(192,57,43,0.08)", border:"1px solid rgba(192,57,43,0.2)", borderRadius:12 }}>

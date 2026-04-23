@@ -250,6 +250,9 @@ useEffect(() => {
             transform: rotate(90deg);
             text-align: center;
           }
+          .culture-compare-box {
+            padding: 20px 16px !important;
+          }
         }
 
         /* ── 폼 내부 2열 그리드 → 1열 ── */
