@@ -185,7 +185,7 @@ export function IntroSection() {
           </div>
 
           <div style={{ maxWidth:780, margin:"48px auto 0 auto", paddingTop:28, borderTop:"1px solid rgba(10,22,40,0.12)" }}>
-            <div style={{ fontSize:11, letterSpacing:"2px", color:C.teal, fontWeight:700, marginBottom:14, textTransform:"uppercase" }}>Q인사이드 공동대표</div>
+            <div style={{ fontSize:11, letterSpacing:"2px", color:C.teal, fontWeight:700, marginBottom:14, textTransform:"uppercase" }}>Q인사이드랩스 공동대표</div>
             <div style={{ display:"flex", alignItems:"flex-end", gap:32, flexWrap:"wrap" }}>
               <div>
                 <div style={{ fontFamily:"'Noto Serif KR', serif", fontSize:26, fontWeight:500, color:C.navy, letterSpacing:"4px" }}>김 재 정</div>
