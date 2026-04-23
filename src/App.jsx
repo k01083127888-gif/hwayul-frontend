@@ -11,6 +11,7 @@ import { StickyScrollCTA } from "./components/StickyScrollCTA.jsx";
 
 import CasesManager from "./components/CasesManager.jsx";
 import { loadContentsFromDB } from "./utils/store.js";
+import { clearAdminKey } from "./utils/adminApi.js";
 // ── 페이지 ────────────────────────────────────────────────────────────────────
 import { HeroSection } from "./pages/HeroSection.jsx";
 import { IntroSection } from "./pages/IntroSection.jsx";
@@ -110,6 +111,7 @@ useEffect(() => {
     const resetTimer = () => {
       if (adminTimerRef.current) clearTimeout(adminTimerRef.current);
       adminTimerRef.current = setTimeout(() => {
+        clearAdminKey();  // 자동 로그아웃 시에도 API 키 반드시 삭제 (보안)
         setIsAdmin(false);
         setActive("home");
       }, TIMEOUT);
