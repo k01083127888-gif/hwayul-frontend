@@ -1050,7 +1050,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                 <h3 style={{ fontSize:16, fontWeight:800, color:C.navy }}>📋 상세 내용</h3>
                 <button onClick={() => setViewDetail(null)} style={{ background:"none", border:"none", fontSize:18, color:C.gray, cursor:"pointer" }}>✕</button>
               </div>
-              {Object.entries(viewDetail).filter(([k]) => !["id","submittedAt","status","resultHtml","resultData","aiChat","referencedContent"].includes(k)).map(([k,v]) => v ? (
+              {Object.entries(viewDetail).filter(([k]) => !["id","submittedAt","status","resultHtml","resultData","aiChat","referencedContent","diagResult","reportHtml","emailHtml"].includes(k)).map(([k,v]) => v ? (
                 <div key={k} style={{ marginBottom:12, paddingBottom:12, borderBottom:"1px solid rgba(10,22,40,0.06)" }}>
                   <div style={{ fontSize:10, fontWeight:700, color:C.gray, textTransform:"uppercase", marginBottom:3 }}>{k}</div>
                   <div style={{ fontSize:13, color:C.navy, whiteSpace:"pre-wrap", lineHeight:1.7 }}>{typeof v === "boolean" ? (v ? "✅ 예" : "아니오") : String(v)}</div>
@@ -1086,6 +1086,9 @@ export function AdminSection({ setActive, authed, setAuthed }) {
               )}
               {viewDetail.resultHtml && (
                 <button onClick={() => { setViewDetail(null); setViewResultHtml(viewDetail.resultHtml); }} style={{ ...btnPrimary, marginTop:8 }}>📄 진단결과지 보기</button>
+              )}
+              {viewDetail.diagResult && (
+                <button onClick={() => { setViewDetail(null); setViewResultHtml(viewDetail.diagResult); }} style={{ ...btnPrimary, marginTop:8, marginLeft:8 }}>📋 첨부된 진단 결과 보기</button>
               )}
             </div>
           </div>
