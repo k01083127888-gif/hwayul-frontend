@@ -40,10 +40,11 @@ export default function App() {
     return pageToPath[page] || "/";
   };
 
-  // URL 전체 파싱 (콘텐츠 상세 /content/:id, 진단 /diagnosis?type=X 포함)
+  // URL 전체 파싱 (콘텐츠 상세 /content/:id 또는 /content/:id/:slug, 진단 /diagnosis?type=X 포함)
   const parseURL = () => {
     const path = window.location.pathname;
-    const m = path.match(/^\/content\/(\d+)$/);
+    // /content/:id 또는 /content/:id/:slug (slug는 SEO용, 무시해도 됨)
+    const m = path.match(/^\/content\/(\d+)(?:\/[^/]*)?$/);
     if (m) return { page: "content", contentId: parseInt(m[1], 10) };
     // 진단 페이지: /diagnosis?type=X 또는 /checklist(레거시)
     if (path === "/diagnosis" || path === "/checklist") {
@@ -64,9 +65,10 @@ export default function App() {
     _setActive(page);
     _setContentId(null);
   };
-  // 콘텐츠 상세 페이지로 이동 (/content/:id)
-  const setContentDetail = (id) => {
-    window.history.pushState({ page: "content", contentId: id }, "", `/content/${id}`);
+  // 콘텐츠 상세 페이지로 이동 (/content/:id/:slug — slug는 SEO용)
+  const setContentDetail = (id, slug) => {
+    const url = slug ? `/content/${id}/${encodeURIComponent(slug)}` : `/content/${id}`;
+    window.history.pushState({ page: "content", contentId: id }, "", url);
     _setActive("content");
     _setContentId(id);
     window.scrollTo({ top: 0, behavior: "smooth" });

@@ -3,6 +3,7 @@ import C from "../tokens/colors.js";
 import { _contents } from "../utils/store.js";
 import { contentDetails } from "../data/contentDetails.js";
 import { usePageMeta } from "../utils/usePageMeta.js";
+import { slugify } from "../utils/slugify.js";
 import { ContentCTABox } from "./ContentCTABox.jsx";
 import { getContentTypeMeta } from "../utils/contentType.js";
 
@@ -46,10 +47,11 @@ export function ContentDetailView({ item, onBack }) {
   const bodyText = stripHtml(detail?.content || item.body || "");
   const description = (item.summary && item.summary.trim()) ? item.summary.trim() : bodyText;
 
+  const _slug = slugify(item.title);
   usePageMeta({
     title: `${item.title} | Q인사이드`,
     description,
-    url: `https://hwayul.kr/content/${item.id}`,
+    url: _slug ? `https://hwayul.kr/content/${item.id}/${encodeURIComponent(_slug)}` : `https://hwayul.kr/content/${item.id}`,
   });
 
   return (

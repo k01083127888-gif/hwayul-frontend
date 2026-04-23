@@ -5,6 +5,7 @@ import { ContentDetailView } from "../components/ContentDetailView.jsx";
 import { SectionTag } from "../components/common/FormElements.jsx";
 import { usePageMeta } from "../utils/usePageMeta.js";
 import { CONTENT_TAB_GROUPS, normalizeContentType, getContentTypeMeta, itemInGroup } from "../utils/contentType.js";
+import { slugify } from "../utils/slugify.js";
 
 // ── ContentSection ─────────────────────────────────────────────────────────────────
 export function ContentSection({ contentId = null, setContentDetail, setActive }) {
@@ -38,10 +39,29 @@ export function ContentSection({ contentId = null, setContentDetail, setActive }
   // 관련 콘텐츠에서 상세보기로 이동 — URL 기반 네비게이션 사용
   useEffect(() => {
     window.__safeworkOpenDetail = (id) => {
-      if (typeof setContentDetail === "function") setContentDetail(id);
+      if (typeof setContentDetail === "function") {
+        const item = _contents.find(n => n.id === id);
+        setContentDetail(id, item ? slugify(item.title) : "");
+      }
     };
     return () => { delete window.__safeworkOpenDetail; };
   }, [setContentDetail]);
+
+  // /content/:id (slug 없는 URL)로 직접 진입 시, 아이템 로드되면 URL에 slug 붙여 교체
+  // — 검색엔진과 사용자 모두 SEO URL을 보게 함 (history 기록은 남기지 않음)
+  useEffect(() => {
+    if (!selectedItem) return;
+    const path = window.location.pathname;
+    const m = path.match(/^\/content\/(\d+)(?:\/([^/]*))?$/);
+    if (!m) return;
+    const slug = slugify(selectedItem.title);
+    if (!slug) return;
+    const currentSlug = m[2] ? decodeURIComponent(m[2]) : "";
+    if (currentSlug !== slug) {
+      const newUrl = `/content/${selectedItem.id}/${encodeURIComponent(slug)}`;
+      window.history.replaceState(window.history.state, "", newUrl);
+    }
+  }, [selectedItem]);
 
   // 콘텐츠 ID가 있는데 리스트에 없으면 단일 fetch 시도 (직접 URL 진입 대응)
   const [singleFetchTried, setSingleFetchTried] = useState(false);
@@ -118,7 +138,7 @@ export function ContentSection({ contentId = null, setContentDetail, setActive }
             <article key={item.id} style={{ background:"white", borderRadius:12, padding:26, cursor:"pointer", border:"1px solid rgba(10,22,40,0.07)", boxShadow:"0 2px 10px rgba(10,22,40,0.05)", transition:"all 0.25s" }}
               onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 12px 36px rgba(10,22,40,0.11)"; }}
               onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 2px 10px rgba(10,22,40,0.05)"; }}
-              onClick={() => { if (setContentDetail) setContentDetail(item.id); }}
+              onClick={() => { if (setContentDetail) setContentDetail(item.id, slugify(item.title)); }}
             >
               <div style={{ display:"flex", justifyContent:"space-between", marginBottom:12 }}>
                 {(() => {
@@ -135,7 +155,7 @@ export function ContentSection({ contentId = null, setContentDetail, setActive }
               <p style={{ fontSize:13, color:C.gray, lineHeight:1.65, marginBottom:14 }}>{item.summary}</p>
               <div style={{ display:"flex", justifyContent:"space-between", paddingTop:12, borderTop:"1px solid rgba(10,22,40,0.07)" }}>
                 <span style={{ fontSize:12, color:C.gray }}>👁 {item.views.toLocaleString()}</span>
-                <button onClick={(e) => { e.stopPropagation(); if (setContentDetail) setContentDetail(item.id); }} style={{ fontSize:12, color:C.teal, fontWeight:700, background:"none", border:"none", cursor:"pointer", fontFamily:"inherit" }}>자세히 보기 →</button>
+                <button onClick={(e) => { e.stopPropagation(); if (setContentDetail) setContentDetail(item.id, slugify(item.title)); }} style={{ fontSize:12, color:C.teal, fontWeight:700, background:"none", border:"none", cursor:"pointer", fontFamily:"inherit" }}>자세히 보기 →</button>
               </div>
             </article>
           ))}
