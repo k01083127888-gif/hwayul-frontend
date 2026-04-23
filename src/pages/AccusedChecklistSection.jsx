@@ -64,7 +64,7 @@ export function AccusedChecklistSection({ setActive }) {
         </div>
 
         {/* 점수 요약 */}
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(5, 1fr)", gap:10, marginBottom:24 }}>
+        <div className="score-grid-5" style={{ display:"grid", gridTemplateColumns:"repeat(5, 1fr)", gap:10, marginBottom:24 }}>
           {[
             { label:"관계 우위", score:result.positionScore, max:10 },
             { label:"행위 점수", score:result.behaviorScore, max:20 },
@@ -73,7 +73,7 @@ export function AccusedChecklistSection({ setActive }) {
             { label:"영향도", score:result.impactScore, max:12 },
           ].map(s => (
             <div key={s.label} style={{ textAlign:"center", padding:"14px 8px", ...cardStyle }}>
-              <div style={{ fontSize:10, color:"rgba(244,241,235,0.45)", marginBottom:6 }}>{s.label}</div>
+              <div style={{ fontSize:10, color:"rgba(244,241,235,0.45)", marginBottom:6, whiteSpace:"nowrap", wordBreak:"keep-all" }}>{s.label}</div>
               <div style={{ fontSize:20, fontWeight:900, color:C.gold }}>{s.score}</div>
             </div>
           ))}

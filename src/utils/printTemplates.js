@@ -6,8 +6,8 @@ import { companyReportStatus, companyOrgStatus, companyCurrentActions } from "..
 
 // ── 진단 결과 출력 시스템 ────────────────────────────────────────────────────
 const PRINT_HEADER = `
-  <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #0D7377;padding-bottom:18px;margin-bottom:24px">
-    <div style="display:flex;align-items:center;gap:14px">
+  <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #0D7377;padding-bottom:18px;margin-bottom:24px;flex-wrap:wrap;gap:12px">
+    <div style="display:flex;align-items:center;gap:14px;white-space:nowrap">
       <svg width="46" height="46" viewBox="0 0 100 100">
         <defs>
           <linearGradient id="pN" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0A1628"/><stop offset="100%" stop-color="#1E3A5F"/></linearGradient>
@@ -29,7 +29,7 @@ const PRINT_HEADER = `
         <div style="font-size:8px;color:#B0ADA6;letter-spacing:0.5px">직장내괴롭힘 & 조직문화 플랫폼</div>
       </div>
     </div>
-    <div style="text-align:right;font-size:11px;color:#8B8680;line-height:1.8">
+    <div style="text-align:right;font-size:11px;color:#8B8680;line-height:1.8;white-space:nowrap">
       <div><strong style="color:#0A1628;font-family:'Gowun Batang','Noto Sans KR',sans-serif;font-size:14px">Q인사이드</strong></div>
       <div>Tel. 02-2088-1767</div>
       <div>Email. hwayulinside@gmail.com</div>
@@ -56,6 +56,11 @@ const PRINT_STYLE = `<style>
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Noto Sans KR',sans-serif; color:#0A1628; background:white; padding:32px; max-width:800px; margin:0 auto; font-size:13px; line-height:1.7; }
   @media print { body { padding:20px; } @page { margin:15mm; } }
+  @media (max-width:600px) {
+    body { padding:16px !important; font-size:12px; word-break:keep-all; }
+    h2 { font-size:15px !important; }
+    h3 { font-size:13px !important; }
+  }
   .section { margin-bottom:22px; }
   .card { border:1px solid #E8E5DE; border-radius:10px; padding:18px; margin-bottom:14px; }
   .badge { display:inline-block; padding:3px 12px; border-radius:100px; font-size:11px; font-weight:700; }

@@ -99,11 +99,11 @@ export function PrintModal({ isOpen, onClose, getHtml, type }) {
           </label>
         )}
         {sent && <div style={{ textAlign:"center", marginBottom:14, padding:"10px 16px", background:"rgba(26,122,74,0.08)", borderRadius:8, fontSize:13, color:C.green, fontWeight:600 }}>✅ 진단결과지가 발송되었습니다.</div>}
-        <div style={{ display:"flex", gap:10 }}>
-          <button onClick={handleViewReport} style={{ flex:2, padding:"14px", borderRadius:10, background:C.teal, border:"none", color:"white", fontWeight:800, fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>
+        <div className="print-modal-buttons" style={{ display:"flex", gap:10 }}>
+          <button onClick={handleViewReport} style={{ flex:2, padding:"14px", borderRadius:10, background:C.teal, border:"none", color:"white", fontWeight:800, fontSize:14, cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap", wordBreak:"keep-all" }}>
             📄 진단결과지 보기
           </button>
-          <button onClick={handleSendEmail} disabled={!email || !isValidEmail(email) || !consent || sent} style={{ flex:1, padding:"14px", borderRadius:10, background:(!email || !isValidEmail(email) || !consent || sent) ? "rgba(10,22,40,0.05)" : C.gold, border:"2px solid " + ((!email || !isValidEmail(email) || !consent || sent) ? "rgba(10,22,40,0.08)" : C.gold), color:(!email || !isValidEmail(email) || !consent || sent) ? C.gray : C.navy, fontWeight:700, fontSize:14, cursor:(!email || !isValidEmail(email) || !consent || sent) ? "not-allowed" : "pointer", fontFamily:"inherit" }}>
+          <button onClick={handleSendEmail} disabled={!email || !isValidEmail(email) || !consent || sent} style={{ flex:1, padding:"14px", borderRadius:10, background:(!email || !isValidEmail(email) || !consent || sent) ? "rgba(10,22,40,0.05)" : C.gold, border:"2px solid " + ((!email || !isValidEmail(email) || !consent || sent) ? "rgba(10,22,40,0.08)" : C.gold), color:(!email || !isValidEmail(email) || !consent || sent) ? C.gray : C.navy, fontWeight:700, fontSize:14, cursor:(!email || !isValidEmail(email) || !consent || sent) ? "not-allowed" : "pointer", fontFamily:"inherit", whiteSpace:"nowrap", wordBreak:"keep-all" }}>
             {sent ? "✅ 전송완료" : "📧 이메일 보내기"}
           </button>
         </div>

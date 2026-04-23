@@ -255,6 +255,48 @@ useEffect(() => {
           }
         }
 
+        /* ── 진단 탭 (피해자/피지목인/산재/사내조사) — 모바일 ── */
+        @media (max-width: 600px) {
+          .diag-tabs button {
+            padding: 10px 12px !important;
+            font-size: 11px !important;
+          }
+        }
+        @media (max-width: 380px) {
+          .diag-tabs {
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+          }
+          .diag-tabs button {
+            flex: 1 1 48% !important;
+            border-radius: 8px !important;
+            padding: 10px 8px !important;
+            font-size: 11px !important;
+          }
+        }
+
+        /* ── 5개 점수 카드 (피지목인 결과) — 모바일 ── */
+        @media (max-width: 480px) {
+          .score-grid-5 {
+            grid-template-columns: repeat(5, 1fr) !important;
+            gap: 6px !important;
+          }
+          .score-grid-5 > div {
+            padding: 10px 4px !important;
+          }
+        }
+
+        /* ── 이메일 모달 버튼 — 모바일 (세로 배치) ── */
+        @media (max-width: 380px) {
+          .print-modal-buttons {
+            flex-direction: column !important;
+          }
+          .print-modal-buttons button {
+            flex: 1 !important;
+            width: 100% !important;
+          }
+        }
+
         /* ── 폼 내부 2열 그리드 → 1열 ── */
         @media (max-width: 600px) {
           .form-grid-2 {

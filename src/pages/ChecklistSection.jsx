@@ -68,7 +68,7 @@ export function ChecklistSection({ setActive, initialTab = "victim" }) {
         </div>
 
         {/* ── 피해자 / 피지목인 / 산재 탭 ── */}
-        <div style={{ display:"flex", justifyContent:"center", gap:0, marginBottom:28 }}>
+        <div className="diag-tabs" style={{ display:"flex", justifyContent:"center", gap:0, marginBottom:28, flexWrap:"wrap" }}>
           {[
             { id:"victim", label:"😟 피해자 진단", color:C.teal },
             { id:"accused", label:"😰 피지목인 진단", color:C.gold },
@@ -82,6 +82,7 @@ export function ChecklistSection({ setActive, initialTab = "victim" }) {
               background:diagTab===tab.id?tab.color:"rgba(255,255,255,0.05)",
               border:diagTab===tab.id?`2px solid ${tab.color}`:"2px solid rgba(255,255,255,0.1)",
               color:diagTab===tab.id?(tab.color===C.gold?C.navy:"white"):"rgba(244,241,235,0.6)", transition:"all 0.2s",
+              whiteSpace:"nowrap", wordBreak:"keep-all",
             }}>{tab.label}</button>
           ))}
         </div>
