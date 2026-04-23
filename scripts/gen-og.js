@@ -11,6 +11,7 @@ const NAVY = "#0A1628";
 const NAVY_DEEP = "#06101F";
 const GOLD = "#C9A84C";
 const TEAL = "#0D7377";
+const TEAL_LIGHT = "#4ECDC4";
 const CREAM = "#F4F1EB";
 
 // ── 브랜드 로고 폰트: Hahmlet (바꾸려면 아래 BRAND_FONT_ID 수정)
@@ -21,7 +22,6 @@ const brandFont = fs.existsSync(brandFontPath) ? opentype.loadSync(brandFontPath
 
 function brandText(text, x, y, size, color) {
   if (!brandFont) {
-    // 폴백: 시스템 폰트
     return `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle"
               fill="${color}" font-family="'Malgun Gothic','Noto Serif KR',serif"
               font-size="${size}" font-weight="900" letter-spacing="-2">${text}</text>`;
@@ -31,6 +31,73 @@ function brandText(text, x, y, size, color) {
   const tx = x - bb.x1 - (bb.x2 - bb.x1) / 2;
   const ty = y - bb.y1 - (bb.y2 - bb.y1) / 2;
   return `<path d="${p.toPathData()}" fill="${color}" transform="translate(${tx} ${ty})"/>`;
+}
+
+// 메트릭만 반환 (좌측 정렬용)
+function textMetrics(text, size) {
+  if (!brandFont) return { width: text.length * size * 0.5, height: size, x1: 0, y1: -size };
+  const p = brandFont.getPath(text, 0, 0, size);
+  const bb = p.getBoundingBox();
+  return { path: p.toPathData(), width: bb.x2 - bb.x1, height: bb.y2 - bb.y1, x1: bb.x1, y1: bb.y1 };
+}
+
+// 임의 좌표에 path 그리기
+function drawPathAt(pathData, x, y, fill) {
+  return `<path d="${pathData}" fill="${fill}" transform="translate(${x} ${y})"/>`;
+}
+
+// 로고 SVG 아이콘 (네비와 동일)
+function logoIcon(x, y, size) {
+  const s = size / 100;
+  const scale = `scale(${s})`;
+  return `
+    <g transform="translate(${x} ${y}) ${scale}">
+      <defs>
+        <linearGradient id="oN" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#1E3A5F"/>
+          <stop offset="100%" stop-color="#2A4A70"/>
+        </linearGradient>
+        <linearGradient id="oM" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="${TEAL}"/>
+          <stop offset="100%" stop-color="${TEAL_LIGHT}"/>
+        </linearGradient>
+      </defs>
+      <line x1="18" y1="10" x2="18" y2="90" stroke="url(#oN)" stroke-width="10" stroke-linecap="round"/>
+      <line x1="50" y1="10" x2="50" y2="55" stroke="url(#oN)" stroke-width="10" stroke-linecap="round"/>
+      <line x1="78" y1="52" x2="78" y2="90" stroke="url(#oN)" stroke-width="10" stroke-linecap="round"/>
+      <path d="M18,46 C28,46 32,33 40,33 C48,33 44,46 50,46" stroke="url(#oM)" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M50,12 C52,30 60,42 70,48 C74,50 78,52 78,52" stroke="url(#oM)" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M96,12 C94,28 88,40 82,47 C80,50 78,52 78,52" stroke="url(#oM)" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M18,90 C34,82 62,82 78,90" stroke="url(#oM)" stroke-width="4.5" fill="none" stroke-linecap="round" opacity="0.45"/>
+      <circle cx="50" cy="46" r="3" fill="${TEAL_LIGHT}" opacity="0.5"/>
+      <circle cx="78" cy="52" r="3" fill="${TEAL_LIGHT}" opacity="0.5"/>
+    </g>
+  `;
+}
+
+// 메인 타이틀: 로고 + Q(크림) + 인사이드(티얼) 센터 정렬
+function mainTitle(centerX, centerY, fontSize, logoSize) {
+  const gap = 24;             // 로고와 텍스트 사이
+  const textGap = 18;         // Q와 인사이드 사이
+  const qM = textMetrics("Q", fontSize);
+  const insideM = textMetrics("인사이드", fontSize);
+  const totalW = logoSize + gap + qM.width + textGap + insideM.width;
+  const startX = centerX - totalW / 2;
+
+  const logoX = startX;
+  const logoY = centerY - logoSize / 2;
+
+  const qX = startX + logoSize + gap - qM.x1;
+  const qY = centerY - qM.y1 - qM.height / 2;
+
+  const insideX = qX + qM.x1 + qM.width + textGap - insideM.x1;
+  const insideY = centerY - insideM.y1 - insideM.height / 2;
+
+  return `
+    ${logoIcon(logoX, logoY, logoSize)}
+    ${drawPathAt(qM.path, qX, qY, CREAM)}
+    ${drawPathAt(insideM.path, insideX, insideY, TEAL_LIGHT)}
+  `;
 }
 
 const svg = `<?xml version="1.0" encoding="UTF-8"?>
@@ -60,8 +127,8 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
   <circle cx="${W/2}"    cy="145" r="2.5" fill="${GOLD}"/>
   <circle cx="${W/2+14}" cy="145" r="2.5" fill="${GOLD}"/>
 
-  <!-- 메인 타이틀 (브랜드 폰트) -->
-  ${brandText("Q인사이드", W/2, 250, 96, CREAM)}
+  <!-- 메인 타이틀: 로고 + Q(크림) + 인사이드(티얼) -->
+  ${mainTitle(W/2, 250, 96, 100)}
 
   <!-- 태그라인 -->
   <text x="${W/2}" y="320" text-anchor="middle"
