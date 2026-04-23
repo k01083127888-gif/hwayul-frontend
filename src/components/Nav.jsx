@@ -52,7 +52,7 @@ export function Nav({ active, setActive }) {
           <span style={{ color:C.cream }}>Q</span><span style={{ color:C.tealLight, marginLeft:3 }}>인사이드</span>
         </div>
         <div style={{ fontSize:9, color:C.gold, letterSpacing:"2px", marginTop:2, fontFamily:"'Noto Sans KR', sans-serif", fontWeight:700 }}>Q INSIDE LABS</div>
-        <div style={{ fontSize:7, color:"rgba(244,241,235,0.3)", letterSpacing:"0.5px", marginTop:0, fontFamily:"'Noto Sans KR', sans-serif" }}>직장내괴롭힘 & 조직문화 플랫폼</div>
+        <div style={{ fontSize:9, color:"rgba(244,241,235,0.7)", letterSpacing:"0.5px", marginTop:2, fontFamily:"'Noto Sans KR', sans-serif" }}>직장내괴롭힘 & 조직문화 플랫폼</div>
       </div>
     </div>
   );
