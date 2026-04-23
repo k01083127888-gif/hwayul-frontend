@@ -55,13 +55,13 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
   <!-- 상단 브랜드 태그 -->
   <text x="${W/2}" y="120" text-anchor="middle"
         fill="${GOLD}" font-family="'Malgun Gothic','Noto Sans KR',sans-serif"
-        font-size="22" font-weight="700" letter-spacing="8">VIEW INSIDE</text>
+        font-size="22" font-weight="700" letter-spacing="8">Q INSIDE LABS</text>
   <circle cx="${W/2-14}" cy="145" r="2.5" fill="${GOLD}"/>
   <circle cx="${W/2}"    cy="145" r="2.5" fill="${GOLD}"/>
   <circle cx="${W/2+14}" cy="145" r="2.5" fill="${GOLD}"/>
 
   <!-- 메인 타이틀 (브랜드 폰트) -->
-  ${brandText("뷰인사이드", W/2, 250, 96, CREAM)}
+  ${brandText("Q인사이드", W/2, 250, 96, CREAM)}
 
   <!-- 태그라인 -->
   <text x="${W/2}" y="320" text-anchor="middle"

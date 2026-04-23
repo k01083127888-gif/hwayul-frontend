@@ -7,7 +7,7 @@ import { adminFetch } from "../utils/adminApi.js";
 export function AdminEmailComposer({ data, onClose, onViewResult }) {
   const [greeting, setGreeting] = useState(data.greeting || "");
   const [body, setBody] = useState(data.body || "");
-  const [closing, setClosing] = useState("감사합니다.\n\n뷰인사이드\n대표 노무사 김재정\nTel. 02-2088-1767\nEmail. hwayulinside@gmail.com\nWeb. www.hwayul.kr");
+  const [closing, setClosing] = useState("감사합니다.\n\nQ인사이드\n대표 노무사 김재정\nTel. 02-2088-1767\nEmail. hwayulinside@gmail.com\nWeb. www.hwayul.kr");
   const [showPreview, setShowPreview] = useState(false);
   const [sent, setSent] = useState(false);
   // AI 자동 작성 관련 상태
@@ -97,8 +97,8 @@ ${resultSummary || "(결과 데이터 없음)"}
 <div class="wrap">
   <div style="background:#0A1628;padding:28px 32px;text-align:center">
     <svg width="48" height="48" viewBox="0 0 100 100" style="margin-bottom:8px"><defs><linearGradient id="eN" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#1E3A5F"/><stop offset="100%" stop-color="#2A4A70"/></linearGradient><linearGradient id="eM" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0D7377"/><stop offset="100%" stop-color="#4ECDC4"/></linearGradient></defs><line x1="18" y1="10" x2="18" y2="90" stroke="url(#eN)" stroke-width="10" stroke-linecap="round"/><line x1="50" y1="10" x2="50" y2="55" stroke="url(#eN)" stroke-width="10" stroke-linecap="round"/><line x1="78" y1="52" x2="78" y2="90" stroke="url(#eN)" stroke-width="10" stroke-linecap="round"/><path d="M18,46 C28,46 32,33 40,33 C48,33 44,46 50,46" stroke="url(#eM)" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M50,12 C52,30 60,42 70,48 C74,50 78,52 78,52" stroke="url(#eM)" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M96,12 C94,28 88,40 82,47 C80,50 78,52 78,52" stroke="url(#eM)" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M18,90 C34,82 62,82 78,90" stroke="url(#eM)" stroke-width="4.5" fill="none" stroke-linecap="round" opacity="0.45"/><circle cx="50" cy="46" r="3" fill="#4ECDC4" opacity="0.5"/><circle cx="78" cy="52" r="3" fill="#4ECDC4" opacity="0.5"/></svg>
-    <div style="font-size:22px;font-weight:800;font-family:'Gowun Batang','Noto Sans KR',sans-serif"><span style="color:#E8E5DE">뷰</span> <span style="color:#4ECDC4">인사이드</span></div>
-    <div style="font-size:9px;color:rgba(244,241,235,0.5);margin-top:2px;letter-spacing:1.5px">View Inside</div>
+    <div style="font-size:22px;font-weight:800;font-family:'Gowun Batang','Noto Sans KR',sans-serif"><span style="color:#E8E5DE">Q</span> <span style="color:#4ECDC4">인사이드</span></div>
+    <div style="font-size:9px;color:rgba(244,241,235,0.5);margin-top:2px;letter-spacing:1.5px">Q Inside Labs</div>
     <div style="font-size:8px;color:rgba(244,241,235,0.3);letter-spacing:0.5px;margin-top:1px">직장내괴롭힘 & 조직문화 플랫폼</div>
   </div>
   <div style="padding:36px 32px">
@@ -109,7 +109,7 @@ ${resultSummary || "(결과 데이터 없음)"}
   </div>
   <div style="background:#0A1628;padding:20px 32px;text-align:center">
     <div style="font-size:10px;color:rgba(244,241,235,0.3);line-height:1.8">
-      © 2025 뷰인사이드 | Tel. 02-2088-1767 | hwayulinside@gmail.com<br/>
+      © 2025 Q인사이드 | Tel. 02-2088-1767 | hwayulinside@gmail.com<br/>
       본 이메일은 요청에 따라 발송되었습니다.
     </div>
   </div>
@@ -154,21 +154,21 @@ ${resultSummary || "(결과 데이터 없음)"}
             if (data.to) {
               try {
                 const subjectMap = {
-                  "report":"[뷰인사이드] 익명 제보 검토 결과 안내",
-                  "biz":"[뷰인사이드] 심층 상담 회신",
-                  "relief":"[뷰인사이드] 해결 의뢰 검토 결과 안내",
-                  "review":"[뷰인사이드] 리포트 검토 회신",
-                  "report-email":"[뷰인사이드] 진단 결과지 발송",
-                  "consulting":"[뷰인사이드] 상담 안내",
-                  "lecture":"[뷰인사이드] 강의 요청 회신",
-                  "advisory":"[뷰인사이드] 자문 요청 회신",
+                  "report":"[Q인사이드] 익명 제보 검토 결과 안내",
+                  "biz":"[Q인사이드] 심층 상담 회신",
+                  "relief":"[Q인사이드] 해결 의뢰 검토 결과 안내",
+                  "review":"[Q인사이드] 리포트 검토 회신",
+                  "report-email":"[Q인사이드] 진단 결과지 발송",
+                  "consulting":"[Q인사이드] 상담 안내",
+                  "lecture":"[Q인사이드] 강의 요청 회신",
+                  "advisory":"[Q인사이드] 자문 요청 회신",
                 };
                 const sendRes = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/send-email", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({
                     to: data.to,
-                    subject: subjectMap[data.type] || "[뷰인사이드] 안내 메일",
+                    subject: subjectMap[data.type] || "[Q인사이드] 안내 메일",
                     html: emailHtml
                   })
                 });

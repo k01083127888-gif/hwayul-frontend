@@ -184,8 +184,8 @@ export function ReportForm({ type, resultData, dark = false, resultHtml = "", ge
           }
           {form.userType === "corporate" ? (
             dark
-              ? <DarkInput label="소속 기업/기관명" value={form.orgName} onChange={F("orgName")} placeholder="(주)뷰인사이드" required />
-              : <Input label="소속 기업/기관명" value={form.orgName} onChange={F("orgName")} placeholder="(주)뷰인사이드" required />
+              ? <DarkInput label="소속 기업/기관명" value={form.orgName} onChange={F("orgName")} placeholder="(주)Q인사이드" required />
+              : <Input label="소속 기업/기관명" value={form.orgName} onChange={F("orgName")} placeholder="(주)Q인사이드" required />
           ) : (
             dark
               ? <DarkInput label="직위/직급 (선택)" value={form.position} onChange={F("position")} placeholder="예: 대리, 팀원 등" />

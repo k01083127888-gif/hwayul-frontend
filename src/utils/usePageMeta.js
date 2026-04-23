@@ -15,7 +15,7 @@ function setMeta(selector, attrName, attrValue, content) {
 
 // ── 페이지별 SEO/OG 메타 태그 동적 적용 훅 ──────────────────────────────
 // 사용: usePageMeta({ title, description, url, image })
-// - title: 브라우저 탭 제목 ("자가진단 | 뷰인사이드" 등)
+// - title: 브라우저 탭 제목 ("자가진단 | Q인사이드" 등)
 // - description: 페이지 설명 (160자 이내 권장)
 // - url: 절대 URL (https://hwayul.kr/xxx)
 // - image: (선택) og:image 절대 URL. 없으면 기본 og-image.png 사용

@@ -30,7 +30,7 @@ export function DifferentiationSection({ setActive }) {
           color: C.gold,
           letterSpacing: "3px",
           marginBottom: 8,
-        }}>WHY VIEW INSIDE</div>
+        }}>WHY Q INSIDE LABS</div>
 
         {/* 메인 타이틀 */}
         <h2 style={{
@@ -52,7 +52,7 @@ export function DifferentiationSection({ setActive }) {
           marginBottom: 32,
         }}>
           <strong style={{ color: "rgba(244,241,235,0.8)" }}>일반 AI</strong>에 물어보면 "일반적인 답"이 나옵니다.<br />
-          뷰인사이드는 <strong style={{ color: "rgba(244,241,235,0.8)" }}>실제 판결문을 근거로</strong> 답합니다.
+          Q인사이드는 <strong style={{ color: "rgba(244,241,235,0.8)" }}>실제 판결문을 근거로</strong> 답합니다.
         </p>
 
         {/* ★ NEW: 강화 카피 박스 ★ */}
@@ -171,7 +171,7 @@ export function DifferentiationSection({ setActive }) {
           fontSize: 14,
           color: "rgba(244,241,235,0.4)",
           marginBottom: 16,
-        }}>일반 AI vs 뷰인사이드</div>
+        }}>일반 AI vs Q인사이드</div>
 
         {/* ★ NEW: 5행 비교표 ★ */}
         <div style={{
@@ -196,7 +196,7 @@ export function DifferentiationSection({ setActive }) {
           }}>
             <div style={{ color: C.gold, textAlign: "left" }}>구분</div>
             <div style={{ color: "rgba(244,241,235,0.5)" }}>일반 AI</div>
-            <div style={{ color: C.gold }}>뷰인사이드 AI</div>
+            <div style={{ color: C.gold }}>Q인사이드 AI</div>
           </div>
 
           {/* 데이터 행 */}

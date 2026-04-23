@@ -29,12 +29,12 @@ function sendConfirmEmail(form) {
     <style>@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&family=Gowun+Batang:wght@400;700&display=swap');</style>
     <div style="max-width:600px;margin:0 auto;font-family:'Noto Sans KR',sans-serif;color:#333;line-height:1.8;">
       <div style="background:#0A1628;padding:28px 24px;border-radius:12px 12px 0 0;">
-        <h2 style="color:#F4F1EB;margin:0;font-size:20px;font-family:'Gowun Batang','Noto Sans KR',sans-serif;">뷰인사이드</h2>
+        <h2 style="color:#F4F1EB;margin:0;font-size:20px;font-family:'Gowun Batang','Noto Sans KR',sans-serif;">Q인사이드</h2>
         <p style="color:rgba(244,241,235,0.6);margin:4px 0 0;font-size:12px;">직장내 괴롭힘 & 조직문화 전문 플랫폼</p>
       </div>
       <div style="padding:28px 24px;border:1px solid #eee;border-top:none;border-radius:0 0 12px 12px;">
         <p style="font-size:15px;font-weight:700;margin-bottom:16px;">${form.name}님, 안녕하세요.</p>
-        <p>뷰인사이드 <strong>심층 상담 신청</strong>이 정상적으로 접수되었습니다.</p>
+        <p>Q인사이드 <strong>심층 상담 신청</strong>이 정상적으로 접수되었습니다.</p>
 
         <div style="background:#f8f7f5;padding:16px 18px;border-radius:8px;margin:20px 0;">
           <p style="font-size:13px;font-weight:700;color:#0A1628;margin:0 0 8px;">📋 신청 정보</p>
@@ -67,7 +67,7 @@ function sendConfirmEmail(form) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       to: form.email,
-      subject: "[뷰인사이드] 심층 상담 신청이 접수되었습니다",
+      subject: "[Q인사이드] 심층 상담 신청이 접수되었습니다",
       html,
     }),
   }).catch(e => console.log("확인 이메일 발송 실패(무시):", e.message));
@@ -76,7 +76,7 @@ function sendConfirmEmail(form) {
 // ── BizSection ─────────────────────────────────────────────────────────────────
 export function BizSection() {
   usePageMeta({
-    title: "심층 상담 신청 — 3단계 패키지 22만원 | 뷰인사이드",
+    title: "심층 상담 신청 — 3단계 패키지 22만원 | Q인사이드",
     description: "전문 노무사 심층 상담 (1차 전화 → 2차 서류 검토 → 3차 대면) 22만원. 해결 의뢰 전환 시 상담료 전액 차감. 개인·기업 모두 이용 가능합니다.",
     url: "https://hwayul.kr/biz",
   });

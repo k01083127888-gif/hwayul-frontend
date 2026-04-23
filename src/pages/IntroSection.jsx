@@ -9,8 +9,8 @@ import { useCaseCount } from "../utils/useCaseCount.js";
 export function IntroSection() {
   const { label: caseCountLabel } = useCaseCount();
   usePageMeta({
-    title: "소개 — 전문 노무사 팀 | 뷰인사이드",
-    description: "20년 경력 노무사가 이끄는 뷰인사이드. 직장내 괴롭힘·산재·조직문화 전문가 팀을 소개합니다.",
+    title: "소개 — 전문 노무사 팀 | Q인사이드",
+    description: "20년 경력 노무사가 이끄는 Q인사이드. 직장내 괴롭힘·산재·조직문화 전문가 팀을 소개합니다.",
     url: "https://hwayul.kr/intro",
   });
   const [selectedMember, setSelectedMember] = useState(null);
@@ -114,9 +114,9 @@ export function IntroSection() {
 
         {/* 플랫폼 취지 */}
         <div style={{ marginBottom:80 }}>
-          <SectionTag>ABOUT 뷰인사이드</SectionTag>
+          <SectionTag>ABOUT Q인사이드</SectionTag>
           <h2 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"clamp(1.7rem, 3vw, 2.4rem)", fontWeight:900, color:C.navy, marginTop:10, marginBottom:24, letterSpacing:"-0.5px" }}>
-            왜 뷰인사이드인가요?
+            왜 Q인사이드인가요?
           </h2>
 
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:32, alignItems:"start" }}>
@@ -128,7 +128,7 @@ export function IntroSection() {
                 동시에 기업과 조직도 사건이 발생하면 <strong>법적 제재, 핵심 인력 이탈, 조직 신뢰 훼손</strong>이라는 실질적 피해를 입습니다. 사전에 예방하지 못했을 때의 비용은, 예방에 드는 비용보다 훨씬 큽니다.
               </p>
               <p style={{ fontSize:15, color:"#4A4540", lineHeight:1.9 }}>
-                뷰인사이드는 <strong>전문 노무사가 직접 운영하는 플랫폼</strong>으로, 피해 근로자의 권리 회복과 기업의 건강한 조직문화 구축, 이 두 가지를 함께 지원합니다. 어느 한쪽 편이 아닌, <strong>법과 사실에 근거한 정확한 판단</strong>이 저희의 원칙입니다.
+                Q인사이드는 <strong>전문 노무사가 직접 운영하는 플랫폼</strong>으로, 피해 근로자의 권리 회복과 기업의 건강한 조직문화 구축, 이 두 가지를 함께 지원합니다. 어느 한쪽 편이 아닌, <strong>법과 사실에 근거한 정확한 판단</strong>이 저희의 원칙입니다.
               </p>
             </div>
 
@@ -173,19 +173,19 @@ export function IntroSection() {
 
             <div style={{ width:36, height:1, background:"rgba(10,22,40,0.2)", margin:"0 auto 32px auto" }} />
 
-            <p style={{ marginBottom:18 }}>뷰인사이드는 바로 이 두 가지 현실 위에서 태어났습니다. <strong style={{ color:C.navy }}>제도가 닿지 못해 무너지는 개인을 위해, 그리고 자신도 모르는 사이에 무너져가는 조직을 위해.</strong></p>
+            <p style={{ marginBottom:18 }}>Q인사이드는 바로 이 두 가지 현실 위에서 태어났습니다. <strong style={{ color:C.navy }}>제도가 닿지 못해 무너지는 개인을 위해, 그리고 자신도 모르는 사이에 무너져가는 조직을 위해.</strong></p>
 
-            <p style={{ marginBottom:18 }}>저희 두 사람의 길은 서로 달랐습니다. <strong style={{ color:C.navy }}>한 사람은 오랜 시간 피해자 곁에서 직접 구제 절차를 진행해왔고, 또 한 사람은 기업의 조직문화 개선 프로젝트를 이끌어왔습니다.</strong> 피해자의 눈물과 기업의 고민을 양쪽에서 마주해온 두 시선이 만나는 자리, 그곳이 뷰인사이드입니다.</p>
+            <p style={{ marginBottom:18 }}>저희 두 사람의 길은 서로 달랐습니다. <strong style={{ color:C.navy }}>한 사람은 오랜 시간 피해자 곁에서 직접 구제 절차를 진행해왔고, 또 한 사람은 기업의 조직문화 개선 프로젝트를 이끌어왔습니다.</strong> 피해자의 눈물과 기업의 고민을 양쪽에서 마주해온 두 시선이 만나는 자리, 그곳이 Q인사이드입니다.</p>
 
-            <p style={{ marginBottom:18 }}>저희는 직접 분석한 {caseCountLabel}의 실제 판례를 데이터베이스로 구축했습니다. 일반 AI가 그럴듯한 말을 만들어낼 때, 뷰인사이드는 실제 사건번호와 법원의 판단을 근거로 답합니다.</p>
+            <p style={{ marginBottom:18 }}>저희는 직접 분석한 {caseCountLabel}의 실제 판례를 데이터베이스로 구축했습니다. 일반 AI가 그럴듯한 말을 만들어낼 때, Q인사이드는 실제 사건번호와 법원의 판단을 근거로 답합니다.</p>
 
-            <p style={{ marginBottom:18 }}>저희는 뷰인사이드가 단순한 챗봇이 아니라, <strong style={{ color:C.navy }}>누군가의 일터가 무너지기 전에 닿을 수 있는 첫 번째 손</strong>이 되기를 원합니다. 정확한 분석으로, 그리고 끝까지 외면하지 않는 끈기로, 피해자와 기업 곁에 있겠습니다.</p>
+            <p style={{ marginBottom:18 }}>저희는 Q인사이드가 단순한 챗봇이 아니라, <strong style={{ color:C.navy }}>누군가의 일터가 무너지기 전에 닿을 수 있는 첫 번째 손</strong>이 되기를 원합니다. 정확한 분석으로, 그리고 끝까지 외면하지 않는 끈기로, 피해자와 기업 곁에 있겠습니다.</p>
 
-            <p style={{ marginBottom:8 }}>여러분의 일터가 더 건강해지는 그날까지, 뷰인사이드는 곁에 있겠습니다. <strong style={{ color:C.navy }}>저희가 먼저 손을 내밀겠습니다.</strong></p>
+            <p style={{ marginBottom:8 }}>여러분의 일터가 더 건강해지는 그날까지, Q인사이드는 곁에 있겠습니다. <strong style={{ color:C.navy }}>저희가 먼저 손을 내밀겠습니다.</strong></p>
           </div>
 
           <div style={{ maxWidth:780, margin:"48px auto 0 auto", paddingTop:28, borderTop:"1px solid rgba(10,22,40,0.12)" }}>
-            <div style={{ fontSize:11, letterSpacing:"2px", color:C.teal, fontWeight:700, marginBottom:14, textTransform:"uppercase" }}>뷰인사이드 공동대표</div>
+            <div style={{ fontSize:11, letterSpacing:"2px", color:C.teal, fontWeight:700, marginBottom:14, textTransform:"uppercase" }}>Q인사이드 공동대표</div>
             <div style={{ display:"flex", alignItems:"flex-end", gap:32, flexWrap:"wrap" }}>
               <div>
                 <div style={{ fontFamily:"'Noto Serif KR', serif", fontSize:26, fontWeight:500, color:C.navy, letterSpacing:"4px" }}>김 재 정</div>
