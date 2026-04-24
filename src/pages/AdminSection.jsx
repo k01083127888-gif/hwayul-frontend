@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import C from "../tokens/colors.js";
 import { _store, _members, _contents, addSubmission, useStore, setMembers, setContents, loadContentsFromDB, saveContentsToDB, updateSubmissionStatus, loadSubmissionsFromDB, syncSubmissionsToDB } from "../utils/store.js";
 import { saveMembers, saveContents, saveDetails, saveToStorage } from "../utils/storage.js";
@@ -382,7 +382,11 @@ export function AdminSection({ setActive, authed, setAuthed }) {
       };
     };
 
-    const quillModules = {
+    // imageHandler의 최신 버전을 ref에 보관 → quillModules는 고정 참조 유지
+    // (매 렌더마다 imageHandler·quillModules가 재생성되면 Quill이 재초기화되어 커서 버벅임 발생)
+    const imageHandlerRef = useRef(imageHandler);
+    imageHandlerRef.current = imageHandler;
+    const quillModules = useMemo(() => ({
       toolbar: {
         container: [
           [{ header: [1, 2, 3, false] }],
@@ -393,9 +397,9 @@ export function AdminSection({ setActive, authed, setAuthed }) {
           ["link", "image", "video"],
           ["clean"],
         ],
-        handlers: { image: imageHandler },
+        handlers: { image: () => imageHandlerRef.current?.() },
       },
-    };
+    }), []);  // 빈 배열 = 최초 1회만 생성, 이후 Quill 재초기화 없음
 
     // 이미지 클릭 → 크기 조절 + 정렬
     useEffect(() => {
