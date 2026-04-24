@@ -258,7 +258,8 @@ export function AdminSection({ setActive, authed, setAuthed }) {
   // 오인식하지 않도록. 그래야 내부 Quill 에디터가 언마운트·재마운트되지 않음.
   // deps [] — 내부 closures는 AdminSection의 변하지 않는 값만 참조
   // (cardStyle, btnPrimary, getFileType, fileTypeLabel, contentDetails 등 모두 불변)
-  const ContentForm = useMemo(() => ({ item, onSave, onCancel }) => {
+  const ContentForm = useMemo(() => {
+    return function ContentForm({ item, onSave, onCancel }) {
     const existingDetail = item?.id ? contentDetails[item.id] : null;
     const [f, setF] = useState(item || { type:"news", tag:"", title:"", date:new Date().toISOString().slice(0,10).replace(/-/g,"."), summary:"", views:0 });
     const [body, setBody] = useState(existingDetail?.content || item?.body || "");
@@ -562,6 +563,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
         </div>
       </div>
     );
+    };
   }, []);
 
   // ── 접수 테이블 ──
