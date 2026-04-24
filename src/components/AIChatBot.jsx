@@ -50,6 +50,8 @@ export function AIChatBot({ onClose, isAdmin = false }) {
   useEffect(() => {
     if (role && role !== "admin" && messages.length > 1) {
       saveSession(role, messages, replyCount);
+      // 심층상담 페이지로 어떤 경로로 이동해도 대화가 전달되도록 브리지에도 저장
+      saveAIChat({ source: "ai", topic: roleConfig[role]?.label || role, messages });
     }
   }, [messages, role, replyCount]);
 

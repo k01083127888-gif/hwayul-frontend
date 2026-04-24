@@ -77,6 +77,13 @@ export function DiagnosisChatBot({ type = "checklist", resultData = null, setAct
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [messages, loading]);
 
+  // 대화 발생 시 심층상담 브리지에 자동 저장 (어떤 경로로 이동해도 대화 전달)
+  useEffect(() => {
+    if (messages.length > 1) {
+      saveAIChat({ source: "diagnosis", topic: cfg?.label || role, messages });
+    }
+  }, [messages, role]);
+
   // 역할 변경 시 챗봇 리셋
   const switchRole = (newRole) => {
     setRole(newRole);
