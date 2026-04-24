@@ -83,6 +83,19 @@ export function AdminSection({ setActive, authed, setAuthed }) {
   const [contentPreview, setContentPreview] = useState(null);
   const [contentQuery, setContentQuery] = useState("");
   const [contentFilter, setContentFilter] = useState("all"); // all | case_sanjae | news | resource | column
+  // 판례번호 뱃지 클릭 시 띄울 판례 상세 모달
+  const [caseLookupModal, setCaseLookupModal] = useState(null); // null | { loading, caseNumber, data }
+  const openCaseLookup = async (caseNumber) => {
+    if (!caseNumber) return;
+    setCaseLookupModal({ loading: true, caseNumber, data: null });
+    try {
+      const res = await fetch(`https://hwayul-backend-production-96cf.up.railway.app/api/cases/by-case-number/${encodeURIComponent(caseNumber)}`);
+      const rows = res.ok ? await res.json() : [];
+      setCaseLookupModal({ loading: false, caseNumber, data: rows });
+    } catch (e) {
+      setCaseLookupModal({ loading: false, caseNumber, data: [], error: e.message });
+    }
+  };
   const [viewDetail, setViewDetail] = useState(null);
   const [emailCompose, setEmailCompose] = useState(null);
   const [viewResultHtml, setViewResultHtml] = useState(null);
@@ -919,7 +932,10 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                       <td style={tdStyle}>
                         {c.tag}
                         {c.case_number && (
-                          <span style={{ display:"inline-block", marginLeft:6, padding:"1px 7px", borderRadius:4, background:"rgba(13,115,119,0.08)", color:C.teal, fontSize:10, fontWeight:700, fontFamily:"'Courier New', monospace", verticalAlign:"middle" }}>{c.case_number}</span>
+                          <button onClick={() => openCaseLookup(c.case_number)}
+                            title="판례DB에서 상세 보기"
+                            style={{ display:"inline-block", marginLeft:6, padding:"2px 8px", borderRadius:4, background:"rgba(13,115,119,0.08)", color:C.teal, fontSize:10, fontWeight:700, fontFamily:"'Courier New', monospace", verticalAlign:"middle", cursor:"pointer", border:"1px solid rgba(13,115,119,0.2)" }}
+                          >🔍 {c.case_number}</button>
                         )}
                       </td>
                       <td style={{ ...tdStyle, maxWidth:300, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{isHidden && <span style={{ fontSize:9, color:C.red, fontWeight:700, marginRight:4 }}>숨김</span>}{c.title}</td>
@@ -1077,6 +1093,72 @@ export function AdminSection({ setActive, authed, setAuthed }) {
         )}
 
         {/* ── 상세보기 오버레이 ── */}
+        {/* 판례번호 클릭 시 — 판례DB 상세 모달 */}
+        {caseLookupModal && (
+          <div style={{ position:"fixed", inset:0, zIndex:9999, background:"rgba(10,22,40,0.75)", backdropFilter:"blur(8px)", display:"flex", alignItems:"center", justifyContent:"center", padding:32 }} onClick={() => setCaseLookupModal(null)}>
+            <div onClick={e => e.stopPropagation()} style={{ background:"white", borderRadius:16, padding:32, maxWidth:760, width:"100%", maxHeight:"85vh", overflow:"auto", boxShadow:"0 24px 80px rgba(10,22,40,0.3)" }}>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:18, paddingBottom:14, borderBottom:"1px solid rgba(10,22,40,0.08)" }}>
+                <div>
+                  <div style={{ fontSize:10, letterSpacing:"2px", color:C.teal, fontWeight:700, textTransform:"uppercase", marginBottom:4 }}>JUDICIAL PRECEDENT DB</div>
+                  <h3 style={{ fontSize:15, fontWeight:800, color:C.navy }}>⚖️ 판례번호 <span style={{ color:C.teal, fontFamily:"'Courier New', monospace" }}>{caseLookupModal.caseNumber}</span></h3>
+                </div>
+                <button onClick={() => setCaseLookupModal(null)} style={{ background:"none", border:"none", fontSize:20, color:C.gray, cursor:"pointer" }}>✕</button>
+              </div>
+              {caseLookupModal.loading ? (
+                <div style={{ textAlign:"center", padding:40, color:C.gray }}>판례DB에서 조회 중...</div>
+              ) : !caseLookupModal.data || caseLookupModal.data.length === 0 ? (
+                <div style={{ padding:"30px 20px", textAlign:"center", background:"rgba(201,168,76,0.05)", border:"1px solid rgba(201,168,76,0.2)", borderRadius:10 }}>
+                  <div style={{ fontSize:28, marginBottom:8 }}>📭</div>
+                  <div style={{ fontSize:13, color:C.gray, lineHeight:1.7 }}>
+                    판례DB에서 이 판례번호를 찾을 수 없습니다.<br/>
+                    <span style={{ fontSize:11, color:"rgba(10,22,40,0.4)" }}>
+                      (콘텐츠에 수기 입력된 번호 / 판례DB에 아직 미등록 / 띄어쓰기·형식 차이 가능)
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                caseLookupModal.data.map((cs, idx) => (
+                  <div key={cs.id || idx} style={{ padding:"18px 20px", background:"rgba(13,115,119,0.04)", border:"1px solid rgba(13,115,119,0.18)", borderRadius:10, marginBottom:16 }}>
+                    <div style={{ display:"flex", gap:8, alignItems:"center", marginBottom:10, flexWrap:"wrap" }}>
+                      {cs.no && <span style={{ fontSize:10, padding:"2px 8px", borderRadius:100, background:"rgba(10,22,40,0.08)", color:C.navy, fontWeight:700 }}>#{cs.no}번</span>}
+                      {cs.court && <span style={{ fontSize:10, padding:"2px 8px", borderRadius:100, background:"rgba(61,90,128,0.12)", color:"#3D5A80", fontWeight:700 }}>{cs.court}</span>}
+                      {cs.category && <span style={{ fontSize:10, padding:"2px 8px", borderRadius:100, background:"rgba(201,168,76,0.12)", color:"#8B7A40", fontWeight:700 }}>{cs.category}</span>}
+                      {cs.recognition && <span style={{ fontSize:10, padding:"2px 8px", borderRadius:100, background: cs.recognition.includes("인정") ? "rgba(26,122,74,0.12)" : "rgba(192,57,43,0.12)", color: cs.recognition.includes("인정") ? C.green : C.red, fontWeight:700 }}>{cs.recognition}</span>}
+                    </div>
+                    {cs.title && (
+                      <h4 style={{ fontSize:14, fontWeight:800, color:C.navy, marginBottom:12, lineHeight:1.55 }}>{cs.title}</h4>
+                    )}
+                    {cs.facts && (
+                      <div style={{ marginBottom:12 }}>
+                        <div style={{ fontSize:10, fontWeight:800, color:C.teal, letterSpacing:"0.5px", marginBottom:5 }}>📋 사실관계</div>
+                        <div style={{ fontSize:12.5, color:"#3A3530", lineHeight:1.85, whiteSpace:"pre-wrap" }}>{cs.facts}</div>
+                      </div>
+                    )}
+                    {cs.holding && (
+                      <div style={{ marginBottom:12 }}>
+                        <div style={{ fontSize:10, fontWeight:800, color:C.teal, letterSpacing:"0.5px", marginBottom:5 }}>⚖️ 판시사항</div>
+                        <div style={{ fontSize:12.5, color:"#3A3530", lineHeight:1.85, whiteSpace:"pre-wrap" }}>{cs.holding}</div>
+                      </div>
+                    )}
+                    {cs.summary && (
+                      <div style={{ marginBottom:12 }}>
+                        <div style={{ fontSize:10, fontWeight:800, color:C.teal, letterSpacing:"0.5px", marginBottom:5 }}>📄 판결요지</div>
+                        <div style={{ fontSize:12.5, color:"#3A3530", lineHeight:1.85, whiteSpace:"pre-wrap" }}>{cs.summary}</div>
+                      </div>
+                    )}
+                    {cs.implications && (
+                      <div style={{ marginTop:14, paddingTop:12, borderTop:"1px dashed rgba(13,115,119,0.25)" }}>
+                        <div style={{ fontSize:10, fontWeight:800, color:C.gold, letterSpacing:"0.5px", marginBottom:5 }}>💡 시사점</div>
+                        <div style={{ fontSize:12.5, color:"#5A4A30", lineHeight:1.85, whiteSpace:"pre-wrap" }}>{cs.implications}</div>
+                      </div>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        )}
+
         {viewDetail && (
           <div style={{ position:"fixed", inset:0, zIndex:9998, background:"rgba(10,22,40,0.7)", backdropFilter:"blur(6px)", display:"flex", alignItems:"center", justifyContent:"center", padding:32 }} onClick={() => setViewDetail(null)}>
             <div onClick={e => e.stopPropagation()} style={{ background:"white", borderRadius:16, padding:32, maxWidth:640, width:"100%", maxHeight:"80vh", overflow:"auto", boxShadow:"0 24px 80px rgba(10,22,40,0.25)" }}>
