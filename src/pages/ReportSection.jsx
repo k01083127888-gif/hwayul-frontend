@@ -40,7 +40,7 @@ export function ReportSection() {
           marginBottom:36,
         }}>
           <div style={{ fontSize:13, fontWeight:800, color:"#A0720A", marginBottom:10, letterSpacing:"0.3px" }}>
-            📢 공익 제보 안내
+            📢 익명 제보 안내
           </div>
           <p style={{ fontSize:13, color:C.navy, lineHeight:1.85, margin:"0 0 12px 0" }}>
             본 채널은 본인의 사안만을 위한 곳이 아닙니다.<br/>
