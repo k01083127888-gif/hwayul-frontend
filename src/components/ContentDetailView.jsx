@@ -50,7 +50,7 @@ export function ContentDetailView({ item, onBack }) {
 
   const _slug = slugify(item.title);
   usePageMeta({
-    title: `${item.title} | Q인사이드`,
+    title: `${item.title} | WIHAM 인사이드`,
     description,
     url: _slug ? `https://hwayul.kr/content/${item.id}/${encodeURIComponent(_slug)}` : `https://hwayul.kr/content/${item.id}`,
   });

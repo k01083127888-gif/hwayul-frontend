@@ -24,13 +24,13 @@ const PRINT_HEADER = `
         <circle cx="78" cy="52" r="3" fill="#4ECDC4" opacity="0.5"/>
       </svg>
       <div>
-        <div style="font-size:24px;font-weight:800;color:#0A1628;font-family:'Gowun Batang','Noto Sans KR',sans-serif">Q <span style="color:#0D7377">인사이드</span></div>
-        <div style="font-size:9px;color:#8B8680;margin-top:1px;letter-spacing:1.5px">Q Inside Labs</div>
+        <div style="font-size:24px;font-weight:800;color:#0A1628;font-family:'Gowun Batang','Noto Sans KR',sans-serif"><span style="font-family:'Inter','Helvetica Neue','Arial Black',sans-serif;font-weight:900;letter-spacing:-0.04em">WIHAM</span> <span style="color:#0D7377">인사이드</span></div>
+        <div style="font-size:9px;color:#8B8680;margin-top:1px;letter-spacing:1.5px">WIHAM Inside Labs</div>
         <div style="font-size:8px;color:#B0ADA6;letter-spacing:0.5px">직장내괴롭힘 & 조직문화 플랫폼</div>
       </div>
     </div>
     <div style="text-align:right;font-size:11px;color:#8B8680;line-height:1.8;white-space:nowrap">
-      <div><strong style="color:#0A1628;font-family:'Gowun Batang','Noto Sans KR',sans-serif;font-size:14px">Q인사이드</strong></div>
+      <div><strong style="color:#0A1628;font-family:'Gowun Batang','Noto Sans KR',sans-serif;font-size:14px">WIHAM 인사이드</strong></div>
       <div>Tel. 02-2088-1767</div>
       <div>Email. hwayulinside@gmail.com</div>
       <div>Web. www.hwayul.kr</div>
@@ -41,12 +41,12 @@ const PRINT_FOOTER = `
   <div style="margin-top:36px;border-top:2px solid #E8E5DE;padding-top:18px;text-align:center">
     <div style="font-size:10px;color:#8B8680;line-height:1.8">
       본 진단 결과는 참고용이며 법적 효력이 없습니다. 최종 판단은 전문 노무사와 확인하시기 바랍니다.<br/>
-      © 2025 Q인사이드 | Tel. 02-2088-1767 | hwayulinside@gmail.com
+      © 2025 WIHAM 인사이드 | Tel. 02-2088-1767 | hwayulinside@gmail.com
     </div>
     <div style="margin-top:12px;padding:10px;background:#0A1628;border-radius:8px">
       <div style="font-size:12px;color:#C9A84C;font-weight:700">💡 전문가 상담이 필요하신가요?</div>
       <div style="font-size:11px;color:rgba(244,241,235,0.6);margin-top:4px">
-        Q인사이드의 전문 노무사에게 맞춤형 상담을 받아보세요. 초기 상담은 무료입니다.
+        WIHAM 인사이드의 전문 노무사에게 맞춤형 상담을 받아보세요. 초기 상담은 무료입니다.
       </div>
     </div>
   </div>
@@ -112,12 +112,12 @@ export function generateChecklistPrintHtml(prereq, behavior, impact, continuity,
   }).join("");
   const contLabel = continuity ? continuityOptions.find(c => c.id === continuity)?.label || "-" : "-";
 
-  return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>직장내 괴롭힘 진단 결과 - Q인사이드</title>${PRINT_STYLE}</head><body>
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>직장내 괴롭힘 진단 결과 - WIHAM 인사이드</title>${PRINT_STYLE}</head><body>
     <div style="max-width:780px;margin:0 auto;padding:32px;background:white;box-shadow:0 4px 20px rgba(10,22,40,0.06)">
     ${PRINT_HEADER}
     <div style="text-align:center;margin-bottom:24px">
       <h2>직장내 괴롭힘 진단 결과 보고서</h2>
-      <div style="font-size:11px;color:#8B8680">진단일시: ${now} | Q인사이드 자동 생성</div>
+      <div style="font-size:11px;color:#8B8680">진단일시: ${now} | WIHAM 인사이드 자동 생성</div>
     </div>
     <div class="card" style="text-align:center;border-color:${result.color};border-width:2px">
       <div style="font-size:32px;margin-bottom:8px">${result.emoji}</div>
@@ -183,12 +183,12 @@ export function generateCulturePrintHtml(totalRisk, catResults, highRiskItems, a
       ${highRiskItems.map(i => `<div style="padding:6px 0;border-bottom:1px solid #F0EDE6">🚩 <strong style="color:${i.catColor}">[${i.catTitle}]</strong> ${i.text}</div>`).join("")}
     </div>` : "";
 
-  return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>조직문화 진단 결과 - Q인사이드</title>${PRINT_STYLE}</head><body>
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>조직문화 진단 결과 - WIHAM 인사이드</title>${PRINT_STYLE}</head><body>
     <div style="max-width:780px;margin:0 auto;padding:32px;background:white;box-shadow:0 4px 20px rgba(10,22,40,0.06)">
     ${PRINT_HEADER}
     <div style="text-align:center;margin-bottom:24px">
       <h2>직장내 괴롭힘 발생 위험도 진단 보고서</h2>
-      <div style="font-size:11px;color:#8B8680">진단일시: ${now}${orgInfo.name ? " | 조직: "+orgInfo.name : ""}${orgInfo.size ? " ("+orgInfo.size+")" : ""} | Q인사이드 자동 생성</div>
+      <div style="font-size:11px;color:#8B8680">진단일시: ${now}${orgInfo.name ? " | 조직: "+orgInfo.name : ""}${orgInfo.size ? " ("+orgInfo.size+")" : ""} | WIHAM 인사이드 자동 생성</div>
     </div>
     <div class="card" style="text-align:center;border-color:${grade.color};border-width:2px">
       <div style="font-size:32px;margin-bottom:6px">${grade.emoji}</div>
@@ -238,12 +238,12 @@ export function generateAccusedPrintHtml(relation, superiority, behavior, justif
     ? impactChecked.map(i => `<div style="padding:5px 0;font-size:12px">✅ ${i.text}</div>`).join("")
     : `<div style="color:#8B8680;font-size:12px">영향 없음 또는 미확인</div>`;
 
-  return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>피지목인 자가진단 결과 - Q인사이드</title>${PRINT_STYLE}</head><body>
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>피지목인 자가진단 결과 - WIHAM 인사이드</title>${PRINT_STYLE}</head><body>
     <div style="max-width:780px;margin:0 auto;padding:32px;background:white;box-shadow:0 4px 20px rgba(10,22,40,0.06)">
     ${PRINT_HEADER}
     <div style="text-align:center;margin-bottom:24px">
       <h2>피지목인 자가진단 결과 보고서</h2>
-      <div style="font-size:11px;color:#8B8680">진단일시: ${now} | Q인사이드 자동 생성</div>
+      <div style="font-size:11px;color:#8B8680">진단일시: ${now} | WIHAM 인사이드 자동 생성</div>
     </div>
     <div class="card" style="text-align:center;border-color:${result.color};border-width:2px">
       <div style="font-size:32px;margin-bottom:8px">${result.emoji}</div>
@@ -318,12 +318,12 @@ export function generateSanjaePrintHtml(situation, medical, workCond, result) {
     ? workChecked.map(w => `<div style="padding:5px 0;font-size:12px">✅ ${w.label}</div>`).join("")
     : `<div style="color:#8B8680;font-size:12px">해당 없음</div>`;
 
-  return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>산재 상담 필요성 체크 결과 - Q인사이드</title>${PRINT_STYLE}</head><body>
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>산재 상담 필요성 체크 결과 - WIHAM 인사이드</title>${PRINT_STYLE}</head><body>
     <div style="max-width:780px;margin:0 auto;padding:32px;background:white;box-shadow:0 4px 20px rgba(10,22,40,0.06)">
     ${PRINT_HEADER}
     <div style="text-align:center;margin-bottom:24px">
       <h2>산재 상담 필요성 체크 결과 보고서</h2>
-      <div style="font-size:11px;color:#8B8680">진단일시: ${now} | Q인사이드 자동 생성</div>
+      <div style="font-size:11px;color:#8B8680">진단일시: ${now} | WIHAM 인사이드 자동 생성</div>
     </div>
     <div class="card" style="text-align:center;border-color:${result.recommend ? C.teal : C.gold};border-width:2px">
       <div style="font-size:32px;margin-bottom:8px">${result.emoji}</div>
@@ -361,12 +361,12 @@ export function generateCompanyPrintHtml(report, org, actions, result) {
     ? arr.map(i => `<div style="padding:5px 0;font-size:12px">✅ ${i.label}</div>`).join("")
     : `<div style="color:#8B8680;font-size:12px">해당 없음</div>`;
 
-  return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>사내 괴롭힘 조사 필요성 체크 결과 - Q인사이드</title>${PRINT_STYLE}</head><body>
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>사내 괴롭힘 조사 필요성 체크 결과 - WIHAM 인사이드</title>${PRINT_STYLE}</head><body>
     <div style="max-width:780px;margin:0 auto;padding:32px;background:white;box-shadow:0 4px 20px rgba(10,22,40,0.06)">
     ${PRINT_HEADER}
     <div style="text-align:center;margin-bottom:24px">
       <h2>사내 괴롭힘 조사 필요성 체크 결과 보고서</h2>
-      <div style="font-size:11px;color:#8B8680">진단일시: ${now} | Q인사이드 자동 생성</div>
+      <div style="font-size:11px;color:#8B8680">진단일시: ${now} | WIHAM 인사이드 자동 생성</div>
     </div>
     <div class="card" style="text-align:center;border-color:${result.color};border-width:2px">
       <div style="font-size:32px;margin-bottom:8px">${result.emoji}</div>

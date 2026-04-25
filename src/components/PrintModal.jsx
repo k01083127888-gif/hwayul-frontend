@@ -30,7 +30,7 @@ export function PrintModal({ isOpen, onClose, getHtml, type }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           to: email,
-          subject: `[Q인사이드] ${typeLabel} 결과지`,
+          subject: `[WIHAM 인사이드] ${typeLabel} 결과지`,
           html,
         }),
       }).catch(e => console.log("결과지 이메일 발송 실패(무시):", e.message));
@@ -62,7 +62,7 @@ export function PrintModal({ isOpen, onClose, getHtml, type }) {
             <span style={{ fontSize:18 }}>📄</span>
             <div>
               <div style={{ fontSize:14, fontWeight:800, color:C.cream }}>진단 결과 보고서</div>
-              <div style={{ fontSize:10, color:"rgba(244,241,235,0.4)" }}>Q인사이드 · {type === "checklist" ? "직장내 괴롭힘 진단" : "조직문화 진단"}</div>
+              <div style={{ fontSize:10, color:"rgba(244,241,235,0.4)" }}>WIHAM 인사이드 · {type === "checklist" ? "직장내 괴롭힘 진단" : "조직문화 진단"}</div>
             </div>
           </div>
           <button onClick={() => setShowReport(false)} style={{ padding:"8px 20px", borderRadius:6, background:"rgba(255,255,255,0.1)", border:"1px solid rgba(255,255,255,0.15)", color:C.cream, fontWeight:700, fontSize:12, cursor:"pointer", fontFamily:"inherit" }}>✕ 닫기</button>

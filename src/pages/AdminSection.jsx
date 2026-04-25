@@ -102,7 +102,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
   const [reportWrite, setReportWrite] = useState(null);
   const resultIframeRef = useRef(null);
   const [nlMode, setNlMode] = useState("list"); // list | compose | preview | history
-  const [nlForm, setNlForm] = useState({ title:"", greeting:"안녕하세요, Q인사이드입니다.", body:"", closing:"감사합니다.\n\nQ인사이드\n대표 노무사 김재정\nhwayulinside@gmail.com" });
+  const [nlForm, setNlForm] = useState({ title:"", greeting:"안녕하세요, WIHAM 인사이드입니다.", body:"", closing:"감사합니다.\n\nWIHAM 인사이드\n대표 노무사 김재정\nhwayulinside@gmail.com" });
   const [nlSent, setNlSent] = useState(false);
   const nlPreviewRef = useRef(null);
   // AI 자동 작성 상태
@@ -156,7 +156,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
       <div style={{ maxWidth:400, width:"100%", textAlign:"center" }}>
         <div style={{ fontSize:48, marginBottom:20 }}>{isLocked ? "🔒" : "🔐"}</div>
         <h2 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:22, fontWeight:800, color:C.cream, marginBottom:8 }}>관리자 로그인</h2>
-        <p style={{ fontSize:13, color:"rgba(244,241,235,0.4)", marginBottom:12 }}>Q인사이드 관리자 전용 페이지입니다.</p>
+        <p style={{ fontSize:13, color:"rgba(244,241,235,0.4)", marginBottom:12 }}>WIHAM 인사이드 관리자 전용 페이지입니다.</p>
         <div style={{ fontSize:10, color:"rgba(244,241,235,0.25)", marginBottom:28, lineHeight:1.6 }}>
           🔒 암호화 적용 · 5회 실패 시 자동 잠금 · 30분 비활동 시 자동 로그아웃
         </div>
@@ -590,7 +590,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:28 }}>
           <div>
             <div style={{ fontSize:10, letterSpacing:"3px", color:C.teal, fontWeight:700, textTransform:"uppercase" }}>ADMIN PANEL</div>
-            <h2 style={{ fontFamily:"'BrandFont', 'Noto Serif KR', serif", fontSize:24, fontWeight:900, color:C.navy, marginTop:4 }}>Q인사이드 관리자</h2>
+            <h2 style={{ fontFamily:"'BrandFont', 'Noto Serif KR', serif", fontSize:24, fontWeight:900, color:C.navy, marginTop:4 }}>WIHAM 인사이드 관리자</h2>
           </div>
           <div style={{ display:"flex", gap:10 }}>
             <button onClick={() => setActive("home")} style={{ padding:"8px 18px", borderRadius:6, border:`1px solid rgba(10,22,40,0.12)`, background:"white", color:C.navy, fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"inherit" }}>🏠 사이트 보기</button>
@@ -1264,7 +1264,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                       <td style={tdStyle}><select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;updateSubmissionStatus(r.id,e.target.value);_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}><option>신규</option><option>진행중</option><option>완료</option></select></td>
                       <td style={{ ...tdStyle, textAlign:"right" }}>
                         <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 12px", marginRight:6 }}>상세보기</button>
-                        <button onClick={()=>r.email && setEmailCompose({ to:r.email||"", name:"제보자", type:"report", data:r, greeting:`안녕하세요, Q인사이드입니다.\n\n접수하신 제보 건에 대한 검토 결과를 안내드립니다.`, body:"" })} disabled={!r.email} title={r.email ? "이메일 회신" : "이메일 미등록 (회신 불가)"} style={{ padding:"5px 12px", borderRadius:6, background:r.email ? C.gold : "rgba(10,22,40,0.08)", border:"none", color:r.email ? C.navy : C.gray, fontWeight:700, fontSize:11, cursor:r.email ? "pointer" : "not-allowed", fontFamily:"inherit" }}>📧 이메일</button>
+                        <button onClick={()=>r.email && setEmailCompose({ to:r.email||"", name:"제보자", type:"report", data:r, greeting:`안녕하세요, WIHAM 인사이드입니다.\n\n접수하신 제보 건에 대한 검토 결과를 안내드립니다.`, body:"" })} disabled={!r.email} title={r.email ? "이메일 회신" : "이메일 미등록 (회신 불가)"} style={{ padding:"5px 12px", borderRadius:6, background:r.email ? C.gold : "rgba(10,22,40,0.08)", border:"none", color:r.email ? C.navy : C.gray, fontWeight:700, fontSize:11, cursor:r.email ? "pointer" : "not-allowed", fontFamily:"inherit" }}>📧 이메일</button>
                         <button onClick={()=>fetchEmailHistory(r.id)} style={{ padding:"5px 10px", borderRadius:6, background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", color:C.teal, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit", marginLeft:4 }}>📬 이력</button>
                       </td>
                     </tr>
@@ -1343,7 +1343,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                       <td style={{ ...tdStyle, whiteSpace:"nowrap" }}><select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;updateSubmissionStatus(r.id,e.target.value);_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}><option>신규</option><option>진행중</option><option>완료</option></select></td>
                       <td style={{ ...tdStyle, textAlign:"right", whiteSpace:"nowrap" }}>
                         <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 12px", marginRight:6 }}>상세보기</button>
-                        <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:"biz", data:r, greeting:`${r.name||""} 님${r.company?` (${r.company})`:""} 안녕하세요,\nQ인사이드입니다.\n\n요청하신 심층 상담 건에 대해 안내드립니다.`, body:"" })} style={{ padding:"5px 12px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
+                        <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:"biz", data:r, greeting:`${r.name||""} 님${r.company?` (${r.company})`:""} 안녕하세요,\nWIHAM 인사이드입니다.\n\n요청하신 심층 상담 건에 대해 안내드립니다.`, body:"" })} style={{ padding:"5px 12px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
                         <button onClick={()=>fetchEmailHistory(r.id)} style={{ padding:"5px 10px", borderRadius:6, background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", color:C.teal, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit", marginLeft:4 }}>📬 이력</button>
                       </td>
                     </tr>
@@ -1407,7 +1407,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                       <td style={tdStyle}><select value={r.status||"신규"} onChange={e=>{r.status=e.target.value;updateSubmissionStatus(r.id,e.target.value);_store.listeners.forEach(fn=>fn());saveToStorage(_store.submissions);}} style={{ padding:"4px 8px", borderRadius:4, border:"1px solid rgba(10,22,40,0.15)", fontSize:11, fontFamily:"inherit" }}><option>신규</option><option>진행중</option><option>완료</option></select></td>
                       <td style={{ ...tdStyle, textAlign:"right" }}>
                         <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 12px", marginRight:6 }}>상세보기</button>
-                        <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:"relief", data:r, greeting:`${r.name||""} 님 안녕하세요,\nQ인사이드입니다.\n\n신청하신 ${r.trackTitle||"해결 의뢰"} 건에 대한 검토 결과를 안내드립니다.`, body:"" })} style={{ padding:"5px 12px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
+                        <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:"relief", data:r, greeting:`${r.name||""} 님 안녕하세요,\nWIHAM 인사이드입니다.\n\n신청하신 ${r.trackTitle||"해결 의뢰"} 건에 대한 검토 결과를 안내드립니다.`, body:"" })} style={{ padding:"5px 12px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
                         <button onClick={()=>fetchEmailHistory(r.id)} style={{ padding:"5px 10px", borderRadius:6, background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", color:C.teal, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit", marginLeft:4 }}>📬 이력</button>
                       </td>
                     </tr>
@@ -1635,7 +1635,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                           </td>
                           <td style={{ ...tdStyle, textAlign:"right", whiteSpace:"nowrap" }}>
                             <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 10px", marginRight:4, fontSize:10 }}>상세</button>
-                            <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:"consulting", data:r, greeting:`${r.name||""} 님 안녕하세요,\nQ인사이드입니다.\n\n전화상담 예약을 확인하였습니다.${r.prefDate?"\n희망일: "+r.prefDate:""} ${r.prefTime?"/ "+r.prefTime:""}`, body:"" })} style={{ padding:"5px 10px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
+                            <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:"consulting", data:r, greeting:`${r.name||""} 님 안녕하세요,\nWIHAM 인사이드입니다.\n\n전화상담 예약을 확인하였습니다.${r.prefDate?"\n희망일: "+r.prefDate:""} ${r.prefTime?"/ "+r.prefTime:""}`, body:"" })} style={{ padding:"5px 10px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
                             <button onClick={()=>fetchEmailHistory(r.id)} style={{ padding:"5px 8px", borderRadius:6, background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", color:C.teal, fontWeight:700, fontSize:9, cursor:"pointer", fontFamily:"inherit", marginLeft:4 }}>📬 이력</button>
                           </td>
                         </tr>
@@ -1689,7 +1689,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                           </td>
                           <td style={{ ...tdStyle, textAlign:"right", whiteSpace:"nowrap" }}>
                             <button onClick={()=>setViewDetail(r)} style={{ ...btnPrimary, padding:"5px 10px", marginRight:4, fontSize:10 }}>상세</button>
-                            <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:r._type, data:r, greeting:`${r.name||""} 님 (${r.company||""}) 안녕하세요,\nQ인사이드입니다.\n\n요청하신 ${bizTypeLabel[r._type].slice(2)} 건에 대해 안내드립니다.`, body:"" })} style={{ padding:"5px 10px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
+                            <button onClick={()=>setEmailCompose({ to:r.email||"", name:r.name||"", type:r._type, data:r, greeting:`${r.name||""} 님 (${r.company||""}) 안녕하세요,\nWIHAM 인사이드입니다.\n\n요청하신 ${bizTypeLabel[r._type].slice(2)} 건에 대해 안내드립니다.`, body:"" })} style={{ padding:"5px 10px", borderRadius:6, background:C.gold, border:"none", color:C.navy, fontWeight:700, fontSize:10, cursor:"pointer", fontFamily:"inherit" }}>📧 이메일</button>
                             <button onClick={()=>fetchEmailHistory(r.id)} style={{ padding:"5px 8px", borderRadius:6, background:"rgba(13,115,119,0.08)", border:"1px solid rgba(13,115,119,0.2)", color:C.teal, fontWeight:700, fontSize:9, cursor:"pointer", fontFamily:"inherit", marginLeft:4 }}>📬 이력</button>
                           </td>
                         </tr>
@@ -1726,7 +1726,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                   model:"claude-sonnet-4-6",
                   max_tokens:2000,
                   tools:[{ type:"web_search_20250305", name:"web_search" }],
-                  system:`당신은 직장내 괴롭힘·노동법 전문 노무사 사무소(Q인사이드)의 뉴스레터 편집장입니다.
+                  system:`당신은 직장내 괴롭힘·노동법 전문 노무사 사무소(WIHAM 인사이드)의 뉴스레터 편집장입니다.
 구독자는 피해 근로자, 인사담당자, 기업 법무팀입니다.
 
 [최우선 원칙] 정확성 보장:
@@ -1743,7 +1743,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
 - 총 600~900자 (뉴스레터 본문만, 인사말·서명 제외)
 - 마지막에 짧은 "이달의 노무사 한마디" 한 줄 추가`,
                   messages:[{ role:"user", content:
-`${ym} 기준 Q인사이드 뉴스레터 본문을 작성해주세요.
+`${ym} 기준 WIHAM 인사이드 뉴스레터 본문을 작성해주세요.
 주제: ${nlAiTopic}${keyword}
 작성 지침: ${topicGuide}
 
@@ -1768,7 +1768,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
               const topicKr = { "판례":"최신 판례", "노동부뉴스":"노동부 뉴스", "지침변경":"법령·지침 변경", "종합":"종합 정보" }[nlAiTopic]||nlAiTopic;
               setNlForm(f => ({
                 ...f,
-                title: `[Q인사이드] ${ymd} ${topicKr} 뉴스레터`,
+                title: `[WIHAM 인사이드] ${ymd} ${topicKr} 뉴스레터`,
                 body: text
               }));
             } catch(e) {
@@ -1801,8 +1801,8 @@ export function AdminSection({ setActive, authed, setAuthed }) {
 </style></head><body>
 <div class="wrap">
   <div style="background:#0A1628;padding:28px 32px;text-align:center">
-    <div style="font-size:22px;font-weight:800;font-family:'Gowun Batang','Noto Sans KR',sans-serif"><span style="color:#E8E5DE">Q</span> <span style="color:#4ECDC4">인사이드</span></div>
-    <div style="font-size:9px;color:rgba(244,241,235,0.5);margin-top:2px;letter-spacing:1.5px">Q Inside Labs Newsletter</div>
+    <div style="font-size:22px;font-weight:800;font-family:'Gowun Batang','Noto Sans KR',sans-serif"><span style="color:#E8E5DE;font-family:'Inter','Helvetica Neue','Arial Black',sans-serif;font-weight:900;letter-spacing:-0.04em">WIHAM</span> <span style="color:#4ECDC4">인사이드</span></div>
+    <div style="font-size:9px;color:rgba(244,241,235,0.5);margin-top:2px;letter-spacing:1.5px">WIHAM Inside Labs Newsletter</div>
   </div>
   <div style="padding:36px 32px">
     <h2 style="font-size:20px;font-weight:800;color:#0A1628;margin-bottom:20px;line-height:1.5">${nlForm.title||"(제목 없음)"}</h2>
@@ -1811,7 +1811,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
     <div style="border-top:1px solid #E8E5DE;padding-top:20px;font-size:13px;color:#8B8680;line-height:1.9;white-space:pre-wrap">${nlForm.closing}</div>
   </div>
   <div style="background:#0A1628;padding:20px 32px;text-align:center">
-    <div style="font-size:10px;color:rgba(244,241,235,0.3);line-height:1.8">© 2025 Q인사이드 | hwayulinside@gmail.com<br/><a href="#" style="color:rgba(244,241,235,0.4);font-size:9px">수신 거부</a></div>
+    <div style="font-size:10px;color:rgba(244,241,235,0.3);line-height:1.8">© 2025 WIHAM 인사이드 | hwayulinside@gmail.com<br/><a href="#" style="color:rgba(244,241,235,0.4);font-size:9px">수신 거부</a></div>
   </div>
 </div></body></html>`;
 
@@ -1952,7 +1952,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
 
                   <div style={{ marginBottom:12 }}>
                     <label style={{ display:"block", fontSize:11, fontWeight:700, color:C.gray, marginBottom:4, textTransform:"uppercase" }}>뉴스레터 제목</label>
-                    <input value={nlForm.title} onChange={e=>setNlForm(f=>({...f,title:e.target.value}))} placeholder="예: [Q인사이드] 2026년 3월 직장내 괴롭힘 최신 판례 정리" style={{ width:"100%", padding:"11px 13px", borderRadius:8, border:`2px solid ${nlForm.title?"rgba(13,115,119,0.3)":"rgba(10,22,40,0.1)"}`, fontSize:13, fontFamily:"inherit", outline:"none", boxSizing:"border-box" }} />
+                    <input value={nlForm.title} onChange={e=>setNlForm(f=>({...f,title:e.target.value}))} placeholder="예: [WIHAM 인사이드] 2026년 3월 직장내 괴롭힘 최신 판례 정리" style={{ width:"100%", padding:"11px 13px", borderRadius:8, border:`2px solid ${nlForm.title?"rgba(13,115,119,0.3)":"rgba(10,22,40,0.1)"}`, fontSize:13, fontFamily:"inherit", outline:"none", boxSizing:"border-box" }} />
                   </div>
 
                   <div style={{ marginBottom:12 }}>
@@ -2011,7 +2011,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                         <div style={{ fontSize:18, marginBottom:6 }}>✅</div>
                         <div style={{ fontSize:14, fontWeight:700, color:C.green }}>뉴스레터가 {subscribers.length}명에게 발송되었습니다!</div>
                         <div style={{ fontSize:12, color:C.gray, marginTop:4 }}>발송 이력에 저장되었습니다.</div>
-                        <button onClick={()=>{ setNlMode("history"); setNlForm({title:"",greeting:"안녕하세요, Q인사이드입니다.",body:"",closing:"감사합니다.\n\nQ인사이드\n대표 노무사 김재정\nhwayulinside@gmail.com"}); setNlSent(false); }} style={{ marginTop:12, padding:"8px 20px", borderRadius:6, background:C.teal, border:"none", color:"white", fontWeight:700, fontSize:12, cursor:"pointer", fontFamily:"inherit" }}>발송 이력 보기 →</button>
+                        <button onClick={()=>{ setNlMode("history"); setNlForm({title:"",greeting:"안녕하세요, WIHAM 인사이드입니다.",body:"",closing:"감사합니다.\n\nWIHAM 인사이드\n대표 노무사 김재정\nhwayulinside@gmail.com"}); setNlSent(false); }} style={{ marginTop:12, padding:"8px 20px", borderRadius:6, background:C.teal, border:"none", color:"white", fontWeight:700, fontSize:12, cursor:"pointer", fontFamily:"inherit" }}>발송 이력 보기 →</button>
                       </div>
                     : <button onClick={handleSend} style={{ width:"100%", padding:"16px", borderRadius:10, background:C.teal, border:"none", color:"white", fontWeight:800, fontSize:15, cursor:"pointer", fontFamily:"inherit" }}>
                         ✉️ 구독자 {subscribers.length}명에게 발송하기

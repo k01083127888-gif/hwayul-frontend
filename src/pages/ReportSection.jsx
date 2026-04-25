@@ -11,7 +11,7 @@ import { usePageMeta } from "../utils/usePageMeta.js";
 // ── ReportSection ─────────────────────────────────────────────────────────────────
 export function ReportSection() {
   usePageMeta({
-    title: "익명 제보 | Q인사이드",
+    title: "익명 제보 | WIHAM 인사이드",
     description: "직장내 괴롭힘·부당대우를 익명으로 제보하세요. 접수된 제보는 전문 노무사가 비밀리에 검토합니다.",
     url: "https://hwayul.kr/report",
   });

@@ -101,7 +101,7 @@ export function SideRequestPanel() {
               </div>
               <div>
                 <label style={{ display:"block", fontSize:11, fontWeight:700, color:"#8B8680", marginBottom:4 }}>기업/기관명 <span style={{ color:"#C0392B" }}>*</span></label>
-                <input value={form.company} onChange={F("company")} placeholder="(주)Q인사이드" style={{ width:"100%", padding:"10px 12px", borderRadius:6, border:"2px solid rgba(10,22,40,0.1)", fontSize:13, fontFamily:"inherit", outline:"none", boxSizing:"border-box" }} />
+                <input value={form.company} onChange={F("company")} placeholder="(주)WIHAM 인사이드" style={{ width:"100%", padding:"10px 12px", borderRadius:6, border:"2px solid rgba(10,22,40,0.1)", fontSize:13, fontFamily:"inherit", outline:"none", boxSizing:"border-box" }} />
               </div>
             </div>
             <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14, marginBottom:14 }}>

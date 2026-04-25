@@ -159,7 +159,16 @@ useEffect(() => {
   return (
     <div style={{ fontFamily:"'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&family=Noto+Serif+KR:wght@700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Noto+Sans+KR:wght@400;600;700;800;900&family=Noto+Serif+KR:wght@700;900&display=swap');
+
+        /* ── WIHAM 브랜드 글자체 ──
+           "WIHAM" 텍스트만 Inter Black 900 + 좁은 letter-spacing 적용.
+           한글은 Noto Sans KR 그대로. */
+        .wiham {
+          font-family: 'Inter', 'Helvetica Neue', 'Helvetica', 'Arial Black', sans-serif;
+          font-weight: 900;
+          letter-spacing: -0.04em;
+        }
         * { margin:0; padding:0; box-sizing:border-box; }
         body { background:${C.navy}; overflow-x: hidden; }
         html { overflow-x: hidden; }
@@ -421,8 +430,8 @@ useEffect(() => {
                 <circle cx="78" cy="52" r="3" fill="#4ECDC4" opacity="0.5" />
               </svg>
               <div>
-                <div style={{ fontFamily:"'BrandFont', 'Noto Sans KR', sans-serif", fontSize:20, fontWeight:800 }}><span style={{ color:C.cream }}>Q</span> <span style={{ color:C.tealLight }}>인사이드</span></div>
-                <div style={{ fontSize:9, color:C.gold, letterSpacing:"2px", fontWeight:700, fontFamily:"'Noto Sans KR', sans-serif" }}>Q INSIDE LABS</div>
+                <div style={{ fontFamily:"'BrandFont', 'Noto Sans KR', sans-serif", fontSize:20, fontWeight:800 }}><span className="wiham" style={{ color:C.cream }}>WIHAM</span> <span style={{ color:C.tealLight }}>인사이드</span></div>
+                <div style={{ fontSize:9, color:C.gold, letterSpacing:"2px", fontWeight:700, fontFamily:"'Noto Sans KR', sans-serif" }}>WIHAM INSIDE LABS</div>
                 <div style={{ fontSize:7, color:"rgba(244,241,235,0.28)", letterSpacing:"0.5px", marginTop:0 }}>직장내괴롭힘 & 조직문화 플랫폼</div>
               </div>
             </div>
@@ -452,7 +461,7 @@ useEffect(() => {
           ))}
         </div>
         <div style={{ maxWidth:1200, margin:"24px auto 0", paddingTop:24, borderTop:"1px solid rgba(255,255,255,0.06)", textAlign:"center", fontSize:11, color:"rgba(244,241,235,0.22)" }}>
-          © 2025 Q인사이드. 본 플랫폼의 진단 결과는 참고용이며 법적 효력이 없습니다. 최종 판단은 전문 노무사와 확인하시기 바랍니다.
+          © 2025 WIHAM 인사이드. 본 플랫폼의 진단 결과는 참고용이며 법적 효력이 없습니다. 최종 판단은 전문 노무사와 확인하시기 바랍니다.
         </div>
         <div style={{ textAlign:"center", marginTop:12, height:16 }}>
           <span onDoubleClick={() => setActive("admin")} style={{ fontSize:10, color:"rgba(244,241,235,0.06)", cursor:"default", userSelect:"none" }}>© HI</span>

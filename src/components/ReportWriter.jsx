@@ -90,7 +90,7 @@ ${resultSummary || "(결과 데이터 없음)"}
   };
 
   // 리포트를 HTML로 변환
-  const buildReportHtml = () => `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${diagType} 검토 리포트 - Q인사이드</title>
+  const buildReportHtml = () => `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${diagType} 검토 리포트 - WIHAM 인사이드</title>
 <style>body{font-family:'Noto Sans KR',sans-serif;max-width:800px;margin:0 auto;padding:40px;color:#1a1a1a;line-height:1.8}
 h1{color:#0A1628;border-bottom:3px solid #0D7377;padding-bottom:12px;font-size:22px}
 h2{color:#0D7377;margin-top:32px;font-size:16px;border-left:4px solid #C9A84C;padding-left:12px}
@@ -108,7 +108,7 @@ h2{color:#0D7377;margin-top:32px;font-size:16px;border-left:4px solid #C9A84C;pa
 <h2>5. ${r.type==="checklist"?"증거 수집·보전 가이드":"맞춤 교육·예방 프로그램"}</h2><div class="section">${report.section5}</div>
 <h2>6. 결론</h2><div class="section">${report.conclusion}</div>
 <div class="footer">
-Q인사이드 | hwayulinside@gmail.com | 02-2088-1767<br/>
+WIHAM 인사이드 | hwayulinside@gmail.com | 02-2088-1767<br/>
 본 리포트는 전문 노무사가 진단 결과를 검토하여 작성한 유료 리포트입니다 (${price}원, VAT 포함). 무단 배포를 금합니다.<br/>
 &copy; ${new Date().getFullYear()} 뷰랩스. All rights reserved.
 </div></body></html>`;
@@ -132,19 +132,19 @@ body{font-family:'Noto Sans KR',sans-serif;margin:0;padding:0;background:#F5F3EF
 .wrap{max-width:640px;margin:0 auto;background:white}</style></head><body>
 <div class="wrap">
   <div style="background:#0A1628;padding:28px 32px;text-align:center">
-    <div style="font-size:22px;font-weight:800;font-family:'Gowun Batang','Noto Sans KR',sans-serif"><span style="color:#E8E5DE">Q</span> <span style="color:#4ECDC4">인사이드</span></div>
-    <div style="font-size:9px;color:rgba(244,241,235,0.5);margin-top:2px;letter-spacing:1.5px">Q Inside Labs</div>
+    <div style="font-size:22px;font-weight:800;font-family:'Gowun Batang','Noto Sans KR',sans-serif"><span style="color:#E8E5DE;font-family:'Inter','Helvetica Neue','Arial Black',sans-serif;font-weight:900;letter-spacing:-0.04em">WIHAM</span> <span style="color:#4ECDC4">인사이드</span></div>
+    <div style="font-size:9px;color:rgba(244,241,235,0.5);margin-top:2px;letter-spacing:1.5px">WIHAM Inside Labs</div>
   </div>
   <div style="padding:36px 32px">
-    <div style="font-size:14px;color:#0A1628;line-height:1.9;white-space:pre-wrap;margin-bottom:24px">${emailBody || `${r.name||""} 님 안녕하세요.\nQ인사이드입니다.\n\n요청하신 ${diagType} 전문 노무사 검토 리포트를 첨부파일로 보내드립니다.\n상세 내용은 첨부된 리포트를 확인해 주시기 바랍니다.\n\n리포트 내용에 대한 문의사항이 있으시면 언제든 연락 주세요.`}</div>
+    <div style="font-size:14px;color:#0A1628;line-height:1.9;white-space:pre-wrap;margin-bottom:24px">${emailBody || `${r.name||""} 님 안녕하세요.\nWIHAM 인사이드입니다.\n\n요청하신 ${diagType} 전문 노무사 검토 리포트를 첨부파일로 보내드립니다.\n상세 내용은 첨부된 리포트를 확인해 주시기 바랍니다.\n\n리포트 내용에 대한 문의사항이 있으시면 언제든 연락 주세요.`}</div>
     <div style="padding:16px;background:rgba(13,115,119,0.06);border:1px solid rgba(13,115,119,0.15);border-radius:10px;margin-bottom:24px;text-align:center">
       <div style="font-size:13px;color:#0D7377;font-weight:700">📎 첨부: ${diagType} 검토 리포트</div>
       <div style="font-size:11px;color:#8B8680;margin-top:4px">상세 검토 리포트가 첨부되어 있습니다.</div>
     </div>
-    <div style="border-top:1px solid #E8E5DE;padding-top:20px;font-size:13px;color:#8B8680;line-height:1.9;white-space:pre-wrap">감사합니다.\n\nQ인사이드\n대표 노무사 김재정\nTel. 02-2088-1767\nEmail. hwayulinside@gmail.com\nWeb. www.hwayul.kr</div>
+    <div style="border-top:1px solid #E8E5DE;padding-top:20px;font-size:13px;color:#8B8680;line-height:1.9;white-space:pre-wrap">감사합니다.\n\nWIHAM 인사이드\n대표 노무사 김재정\nTel. 02-2088-1767\nEmail. hwayulinside@gmail.com\nWeb. www.hwayul.kr</div>
   </div>
   <div style="background:#0A1628;padding:20px 32px;text-align:center">
-    <div style="font-size:10px;color:rgba(244,241,235,0.3);line-height:1.8">&copy; 2025 Q인사이드 | Tel. 02-2088-1767 | hwayulinside@gmail.com</div>
+    <div style="font-size:10px;color:rgba(244,241,235,0.3);line-height:1.8">&copy; 2025 WIHAM 인사이드 | Tel. 02-2088-1767 | hwayulinside@gmail.com</div>
   </div>
 </div></body></html>`;
 
@@ -156,7 +156,7 @@ body{font-family:'Noto Sans KR',sans-serif;margin:0;padding:0;background:#F5F3EF
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             to: r.email,
-            subject: `[Q인사이드] ${diagType} 노무사 검토 리포트`,
+            subject: `[WIHAM 인사이드] ${diagType} 노무사 검토 리포트`,
             html: summaryEmailHtml
           })
         });
@@ -173,9 +173,9 @@ body{font-family:'Noto Sans KR',sans-serif;margin:0;padding:0;background:#F5F3EF
             recipient_email: r.email,
             recipient_name: r.name || "",
             email_type_label: "노무사 검토 리포트 발송",
-            greeting: emailBody || `${r.name||""} 님 안녕하세요, Q인사이드입니다.`,
+            greeting: emailBody || `${r.name||""} 님 안녕하세요, WIHAM 인사이드입니다.`,
             body: "검토 리포트 첨부 발송",
-            closing: "감사합니다. Q인사이드 대표 노무사 김재정",
+            closing: "감사합니다. WIHAM 인사이드 대표 노무사 김재정",
             report_html: buildReportHtml()
           })
         });
@@ -221,7 +221,7 @@ body{font-family:'Noto Sans KR',sans-serif;margin:0;padding:0;background:#F5F3EF
       <div style={{ marginBottom:16 }}>
         <label style={lbl}>이메일 본문 (간단한 안내만 — 상세 내용은 첨부 리포트에)</label>
         <textarea value={emailBody} onChange={e=>setEmailBody(e.target.value)} rows={6} style={txArea}
-          placeholder={`${r.name||""} 님 안녕하세요.\nQ인사이드입니다.\n\n요청하신 ${diagType} 전문 노무사 검토 리포트를 첨부파일로 보내드립니다.\n상세 내용은 첨부된 리포트를 확인해 주시기 바랍니다.\n\n리포트 내용에 대한 문의사항이 있으시면 언제든 연락 주세요.\n\n감사합니다.\nQ인사이드\n대표 노무사 김재정\nhwayulinside@gmail.com | 02-2088-1767`} />
+          placeholder={`${r.name||""} 님 안녕하세요.\nWIHAM 인사이드입니다.\n\n요청하신 ${diagType} 전문 노무사 검토 리포트를 첨부파일로 보내드립니다.\n상세 내용은 첨부된 리포트를 확인해 주시기 바랍니다.\n\n리포트 내용에 대한 문의사항이 있으시면 언제든 연락 주세요.\n\n감사합니다.\nWIHAM 인사이드\n대표 노무사 김재정\nhwayulinside@gmail.com | 02-2088-1767`} />
       </div>
       <div style={{ padding:"10px 14px", background:"rgba(13,115,119,0.06)", borderRadius:8, marginBottom:16, fontSize:11, color:C.gray }}>
         📎 <b>첨부파일:</b> 뷰_검토리포트_{r.orgName||r.name||""}_{new Date().toISOString().slice(0,10)}.html

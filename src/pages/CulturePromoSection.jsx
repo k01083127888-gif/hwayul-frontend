@@ -15,7 +15,7 @@ export function CulturePromoSection({ setActive }) {
           </h2>
           <p style={{ fontSize:14, color:"rgba(244,241,235,0.55)", lineHeight:1.85, maxWidth:640, margin:"0 auto" }}>
             괴롭힘이 반복되는 조직에는 공통된 구조적 원인이 있습니다.<br/>
-            Q인사이드는 <strong style={{ color:C.tealLight }}>6개 핵심 영역</strong>을 진단하여 사전에 위험을 발견하고,<br/>
+            WIHAM 인사이드는 <strong style={{ color:C.tealLight }}>6개 핵심 영역</strong>을 진단하여 사전에 위험을 발견하고,<br/>
             전문 노무사의 리포트로 실질적인 개선 방향을 제시합니다.
           </p>
         </div>
