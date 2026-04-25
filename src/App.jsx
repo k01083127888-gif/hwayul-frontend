@@ -162,12 +162,17 @@ useEffect(() => {
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Noto+Sans+KR:wght@400;600;700;800;900&family=Noto+Serif+KR:wght@700;900&display=swap');
 
         /* ── WIHAM 브랜드 글자체 ──
-           "WIHAM" 텍스트만 Inter Black 900 + 좁은 letter-spacing 적용.
-           한글은 Noto Sans KR 그대로. */
+           "WIHAM" 텍스트는 Inter Black 900 + 좁은 letter-spacing.
+           "인사이드" 한글은 Noto Sans KR 900 으로 무게감 균형. */
         .wiham {
           font-family: 'Inter', 'Helvetica Neue', 'Helvetica', 'Arial Black', sans-serif;
           font-weight: 900;
           letter-spacing: -0.04em;
+        }
+        .wiham-ko {
+          font-family: 'Noto Sans KR', sans-serif;
+          font-weight: 900;
+          letter-spacing: -0.03em;
         }
         * { margin:0; padding:0; box-sizing:border-box; }
         body { background:${C.navy}; overflow-x: hidden; }
@@ -430,7 +435,7 @@ useEffect(() => {
                 <circle cx="78" cy="52" r="3" fill="#4ECDC4" opacity="0.5" />
               </svg>
               <div>
-                <div style={{ fontFamily:"'BrandFont', 'Noto Sans KR', sans-serif", fontSize:20, fontWeight:800 }}><span className="wiham" style={{ color:C.cream }}>WIHAM</span> <span style={{ color:C.tealLight }}>인사이드</span></div>
+                <div style={{ fontFamily:"'BrandFont', 'Noto Sans KR', sans-serif", fontSize:20, fontWeight:800 }}><span className="wiham" style={{ color:C.cream }}>WIHAM</span> <span className="wiham-ko" style={{ color:C.tealLight }}>인사이드</span></div>
                 <div style={{ fontSize:9, color:C.gold, letterSpacing:"2px", fontWeight:700, fontFamily:"'Noto Sans KR', sans-serif" }}>WIHAM INSIDE LABS</div>
                 <div style={{ fontSize:7, color:"rgba(244,241,235,0.28)", letterSpacing:"0.5px", marginTop:0 }}>직장내괴롭힘 & 조직문화 플랫폼</div>
               </div>

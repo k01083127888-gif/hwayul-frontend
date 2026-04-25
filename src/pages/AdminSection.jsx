@@ -1801,7 +1801,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
 </style></head><body>
 <div class="wrap">
   <div style="background:#0A1628;padding:28px 32px;text-align:center">
-    <div style="font-size:22px;font-weight:800;font-family:'Gowun Batang','Noto Sans KR',sans-serif"><span style="color:#E8E5DE;font-family:'Inter','Helvetica Neue','Arial Black',sans-serif;font-weight:900;letter-spacing:-0.04em">WIHAM</span> <span style="color:#4ECDC4">인사이드</span></div>
+    <div style="font-size:22px;font-weight:800;font-family:'Gowun Batang','Noto Sans KR',sans-serif"><span style="color:#E8E5DE;font-family:'Inter','Helvetica Neue','Arial Black',sans-serif;font-weight:900;letter-spacing:-0.04em">WIHAM</span> <span style="color:#4ECDC4;font-family:'Noto Sans KR',sans-serif;font-weight:900;letter-spacing:-0.03em">인사이드</span></div>
     <div style="font-size:9px;color:rgba(244,241,235,0.5);margin-top:2px;letter-spacing:1.5px">WIHAM Inside Labs Newsletter</div>
   </div>
   <div style="padding:36px 32px">

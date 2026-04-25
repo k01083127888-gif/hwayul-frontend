@@ -49,7 +49,7 @@ export function Nav({ active, setActive }) {
       </div>
       <div>
         <div style={{ fontFamily:"'BrandFont', 'Noto Sans KR', sans-serif", fontSize:18, fontWeight:800, letterSpacing:"-0.3px", lineHeight:1.2 }}>
-          <span className="wiham" style={{ color:C.cream }}>WIHAM</span><span style={{ color:C.tealLight, marginLeft:6 }}>인사이드</span>
+          <span className="wiham" style={{ color:C.cream }}>WIHAM</span><span className="wiham-ko" style={{ color:C.tealLight, marginLeft:6 }}>인사이드</span>
         </div>
         <div style={{ fontSize:9, color:C.gold, letterSpacing:"2px", marginTop:2, fontFamily:"'Noto Sans KR', sans-serif", fontWeight:700 }}>WIHAM INSIDE LABS</div>
         <div style={{ fontSize:9, color:"rgba(244,241,235,0.7)", letterSpacing:"0.5px", marginTop:2, fontFamily:"'Noto Sans KR', sans-serif" }}>직장내괴롭힘 & 조직문화 플랫폼</div>
