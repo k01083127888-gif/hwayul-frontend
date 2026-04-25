@@ -67,7 +67,6 @@ export function DiagnosisChatBot({ type = "checklist", resultData = null, setAct
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [replyCount, setReplyCount] = useState(0);
-  const [showCTA, setShowCTA] = useState(false);
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -220,7 +219,6 @@ ${conversionGuide[role] || conversionGuide.general}`;
     setLoading(true);
     const newCount = replyCount + 1;
     setReplyCount(newCount);
-    if (newCount >= 3) setShowCTA(true);
     try {
       const history = messages.map(m => ({ role: m.role === "assistant" ? "assistant" : "user", content: m.text }));
       // 사용자가 콘텐츠 상세에서 "이 사례 참조" 체크했는지 확인 (30분 TTL)
@@ -342,27 +340,9 @@ ${conversionGuide[role] || conversionGuide.general}`;
           </div>
         )}
 
-        {showCTA && (
-          <div style={{ padding: "14px 16px", background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.3)", borderRadius: 12, marginTop: 4 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: C.gold, marginBottom: 5 }}>💡 더 정확한 판단이 필요하신가요?</div>
-            <div style={{ fontSize: 11, color: "rgba(244,241,235,0.6)", lineHeight: 1.65, marginBottom: 10 }}>
-              AI는 일반적 기준까지 안내 가능합니다.<br />
-              당신의 구체적 사안에 대한 법적 판단·증거 전략·구제 절차는<br />
-              <strong style={{ color: "rgba(244,241,235,0.85)" }}>전문 노무사 심층 상담(22만원, 3단계 패키지)</strong>에서 직접 검토해 드립니다.
-            </div>
-            <button
-              onClick={() => {
-                // 진단 AI 대화 내용을 심층상담 페이지로 전달
-                saveAIChat({ source: "diagnosis", topic: cfg?.label || role, messages });
-                if (setActive) setActive("biz");
-                else window.dispatchEvent(new CustomEvent("hwayul-goto", { detail: "biz" }));
-              }}
-              style={{ width: "100%", padding: "10px", borderRadius: 8, background: C.gold, border: "none", color: C.navy, fontWeight: 800, fontSize: 12, cursor: "pointer", fontFamily: "inherit" }}
-            >
-              💼 심층 상담 신청하기 →
-            </button>
-          </div>
-        )}
+        {/* ★ 챗봇 내부의 심층상담 CTA 제거 — 진단 결과 페이지 하단에 이미 있는
+              "💼 심층 상담 신청 →" 골드 박스와 중복되어 사용자에게 산만하게 보임.
+              대화 내용은 saveAIChat이 useEffect로 자동 저장되어 어디서 신청해도 전달됨. */}
 
         <div ref={bottomRef} />
       </div>
