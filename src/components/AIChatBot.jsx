@@ -376,43 +376,10 @@ ${conversionGuides.general}`,
     if (role !== "admin" && newCount >= 3) setShowCTA(true);
     try {
       const history = messages.map(m => ({ role: m.role === "assistant" ? "assistant" : "user", content: m.text }));
-      // 사용자가 콘텐츠 상세에서 "이 사례 참조" 체크했는지 확인 (30분 TTL)
-      let attachContentId = null;
-      try {
-        const raw = localStorage.getItem("hwayul_attach_content");
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          if (parsed?.id && parsed.expiresAt > Date.now()) attachContentId = parsed.id;
-          else localStorage.removeItem("hwayul_attach_content");
-        }
-      } catch {}
-      // 진단 결과 (24시간 TTL) — AI가 사용자 진단 결과를 알고 답변
-      let diagSummary = "";
-      try {
-        const raw = localStorage.getItem("hwayul_diag_result");
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          if (parsed?.summary && parsed.expiresAt > Date.now()) diagSummary = parsed.summary;
-          else localStorage.removeItem("hwayul_diag_result");
-        }
-      } catch {}
-      // 사용자가 콘텐츠 본문 체크리스트에서 체크한 상황 (24시간 TTL)
-      // ★ 하단 "참조" 체크박스가 켜진 콘텐츠의 체크만 AI에 전달
-      //   (참조 체크 안 한 콘텐츠의 체크는 무시 — 사용자가 명시적으로 동의한 것만 사용)
-      let userSituations = null;
-      try {
-        const raw = localStorage.getItem("hwayul_user_situations");
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          const valid = parsed?.situations && parsed.situations.length > 0 && parsed.expiresAt > Date.now();
-          if (valid && attachContentId && parsed.contentId === attachContentId) {
-            userSituations = parsed;
-          } else if (!valid) {
-            localStorage.removeItem("hwayul_user_situations");
-          }
-          // valid이지만 attachContentId와 매칭 안 되면 그대로 두되 AI엔 전달 안 함
-        }
-      } catch {}
+      // ★ 플로팅 AI 상담 도우미는 "일반 상담" 차별화를 위해
+      //   콘텐츠 참조, 진단 결과, 본문 체크 등 사용자 컨텍스트를 전혀 주입하지 않음.
+      //   진단 결과 기반 맞춤 상담은 진단 페이지의 DiagnosisChatBot이 담당.
+      //   여기서는 역할(피해자/피지목인/HR/일반)만으로 깨끗한 일반 AI 상담 제공.
       const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/claude", {
         method:"POST",
         body: JSON.stringify({
@@ -420,9 +387,6 @@ ${conversionGuides.general}`,
           max_tokens: role === "admin" ? 1500 : (role === "hr" ? 1000 : 1000),
           system: systemPrompts[role] || systemPrompts.general,
           messages:[...history, { role:"user", content: role === "admin" ? q : `[${newCount}번째 질문] ${q}` }],
-          ...(attachContentId ? { attach_content_id: attachContentId } : {}),
-          ...(diagSummary ? { diag_summary: diagSummary } : {}),
-          ...(userSituations ? { user_situations: userSituations } : {}),
         })
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
