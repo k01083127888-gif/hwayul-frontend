@@ -24,7 +24,7 @@ const PRINT_HEADER = `
         <circle cx="78" cy="52" r="3" fill="#4ECDC4" opacity="0.5"/>
       </svg>
       <div>
-        <div style="font-size:24px;font-weight:800;color:#0A1628;font-family:'Gowun Batang','Noto Sans KR',sans-serif"><span style="font-family:'Inter','Helvetica Neue','Arial Black',sans-serif;font-weight:900;letter-spacing:-0.04em">WIHAM</span> <span style="color:#0D7377;font-family:'Noto Sans KR',sans-serif;font-weight:900;letter-spacing:-0.03em">인사이드</span></div>
+        <div style="font-size:24px;font-weight:800;color:#0A1628;font-family:'Gowun Batang','Noto Sans KR',sans-serif"><span style="font-family:'Inter','Helvetica Neue','Arial Black',sans-serif;font-weight:900;letter-spacing:-0.04em">WIHAM</span><span style="color:#C9A84C;font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:0.55em;letter-spacing:-0.03em;margin-left:3px">위함</span> <span style="color:#0D7377;font-family:'Noto Sans KR',sans-serif;font-weight:900;letter-spacing:-0.03em">인사이드</span></div>
         <div style="font-size:9px;color:#8B8680;margin-top:1px;letter-spacing:1.5px">WIHAM Inside Labs</div>
         <div style="font-size:8px;color:#B0ADA6;letter-spacing:0.5px">직장내괴롭힘 & 조직문화 플랫폼</div>
       </div>
