@@ -25,10 +25,37 @@ export function ReportSection() {
       <div style={{ maxWidth:700, margin:"0 auto" }}>
         <SectionTag>ANONYMOUS REPORT</SectionTag>
         <h2 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"2rem", fontWeight:800, color:C.navy, marginTop:8, marginBottom:10 }}>익명 제보 · 상담 신청</h2>
-        <div style={{ padding:"14px 18px", background:"rgba(13,115,119,0.08)", borderLeft:`4px solid ${C.teal}`, borderRadius:"0 8px 8px 0", marginBottom:36 }}>
+        <div style={{ padding:"14px 18px", background:"rgba(13,115,119,0.08)", borderLeft:`4px solid ${C.teal}`, borderRadius:"0 8px 8px 0", marginBottom:18 }}>
           <p style={{ fontSize:13, color:C.navy, lineHeight:1.7, margin:0 }}>🔒 <strong>완전 익명 보장</strong>: 제보자 신원은 일체 수집되지 않으며, 법적으로 보호됩니다. 제출된 내용은 담당 노무사에게만 전달됩니다.<br/>
           <span style={{ color:C.gray, fontSize:12 }}>※ 실명 상담을 원하시면 '피해자 구제' 또는 '기업상담' 메뉴를 이용하세요.</span>
           </p>
+        </div>
+
+        {/* ── 공익 제보 안내 ─────────────────────────────────────────── */}
+        <div style={{
+          padding:"18px 22px",
+          background:"rgba(201,168,76,0.06)",
+          border:`1.5px solid rgba(201,168,76,0.3)`,
+          borderRadius:10,
+          marginBottom:36,
+        }}>
+          <div style={{ fontSize:13, fontWeight:800, color:"#A0720A", marginBottom:10, letterSpacing:"0.3px" }}>
+            📢 공익 제보 안내
+          </div>
+          <p style={{ fontSize:13, color:C.navy, lineHeight:1.85, margin:"0 0 12px 0" }}>
+            본 채널은 본인의 사안만을 위한 곳이 아닙니다.<br/>
+            다양한 사정으로 권리 구제를 제대로 받지 못하는 분이 주변에 있거나,
+            사안의 심각성이 깊이 느껴지는 경우 누구든 제보해 주실 수 있습니다.
+          </p>
+          <p style={{ fontSize:13, color:C.navy, lineHeight:1.85, margin:"0 0 14px 0" }}>
+            권리 구제의 시급성과 공익적 가치가 인정되는 사안에 대해서는
+            <strong> WIHAM랩스의 전문 노무사가 직접 검토하여 응답하고, 필요한 조치까지 함께합니다.</strong>
+          </p>
+          <ul style={{ margin:0, paddingLeft:18, fontSize:12, color:C.gray, lineHeight:1.85 }}>
+            <li>본 채널에는 어떤 형태의 게시판도 존재하지 않습니다</li>
+            <li>제보 내용은 외부에 노출되지 않으며, 철저한 익명이 보장됩니다</li>
+            <li>WIHAM랩스의 수임료(사익) 추구와는 무관하게 운영되는 공익 채널입니다</li>
+          </ul>
         </div>
 
         {!done ? (
