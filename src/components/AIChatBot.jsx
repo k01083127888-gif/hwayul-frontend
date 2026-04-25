@@ -397,13 +397,20 @@ ${conversionGuides.general}`,
         }
       } catch {}
       // 사용자가 콘텐츠 본문 체크리스트에서 체크한 상황 (24시간 TTL)
+      // ★ 하단 "참조" 체크박스가 켜진 콘텐츠의 체크만 AI에 전달
+      //   (참조 체크 안 한 콘텐츠의 체크는 무시 — 사용자가 명시적으로 동의한 것만 사용)
       let userSituations = null;
       try {
         const raw = localStorage.getItem("hwayul_user_situations");
         if (raw) {
           const parsed = JSON.parse(raw);
-          if (parsed?.situations && parsed.situations.length > 0 && parsed.expiresAt > Date.now()) userSituations = parsed;
-          else localStorage.removeItem("hwayul_user_situations");
+          const valid = parsed?.situations && parsed.situations.length > 0 && parsed.expiresAt > Date.now();
+          if (valid && attachContentId && parsed.contentId === attachContentId) {
+            userSituations = parsed;
+          } else if (!valid) {
+            localStorage.removeItem("hwayul_user_situations");
+          }
+          // valid이지만 attachContentId와 매칭 안 되면 그대로 두되 AI엔 전달 안 함
         }
       } catch {}
       const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/claude", {
