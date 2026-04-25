@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import DOMPurify from "dompurify";
 import C from "../tokens/colors.js";
 import { _contents } from "../utils/store.js";
@@ -53,6 +54,46 @@ export function ContentDetailView({ item, onBack }) {
     description,
     url: _slug ? `https://hwayul.kr/content/${item.id}/${encodeURIComponent(_slug)}` : `https://hwayul.kr/content/${item.id}`,
   });
+
+  // ── 본문 체크박스 추적 → AI 상담에 자동 전달 ──────────────────────────
+  // 본문 안의 체크박스(예: "혹시 이런 상황이신가요?")를 사용자가 체크하면,
+  // 해당 항목의 텍스트를 localStorage에 저장하여 AI 상담 시 컨텍스트로 주입.
+  useEffect(() => {
+    const container = document.querySelector(".hwayul-content-body");
+    if (!container) return;
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    if (!checkboxes.length) return;
+
+    const collectChecked = () => {
+      const situations = [];
+      checkboxes.forEach(cb => {
+        if (!cb.checked) return;
+        const wrap = cb.closest("li, p, div");
+        const label = wrap ? wrap.textContent.replace(/\s+/g, " ").trim() : "";
+        if (label) situations.push(label.slice(0, 200));
+      });
+      try {
+        if (situations.length > 0) {
+          localStorage.setItem("hwayul_user_situations", JSON.stringify({
+            contentId: item.id,
+            contentTitle: item.title || "",
+            situations,
+            savedAt: Date.now(),
+            expiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24시간
+          }));
+        } else {
+          localStorage.removeItem("hwayul_user_situations");
+        }
+      } catch {}
+    };
+
+    checkboxes.forEach(cb => cb.addEventListener("change", collectChecked));
+    // 처음 마운트 시점에도 이미 체크된 상태 반영
+    collectChecked();
+    return () => {
+      checkboxes.forEach(cb => cb.removeEventListener("change", collectChecked));
+    };
+  }, [item?.id, item?.title]);
 
   return (
     <section style={{ padding:"80px 32px", background:C.cream, minHeight:"100vh" }}>

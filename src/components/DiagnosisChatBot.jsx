@@ -233,6 +233,16 @@ ${conversionGuide[role] || conversionGuide.general}`;
           else localStorage.removeItem("hwayul_attach_content");
         }
       } catch {}
+      // 사용자가 콘텐츠 본문 체크리스트에서 체크한 상황 (24시간 TTL)
+      let userSituations = null;
+      try {
+        const raw = localStorage.getItem("hwayul_user_situations");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed?.situations && parsed.situations.length > 0 && parsed.expiresAt > Date.now()) userSituations = parsed;
+          else localStorage.removeItem("hwayul_user_situations");
+        }
+      } catch {}
       const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/claude", {
         method: "POST",
         body: JSON.stringify({
@@ -241,6 +251,7 @@ ${conversionGuide[role] || conversionGuide.general}`;
           system: systemPrompt,
           messages: [...history, { role: "user", content: `[${newCount}번째 질문] ${q}` }],
           ...(attachContentId ? { attach_content_id: attachContentId } : {}),
+          ...(userSituations ? { user_situations: userSituations } : {}),
         }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

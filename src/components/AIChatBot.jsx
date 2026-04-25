@@ -386,6 +386,26 @@ ${conversionGuides.general}`,
           else localStorage.removeItem("hwayul_attach_content");
         }
       } catch {}
+      // 진단 결과 (24시간 TTL) — AI가 사용자 진단 결과를 알고 답변
+      let diagSummary = "";
+      try {
+        const raw = localStorage.getItem("hwayul_diag_result");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed?.summary && parsed.expiresAt > Date.now()) diagSummary = parsed.summary;
+          else localStorage.removeItem("hwayul_diag_result");
+        }
+      } catch {}
+      // 사용자가 콘텐츠 본문 체크리스트에서 체크한 상황 (24시간 TTL)
+      let userSituations = null;
+      try {
+        const raw = localStorage.getItem("hwayul_user_situations");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed?.situations && parsed.situations.length > 0 && parsed.expiresAt > Date.now()) userSituations = parsed;
+          else localStorage.removeItem("hwayul_user_situations");
+        }
+      } catch {}
       const res = await fetch("https://hwayul-backend-production-96cf.up.railway.app/api/claude", {
         method:"POST",
         body: JSON.stringify({
@@ -394,6 +414,8 @@ ${conversionGuides.general}`,
           system: systemPrompts[role] || systemPrompts.general,
           messages:[...history, { role:"user", content: role === "admin" ? q : `[${newCount}번째 질문] ${q}` }],
           ...(attachContentId ? { attach_content_id: attachContentId } : {}),
+          ...(diagSummary ? { diag_summary: diagSummary } : {}),
+          ...(userSituations ? { user_situations: userSituations } : {}),
         })
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

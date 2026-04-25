@@ -52,6 +52,33 @@ export function ChecklistSection({ setActive, initialTab = "victim" }) {
   const result = step === 4 ? calcResult(prereq, behavior, impact, continuity) : null;
   const reset = () => { setPrereq({}); setBehavior({}); setImpact({}); setContinuity(null); setStep(0); setExOpen(null); saveChecklist(null); };
 
+  // ── 진단 결과를 텍스트 요약으로 localStorage에 저장 (24시간) ────────────
+  // AI 상담 진입 시 자동으로 컨텍스트에 주입되어 사용자가 같은 얘기를 반복하지 않게 함
+  useEffect(() => {
+    if (!result) return;
+    try {
+      const continuityLabel = (continuityOptions || []).find(o => o.id === continuity)?.label || "";
+      const hitCatTitles = (result.hitCats || []).map(c => c.title).filter(Boolean).join(", ");
+      const summary = [
+        `진단 유형: 직장내 괴롭힘 자가진단 (피해자)`,
+        `결과 등급: ${result.level || ""}`,
+        `판단: ${result.title || ""}`,
+        `요약: ${result.summary || ""}`,
+        `3대 요건 충족: ${result.prereqMet ?? 0}/3`,
+        `행위유형 점수: ${result.behaviorScore ?? 0}점${hitCatTitles ? ` (해당: ${hitCatTitles})` : ""}`,
+        `피해 영향도: ${result.impactScore ?? 0}점`,
+        `반복성: ${continuityLabel || "-"}`,
+        `총점: ${result.total ?? 0}점`,
+      ].filter(Boolean).join("\n");
+      localStorage.setItem("hwayul_diag_result", JSON.stringify({
+        type: "checklist",
+        summary,
+        savedAt: Date.now(),
+        expiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24시간
+      }));
+    } catch {}
+  }, [result, continuity]);
+
   const CheckBox = ({ checked, color = C.teal }) => (
     <div style={{ width:20, height:20, borderRadius:5, border:`2px solid ${checked ? color : "rgba(255,255,255,0.22)"}`, background:checked ? color : "transparent", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center" }}>
       {checked && <span style={{ color:"white", fontSize:11, fontWeight:900 }}>✓</span>}
