@@ -54,7 +54,6 @@ export function ReportSection() {
           <ul style={{ margin:0, paddingLeft:18, fontSize:12, color:C.gray, lineHeight:1.85 }}>
             <li>본 채널에는 어떤 형태의 게시판도 존재하지 않습니다</li>
             <li>제보 내용은 외부에 노출되지 않으며, 철저한 익명이 보장됩니다</li>
-            <li>WIHAM랩스의 수임료(사익) 추구와는 무관하게 운영되는 공익 채널입니다</li>
           </ul>
         </div>
 
