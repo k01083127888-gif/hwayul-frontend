@@ -27,7 +27,7 @@ export function ReportSection() {
         <h2 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:"2rem", fontWeight:800, color:C.navy, marginTop:8, marginBottom:10 }}>익명 제보 · 상담 신청</h2>
         <div style={{ padding:"14px 18px", background:"rgba(13,115,119,0.08)", borderLeft:`4px solid ${C.teal}`, borderRadius:"0 8px 8px 0", marginBottom:18 }}>
           <p style={{ fontSize:13, color:C.navy, lineHeight:1.7, margin:0 }}>🔒 <strong>완전 익명 보장</strong>: 제보자 신원은 일체 수집되지 않으며, 법적으로 보호됩니다. 제출된 내용은 담당 노무사에게만 전달됩니다.<br/>
-          <span style={{ color:C.gray, fontSize:12 }}>※ 실명 상담을 원하시면 '피해자 구제' 또는 '기업상담' 메뉴를 이용하세요.</span>
+          <span style={{ color:C.gray, fontSize:12 }}>※ 실명 상담을 원하시면 '심층상담' 메뉴를 이용해 주세요.</span>
           </p>
         </div>
 
@@ -55,6 +55,7 @@ export function ReportSection() {
             <li>본 채널에는 어떤 형태의 게시판도 존재하지 않습니다</li>
             <li>제보 내용은 외부에 노출되지 않으며, 철저한 익명이 보장됩니다</li>
             <li>WIHAM랩스의 수임료(사익) 추구와는 무관하게 운영되는 공익 채널입니다</li>
+            <li>경제적 여건이 있으시고 체계적인 사건 검토가 필요하신 경우에는 <strong style={{ color:"#A0720A" }}>'심층상담'</strong> 메뉴를 이용해 주세요</li>
           </ul>
         </div>
 
