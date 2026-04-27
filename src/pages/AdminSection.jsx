@@ -683,6 +683,42 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                   }}
                 />
               </label>
+              {/* 전체 교체 업로드 — 기존 콘텐츠 전부 삭제 후 엑셀로 새로 채움 */}
+              <label style={{ padding:"10px 20px", borderRadius:8, background:"rgba(192,57,43,0.08)", border:"1.5px solid rgba(192,57,43,0.4)", color:"#A03020", fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"inherit", display:"flex", alignItems:"center", gap:8 }}>
+                🔄 전체 교체 업로드
+                <input
+                  type="file"
+                  accept=".xlsx,.xls"
+                  style={{ display:"none" }}
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    // 3단계 확인 — 위험한 작업이라 신중하게
+                    if (!confirm("⚠️ 위험: 전체 교체 업로드\n\n현재 DB의 모든 콘텐츠가 삭제되고 이 엑셀로 새로 채워집니다.\n돌이킬 수 없습니다.\n\n진행하시겠습니까?")) { e.target.value = ""; return; }
+                    const typed = window.prompt("정말 전체를 지우고 새로 시작하시겠습니까?\n확인하려면 '교체' 라고 입력하세요.");
+                    if (typed !== "교체") { alert("취소되었습니다."); e.target.value = ""; return; }
+                    if (!confirm(`마지막 확인:\n\n파일: ${file.name}\n\n이 엑셀의 내용으로 콘텐츠 전체가 교체됩니다.\n진행할까요?`)) { e.target.value = ""; return; }
+                    try {
+                      const buf = await file.arrayBuffer();
+                      const res = await adminFetch("https://hwayul-backend-production-96cf.up.railway.app/api/import-contents-excel?mode=replace", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/octet-stream" },
+                        body: buf,
+                      });
+                      const data = await res.json();
+                      if (data.success) {
+                        alert(`✅ 전체 교체 완료!\n\n기존 삭제: ${data.deletedBefore}건\n신규 등록: ${data.inserted}건\n오류: ${data.errors}건${data.errorDetails?.length ? "\n\n" + data.errorDetails.map(er => `· ${er.row}: ${er.error}`).join("\n") : ""}`);
+                        loadContentsFromDB();
+                      } else {
+                        alert("교체 실패 (롤백됨): " + (data.error || "알 수 없는 오류") + (data.errorDetails?.length ? "\n\n" + data.errorDetails.map(er => `· ${er.row}: ${er.error}`).join("\n") : ""));
+                      }
+                    } catch (err) {
+                      alert("업로드 실패: " + err.message);
+                    }
+                    e.target.value = "";
+                  }}
+                />
+              </label>
               {/* 업로드 취소 — 특정 ID 초과분 일괄 삭제 */}
               <button onClick={async () => {
                 const input = window.prompt("업로드 취소: 어느 ID까지 보존하시겠습니까?\n\n이 ID 초과분이 모두 삭제됩니다.\n(엑셀 업로드 전 max ID를 입력하세요)\n\n예: 86397 입력 → 86398 이상 모두 삭제");
