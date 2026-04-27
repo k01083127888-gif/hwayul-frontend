@@ -8,9 +8,22 @@ import { slugify } from "../utils/slugify.js";
 import { ContentCTABox } from "./ContentCTABox.jsx";
 import { getContentTypeMeta } from "../utils/contentType.js";
 
+// 엑셀 업로드 과정에서 깨진 이모지·문자를 정상 이모지로 교정
+// (DB 수정 없이 렌더링 시점에만 보정 — 추후 깨진 패턴 발견 시 여기 추가)
+const fixBrokenEmojis = (html) => (html || "")
+  // "樂"(한자) → 🤔 (생각하는 얼굴) — "혹시 이런 상황이신가요?" 헤딩 앞 자리
+  .replace(/<h3>\s*樂\s*/g, "<h3>🤔 ")
+  .replace(/<h2>\s*樂\s*/g, "<h2>🤔 ")
+  .replace(/<h4>\s*樂\s*/g, "<h4>🤔 ")
+  // <h3> 다음에 빈 공백만 있고 "이 판례의 핵심 시사점" 등 이어지는 경우 → 💡 추가
+  .replace(/<h3>\s+(이 판례의 핵심|핵심 시사점|핵심 정리|이 사건의 핵심)/g, "<h3>💡 $1")
+  .replace(/<h2>\s+(이 판례의 핵심|핵심 시사점|핵심 정리|이 사건의 핵심)/g, "<h2>💡 $1")
+  // 단독 한자 "樂"이 본문 어디든 있으면 → 🤔 로 (보수적으로 헤딩 안에서만)
+  ;
+
 // XSS 방어: 본문 HTML을 렌더링하기 전 허용 태그·속성만 남기고 나머지 제거
 // 특히 <script>, onerror, onload 등 이벤트 핸들러, javascript: URL 완전 차단
-const sanitizeBody = (html) => DOMPurify.sanitize(html || "", {
+const sanitizeBody = (html) => DOMPurify.sanitize(fixBrokenEmojis(html), {
   ALLOWED_TAGS: [
     "h1","h2","h3","h4","h5","h6",
     "p","br","hr","strong","b","em","i","u","s","del","mark","small","sub","sup",
