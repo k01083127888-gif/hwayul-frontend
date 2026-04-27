@@ -33,9 +33,8 @@ export function ContentDetailView({ item, onBack }) {
   // 이전 버그: 옛날 ID 9에 저장됐던 다른 글의 detail이 새 글의 본문을 덮어쓰는 문제.
   const fallback = contentDetails[item.id];
   const detail = item.body
-    ? { content: item.body, attachments: item.attachments || fallback?.attachments, related: fallback?.related }
+    ? { content: item.body, attachments: item.attachments || fallback?.attachments }
     : (fallback || { content: "", attachments: item.attachments });
-  const relatedItems = detail?.related?.map(rid => _contents.find(n => n.id === rid)).filter(Boolean) || [];
 
   // ── 동적 SEO 메타태그 ──
   // description 우선순위: summary > body(HTML 태그 제거 후 첫 160자)
@@ -229,29 +228,6 @@ export function ContentDetailView({ item, onBack }) {
 
         {/* ★ 진단 유도 CTA 박스 (본문 + 첨부파일 다 본 후 노출) */}
         <ContentCTABox item={item} />
-
-        {/* 관련 콘텐츠 */}
-        {relatedItems.length > 0 && (
-          <div style={{ background:"white", borderRadius:16, padding:36, boxShadow:"0 4px 24px rgba(10,22,40,0.08)", border:"1px solid rgba(10,22,40,0.06)" }}>
-            <div style={{ fontSize:10, letterSpacing:"2px", color:C.gold, fontWeight:700, textTransform:"uppercase", marginBottom:6 }}>RELATED CONTENT</div>
-            <h3 style={{ fontFamily:"'Noto Serif KR', serif", fontSize:18, fontWeight:800, color:C.navy, marginBottom:20 }}>관련 콘텐츠</h3>
-            <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
-              {relatedItems.map(rel => (
-                <div key={rel.id} onClick={() => { onBack(); setTimeout(() => { window.__safeworkOpenDetail?.(rel.id); }, 50); }} style={{ display:"flex", alignItems:"center", gap:16, padding:"14px 18px", borderRadius:10, border:"1px solid rgba(10,22,40,0.08)", cursor:"pointer", transition:"all 0.2s", background:"rgba(10,22,40,0.01)" }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(13,115,119,0.06)"; e.currentTarget.style.borderColor = C.teal; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = "rgba(10,22,40,0.01)"; e.currentTarget.style.borderColor = "rgba(10,22,40,0.08)"; }}
-                >
-                  <span style={{ fontSize:22, flexShrink:0 }}>{getContentTypeMeta(rel).icon}</span>
-                  <div style={{ flex:1, minWidth:0 }}>
-                    <div style={{ fontSize:13, fontWeight:700, color:C.navy, lineHeight:1.4, marginBottom:3 }}>{rel.title}</div>
-                    <div style={{ fontSize:11, color:C.gray }}>{rel.date} · 👁 {rel.views.toLocaleString()}</div>
-                  </div>
-                  <span style={{ fontSize:13, color:C.teal, fontWeight:700, flexShrink:0 }}>→</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );
