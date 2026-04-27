@@ -926,7 +926,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                 return (<>
               <div style={{ padding:"8px 14px 12px", fontSize:11, color:C.gray }}>총 {contentsState.length}건 중 <strong style={{ color:C.navy }}>{filteredContents.length}건</strong> 표시</div>
               <table style={{ width:"100%", borderCollapse:"collapse" }}>
-                <thead><tr>{["유형","태그","제목","날짜","조회","상태",""].map(h => <th key={h} style={thStyle}>{h}</th>)}</tr></thead>
+                <thead><tr>{["유형","태그","제목","날짜","조회",""].map(h => <th key={h} style={thStyle}>{h}</th>)}</tr></thead>
                 <tbody>{filteredContents.map((c,i) => {
                   const typeL = {case:"⚖️ 판결",sanjae:"🏥 산재",news:"📰 뉴스",resource:"📎 자료",column:"✏️ 칼럼",video:"▶ 영상(레거시)"};
                   const isHidden = !!c.hidden;
@@ -945,11 +945,6 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                       <td style={{ ...tdStyle, maxWidth:300, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{isHidden && <span style={{ fontSize:9, color:C.red, fontWeight:700, marginRight:4 }}>숨김</span>}{c.title}</td>
                       <td style={tdStyle}>{c.date}</td>
                       <td style={tdStyle}>{c.views?.toLocaleString()}</td>
-                      <td style={tdStyle}>
-                        <span style={{ padding:"2px 8px", borderRadius:100, fontSize:10, fontWeight:700, background:isHidden?"rgba(192,57,43,0.1)":"rgba(26,122,74,0.1)", color:isHidden?C.red:C.green, border:`1px solid ${isHidden?"rgba(192,57,43,0.2)":"rgba(26,122,74,0.2)"}` }}>
-                          {isHidden?"숨김":"공개"}
-                        </span>
-                      </td>
                       <td style={{ ...tdStyle, textAlign:"right", whiteSpace:"nowrap" }}>
                         <button onClick={() => setContentPreview(contentPreview?.id===c.id ? null : c)} style={{ padding:"5px 12px", borderRadius:6, border:"1px solid rgba(13,115,119,0.3)", background:contentPreview?.id===c.id?"rgba(13,115,119,0.12)":"rgba(13,115,119,0.05)", color:C.teal, fontWeight:700, fontSize:11, cursor:"pointer", fontFamily:"inherit", marginRight:6 }}>{contentPreview?.id===c.id?"접기":"상세"}</button>
                         <button onClick={() => { setEditContent(c); setTimeout(() => window.scrollTo({top:0, behavior:"smooth"}), 300); }} style={{ ...btnPrimary, padding:"5px 12px", marginRight:6 }}>수정</button>
