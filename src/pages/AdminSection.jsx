@@ -683,63 +683,37 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                   }}
                 />
               </label>
-              {/* 전체 교체 업로드 — 기존 콘텐츠 전부 삭제 후 선택한 엑셀들로 새로 채움 (다중 파일 지원) */}
+              {/* 전체 교체 업로드 — 기존 콘텐츠 전부 삭제 후 엑셀로 새로 채움 */}
               <label style={{ padding:"10px 20px", borderRadius:8, background:"rgba(192,57,43,0.08)", border:"1.5px solid rgba(192,57,43,0.4)", color:"#A03020", fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"inherit", display:"flex", alignItems:"center", gap:8 }}>
                 🔄 전체 교체 업로드
                 <input
                   type="file"
                   accept=".xlsx,.xls"
-                  multiple
                   style={{ display:"none" }}
                   onChange={async (e) => {
-                    const files = Array.from(e.target.files || []);
-                    if (!files.length) return;
-                    const fileList = files.map((f,i) => `  ${i+1}. ${f.name}`).join("\n");
+                    const file = e.target.files?.[0];
+                    if (!file) return;
                     // 3단계 확인 — 위험한 작업이라 신중하게
-                    if (!confirm(`⚠️ 위험: 전체 교체 업로드\n\n현재 DB의 모든 콘텐츠가 삭제되고 아래 ${files.length}개 엑셀로 새로 채워집니다.\n돌이킬 수 없습니다.\n\n${fileList}\n\n진행하시겠습니까?`)) { e.target.value = ""; return; }
+                    if (!confirm("⚠️ 위험: 전체 교체 업로드\n\n현재 DB의 모든 콘텐츠가 삭제되고 이 엑셀로 새로 채워집니다.\n돌이킬 수 없습니다.\n\n진행하시겠습니까?")) { e.target.value = ""; return; }
                     const typed = window.prompt("정말 전체를 지우고 새로 시작하시겠습니까?\n확인하려면 '교체' 라고 입력하세요.");
                     if (typed !== "교체") { alert("취소되었습니다."); e.target.value = ""; return; }
-                    if (!confirm(`마지막 확인:\n\n파일 ${files.length}개:\n${fileList}\n\n이 엑셀들의 내용으로 콘텐츠 전체가 교체됩니다.\n진행할까요?`)) { e.target.value = ""; return; }
-
-                    let totalDeleted = 0, totalUpdated = 0, totalInserted = 0, totalErrors = 0;
-                    const allErrors = [];
-                    let anyFailed = false;
+                    if (!confirm(`마지막 확인:\n\n파일: ${file.name}\n\n이 엑셀의 내용으로 콘텐츠 전체가 교체됩니다.\n진행할까요?`)) { e.target.value = ""; return; }
                     try {
-                      for (let i = 0; i < files.length; i++) {
-                        const file = files[i];
-                        const buf = await file.arrayBuffer();
-                        // 첫 파일만 ?mode=replace (DB 비움 + INSERT)
-                        // 두 번째 파일부터는 일반 업서트로 누적 추가
-                        const url = i === 0
-                          ? "https://hwayul-backend-production-96cf.up.railway.app/api/import-contents-excel?mode=replace"
-                          : "https://hwayul-backend-production-96cf.up.railway.app/api/import-contents-excel";
-                        const res = await adminFetch(url, {
-                          method: "POST",
-                          headers: { "Content-Type": "application/octet-stream" },
-                          body: buf,
-                        });
-                        const data = await res.json();
-                        if (data.success) {
-                          if (i === 0) totalDeleted = data.deletedBefore || 0;
-                          totalUpdated += data.updated || 0;
-                          totalInserted += data.inserted || 0;
-                          totalErrors += data.errors || 0;
-                          if (data.errorDetails?.length) allErrors.push(`[${file.name}]`, ...data.errorDetails.map(er => `  · ${er.row}: ${er.error}`));
-                        } else {
-                          anyFailed = true;
-                          allErrors.push(`[${file.name}] 실패: ${data.error || "알 수 없는 오류"}`);
-                          // 첫 파일이 실패하면 DB는 비워지지 않음(서버 ROLLBACK), 나머지는 진행 안 함
-                          if (i === 0) break;
-                        }
-                      }
-                      if (anyFailed && totalDeleted === 0) {
-                        alert(`❌ 교체 실패 (DB 변경 없음, 롤백됨)\n\n${allErrors.join("\n")}`);
+                      const buf = await file.arrayBuffer();
+                      const res = await adminFetch("https://hwayul-backend-production-96cf.up.railway.app/api/import-contents-excel?mode=replace", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/octet-stream" },
+                        body: buf,
+                      });
+                      const data = await res.json();
+                      if (data.success) {
+                        alert(`✅ 전체 교체 완료!\n\n기존 삭제: ${data.deletedBefore}건\n신규 등록: ${data.inserted}건\n오류: ${data.errors}건${data.errorDetails?.length ? "\n\n" + data.errorDetails.map(er => `· ${er.row}: ${er.error}`).join("\n") : ""}`);
+                        loadContentsFromDB();
                       } else {
-                        alert(`✅ 전체 교체 완료!\n\n기존 삭제: ${totalDeleted}건\n신규 등록: ${totalInserted}건\n수정: ${totalUpdated}건\n오류: ${totalErrors}건${allErrors.length ? "\n\n" + allErrors.slice(0, 15).join("\n") : ""}`);
+                        alert("교체 실패 (롤백됨): " + (data.error || "알 수 없는 오류") + (data.errorDetails?.length ? "\n\n" + data.errorDetails.map(er => `· ${er.row}: ${er.error}`).join("\n") : ""));
                       }
-                      loadContentsFromDB();
                     } catch (err) {
-                      alert("업로드 실패: " + err.message + (allErrors.length ? "\n\n진행했던 결과:\n" + allErrors.join("\n") : ""));
+                      alert("업로드 실패: " + err.message);
                     }
                     e.target.value = "";
                   }}
