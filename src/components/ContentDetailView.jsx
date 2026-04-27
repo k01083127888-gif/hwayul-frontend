@@ -28,7 +28,13 @@ const sanitizeBody = (html) => DOMPurify.sanitize(html || "", {
 
 export function ContentDetailView({ item, onBack }) {
   const typeMeta = getContentTypeMeta(item);
-  const detail = contentDetails[item.id] || { content: item.body, attachments: item.attachments };
+  // ★ DB 본문 우선 — item.body(서버에서 받은 최신 본문)가 있으면 무조건 그것을 사용.
+  // contentDetails(localStorage·하드코딩 폴백)는 DB에 본문이 없을 때만 사용.
+  // 이전 버그: 옛날 ID 9에 저장됐던 다른 글의 detail이 새 글의 본문을 덮어쓰는 문제.
+  const fallback = contentDetails[item.id];
+  const detail = item.body
+    ? { content: item.body, attachments: item.attachments || fallback?.attachments, related: fallback?.related }
+    : (fallback || { content: "", attachments: item.attachments });
   const relatedItems = detail?.related?.map(rid => _contents.find(n => n.id === rid)).filter(Boolean) || [];
 
   // ── 동적 SEO 메타태그 ──
