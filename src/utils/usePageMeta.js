@@ -19,7 +19,9 @@ function setMeta(selector, attrName, attrValue, content) {
 // - description: 페이지 설명 (160자 이내 권장)
 // - url: 절대 URL (https://wiham.kr/xxx)
 // - image: (선택) og:image 절대 URL. 없으면 기본 og-image.png 사용
-export function usePageMeta({ title, description, url, image = "https://wiham.kr/og-image.png" }) {
+//   ★ ?v= 버전 쿼리: 카카오톡/페이스북이 옛날 이미지를 캐시하면 안 보이므로
+//     이미지 디자인 변경할 때마다 v= 숫자 올려서 강제 캐시 버스팅
+export function usePageMeta({ title, description, url, image = "https://wiham.kr/og-image.png?v=2" }) {
   useEffect(() => {
     if (!title && !description && !url) return;
     const desc = (description || "").replace(/\s+/g, " ").trim().slice(0, 160);

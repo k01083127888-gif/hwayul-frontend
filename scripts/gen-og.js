@@ -75,27 +75,27 @@ function logoIcon(x, y, size) {
   `;
 }
 
-// 메인 타이틀: 로고 + Q(크림) + 인사이드(티얼) 센터 정렬
+// 메인 타이틀: 로고 + WIHAM(크림) + 인사이드(티얼) 센터 정렬
 function mainTitle(centerX, centerY, fontSize, logoSize) {
-  const gap = 24;             // 로고와 텍스트 사이
-  const textGap = 18;         // Q와 인사이드 사이
-  const qM = textMetrics("Q", fontSize);
+  const gap = 28;             // 로고와 텍스트 사이
+  const textGap = 22;         // WIHAM과 인사이드 사이
+  const wihamM = textMetrics("WIHAM", fontSize);
   const insideM = textMetrics("인사이드", fontSize);
-  const totalW = logoSize + gap + qM.width + textGap + insideM.width;
+  const totalW = logoSize + gap + wihamM.width + textGap + insideM.width;
   const startX = centerX - totalW / 2;
 
   const logoX = startX;
   const logoY = centerY - logoSize / 2;
 
-  const qX = startX + logoSize + gap - qM.x1;
-  const qY = centerY - qM.y1 - qM.height / 2;
+  const wihamX = startX + logoSize + gap - wihamM.x1;
+  const wihamY = centerY - wihamM.y1 - wihamM.height / 2;
 
-  const insideX = qX + qM.x1 + qM.width + textGap - insideM.x1;
+  const insideX = wihamX + wihamM.x1 + wihamM.width + textGap - insideM.x1;
   const insideY = centerY - insideM.y1 - insideM.height / 2;
 
   return `
     ${logoIcon(logoX, logoY, logoSize)}
-    ${drawPathAt(qM.path, qX, qY, CREAM)}
+    ${drawPathAt(wihamM.path, wihamX, wihamY, CREAM)}
     ${drawPathAt(insideM.path, insideX, insideY, TEAL_LIGHT)}
   `;
 }
@@ -122,7 +122,7 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
   <!-- 상단 브랜드 태그 -->
   <text x="${W/2}" y="120" text-anchor="middle"
         fill="${GOLD}" font-family="'Malgun Gothic','Noto Sans KR',sans-serif"
-        font-size="22" font-weight="700" letter-spacing="8">Q INSIDE LABS</text>
+        font-size="22" font-weight="700" letter-spacing="8">WIHAM INSIDE LABS</text>
   <circle cx="${W/2-14}" cy="145" r="2.5" fill="${GOLD}"/>
   <circle cx="${W/2}"    cy="145" r="2.5" fill="${GOLD}"/>
   <circle cx="${W/2+14}" cy="145" r="2.5" fill="${GOLD}"/>
