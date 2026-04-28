@@ -104,10 +104,10 @@ const PRINT_STYLE = `<style>
 
 export function generateChecklistPrintHtml(prereq, behavior, impact, continuity, result) {
   const now = new Date().toLocaleString("ko-KR");
-  // 이메일 클라이언트(Gmail 등)는 <style> CSS를 자주 제거하므로 모든 시각 요소는 인라인 스타일로 박아둠.
-  // 체크박스도 ☑ ☐ Unicode 문자 + 인라인 스타일 박스로 이중 안전장치.
-  const boxOn = `<span style="display:inline-block;width:20px;height:20px;line-height:16px;text-align:center;font-size:14px;font-weight:900;border:2px solid #0D7377;background:#0D7377;color:#fff;border-radius:3px;vertical-align:middle">✓</span>`;
-  const boxOff = `<span style="display:inline-block;width:20px;height:20px;line-height:16px;text-align:center;font-size:14px;border:2px solid #B0ADA6;background:#fff;color:transparent;border-radius:3px;vertical-align:middle">·</span>`;
+  // 이메일 클라이언트가 display:inline-block 까지 제거하는 경우가 많아 — 유니코드 ☑ ☐ 문자로 대체.
+  // 폰트가 어떤 거든 진짜 박스로 렌더링되며 색만 인라인으로 입혀줌.
+  const boxOn  = `<span style="font-size:20px;color:#0D7377;font-weight:900">☑</span>`;
+  const boxOff = `<span style="font-size:20px;color:#C0BDB6">☐</span>`;
 
   const prereqRows = prerequisiteItems.map(p => {
     const on = !!prereq[p.id];
@@ -124,12 +124,12 @@ export function generateChecklistPrintHtml(prereq, behavior, impact, continuity,
     return `<div style="border:1px solid #E8E5DE;border-left:4px solid ${cat.color};border-radius:8px;padding:20px 22px;margin-bottom:14px;background:#fff">
       <h3 style="font-size:14px;font-weight:800;margin:0 0 8px;color:#0A1628">${cat.icon} ${cat.category} <span style="display:inline-block;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700;background:${cat.color}20;color:${cat.color};margin-left:6px">${checked.length}건 해당</span></h3>
       <div style="font-size:11px;color:#8B8680;margin-bottom:12px">법적 근거: ${cat.basis}</div>
-      ${checked.map(i => `<div style="padding:8px 0;font-size:12px;line-height:1.7"><span style="display:inline-block;width:18px;height:18px;line-height:14px;text-align:center;font-size:12px;font-weight:900;border:2px solid #0D7377;background:#0D7377;color:#fff;border-radius:3px;vertical-align:middle;margin-right:10px">✓</span>${i.text}</div>`).join("")}
+      ${checked.map(i => `<div style="padding:8px 0;font-size:12px;line-height:1.7"><span style="font-size:18px;color:#0D7377;font-weight:900;margin-right:8px">☑</span>${i.text}</div>`).join("")}
     </div>`;
   }).join("");
   const impactRows = impactItems.map(cat => {
     const checked = cat.items.filter(i => impact[i.id]);
-    return checked.length > 0 ? `<div style="margin-bottom:18px;padding:16px 18px;background:#FAFAF7;border-left:4px solid #C9A84C;border-radius:0 8px 8px 0"><strong style="font-size:12px;color:#0A1628;display:block;margin-bottom:8px">${cat.category}</strong>${checked.map(i => `<div style="padding:6px 0;font-size:12px;line-height:1.7"><span style="display:inline-block;width:18px;height:18px;line-height:14px;text-align:center;font-size:12px;font-weight:900;border:2px solid #0D7377;background:#0D7377;color:#fff;border-radius:3px;vertical-align:middle;margin-right:10px">✓</span>${i.text}</div>`).join("")}</div>` : "";
+    return checked.length > 0 ? `<div style="margin-bottom:18px;padding:16px 18px;background:#FAFAF7;border-left:4px solid #C9A84C;border-radius:0 8px 8px 0"><strong style="font-size:12px;color:#0A1628;display:block;margin-bottom:8px">${cat.category}</strong>${checked.map(i => `<div style="padding:6px 0;font-size:12px;line-height:1.7"><span style="font-size:18px;color:#0D7377;font-weight:900;margin-right:8px">☑</span>${i.text}</div>`).join("")}</div>` : "";
   }).join("");
   const contLabel = continuity ? continuityOptions.find(c => c.id === continuity)?.label || "-" : "-";
 
@@ -171,7 +171,7 @@ export function generateChecklistPrintHtml(prereq, behavior, impact, continuity,
     <div style="margin-bottom:56px"><h2 style="font-size:17px;font-weight:900;margin:0 0 22px;color:#0A1628;padding:14px 0 14px 18px;border-left:5px solid #0D7377;background:#F5F3EF;border-radius:0 6px 6px 0">1. 사전요건 (3대 요건) 점검</h2><table style="width:100%;border-collapse:collapse;border:1px solid #E8E5DE;border-radius:8px;overflow:hidden"><thead><tr><th style="width:60px;background:#F5F3EF;padding:12px;font-size:11px;font-weight:700;text-align:center;border-bottom:2px solid #E8E5DE">체크</th><th style="background:#F5F3EF;padding:12px;font-size:11px;font-weight:700;text-align:left;border-bottom:2px solid #E8E5DE;width:90px">요건</th><th style="background:#F5F3EF;padding:12px;font-size:11px;font-weight:700;text-align:left;border-bottom:2px solid #E8E5DE">내용</th></tr></thead><tbody>${prereqRows}</tbody></table></div>
     <div style="margin-bottom:56px"><h2 style="font-size:17px;font-weight:900;margin:0 0 22px;color:#0A1628;padding:14px 0 14px 18px;border-left:5px solid #0D7377;background:#F5F3EF;border-radius:0 6px 6px 0">2. 해당 행위유형 상세</h2>${behaviorRows || '<div style="color:#8B8680;padding:18px;background:#FAFAF7;border-radius:8px;text-align:center">해당 없음</div>'}</div>
     <div style="margin-bottom:56px"><h2 style="font-size:17px;font-weight:900;margin:0 0 22px;color:#0A1628;padding:14px 0 14px 18px;border-left:5px solid #0D7377;background:#F5F3EF;border-radius:0 6px 6px 0">3. 피해 영향도</h2>${impactRows || '<div style="color:#8B8680;padding:18px;background:#FAFAF7;border-radius:8px;text-align:center">해당 없음</div>'}</div>
-    <div style="margin-bottom:56px"><h2 style="font-size:17px;font-weight:900;margin:0 0 22px;color:#0A1628;padding:14px 0 14px 18px;border-left:5px solid #0D7377;background:#F5F3EF;border-radius:0 6px 6px 0">4. 권고 조치</h2><div style="border:1px solid #E8E5DE;border-left:4px solid #0D7377;border-radius:8px;padding:18px 22px;background:#FAFAF7">${result.actions.map((a,i) => `<div style="padding:11px 0;font-size:13px;border-bottom:${i<result.actions.length-1?'1px dashed #E8E5DE':'none'}"><span style="display:inline-block;width:26px;height:26px;line-height:22px;text-align:center;border-radius:50%;background:#0D7377;color:#fff;font-size:12px;font-weight:900;border:2px solid #0D7377;margin-right:12px;vertical-align:middle">${i+1}</span><span style="line-height:1.7;vertical-align:middle">${a}</span></div>`).join("")}</div></div>
+    <div style="margin-bottom:56px"><h2 style="font-size:17px;font-weight:900;margin:0 0 22px;color:#0A1628;padding:14px 0 14px 18px;border-left:5px solid #0D7377;background:#F5F3EF;border-radius:0 6px 6px 0">4. 권고 조치</h2><div style="border:1px solid #E8E5DE;border-left:4px solid #0D7377;border-radius:8px;padding:18px 22px;background:#FAFAF7">${result.actions.map((a,i) => `<table cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;border-bottom:${i<result.actions.length-1?'1px dashed #E8E5DE':'none'}"><tr><td style="width:36px;padding:14px 0;vertical-align:top"><span style="display:inline-block;padding:4px 10px;background:#0D7377;color:#fff;font-size:12px;font-weight:900;border-radius:100px">${i+1}</span></td><td style="padding:14px 0 14px 8px;font-size:13px;line-height:1.7;vertical-align:top">${a}</td></tr></table>`).join("")}</div></div>
     ${PRINT_FOOTER}
     </div>
     <script>window.onload = function() { try { window.print(); } catch(e){} }</script>
