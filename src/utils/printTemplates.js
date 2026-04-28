@@ -175,27 +175,57 @@ export function generateChecklistPrintHtml(prereq, behavior, impact, continuity,
 export function generateCulturePrintHtml(totalRisk, catResults, highRiskItems, answers, orgInfo, getRiskGrade) {
   const now = new Date().toLocaleString("ko-KR");
   const grade = getRiskGrade(totalRisk);
-  const catRows = catResults.map(cat => `
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <h3 style="margin:0">${cat.icon} ${cat.title}</h3>
-        <span class="badge" style="background:${cat.grade.color}20;color:${cat.grade.color}">${cat.score}점 · ${cat.grade.label}</span>
+  // 5점 척도 응답을 시각적 박스로 표현 — 0(전혀 아니다)~4(매우 그렇다)
+  // 선택된 칸만 컬러로 채워서 한눈에 응답 강도 파악 가능
+  const scaleBoxes = (v, color) => {
+    const labels = ["전혀","아니","보통","그렇","매우"];
+    return Array.from({length:5}, (_,i) => {
+      const on = i === v;
+      const isHigh = i >= 3;
+      const fillColor = isHigh ? "#C0392B" : i === 2 ? "#D4740A" : "#1A7A4A";
+      return `<span style="display:inline-block;width:30px;height:22px;line-height:18px;text-align:center;font-size:9px;font-weight:${on?900:500};margin-right:3px;border:1.5px solid ${on?fillColor:'#D8D5CE'};border-radius:4px;background:${on?fillColor:'#fff'};color:${on?'#fff':'#B0ADA6'};vertical-align:middle">${labels[i]}</span>`;
+    }).join("");
+  };
+
+  const catRows = catResults.map((cat, ci) => `
+    <div class="card" style="margin-bottom:24px;border-left:4px solid ${cat.grade.color}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+        <h3 style="margin:0;font-size:15px">${cat.icon} ${cat.title}</h3>
+        <span class="badge" style="background:${cat.grade.color};color:#fff;font-size:12px;padding:5px 14px">${cat.score}점 · ${cat.grade.label}</span>
       </div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${cat.score}%;background:${cat.grade.color}"></div></div>
-      <div style="font-size:11px;color:#8B8680;margin-top:6px">📌 ${cat.riskFactor}</div>
-      <table style="margin-top:8px"><thead><tr><th style="width:40px"></th><th>문항</th><th style="width:80px">응답</th></tr></thead><tbody>
+      <div class="bar-bg" style="height:10px"><div class="bar-fill" style="width:${cat.score}%;background:${cat.grade.color}"></div></div>
+      <div style="font-size:11px;color:#5A5550;margin:10px 0 16px;padding:10px 14px;background:#FAFAF7;border-radius:6px;border-left:3px solid ${cat.color}">📌 ${cat.riskFactor}</div>
+      <table style="margin-top:8px;border-collapse:separate;border-spacing:0">
+        <thead><tr>
+          <th style="width:46px;text-align:center">No.</th>
+          <th>문항</th>
+          <th style="width:200px;text-align:center">응답 (5점 척도)</th>
+        </tr></thead>
+        <tbody>
         ${cat.items.map((item,idx) => {
           const v = answers[item.id];
-          const label = v !== undefined ? ["전혀 아니다","아니다","보통이다","그렇다","매우 그렇다"][v] : "-";
-          const cls = v >= 3 ? "color:#C0392B;font-weight:700" : v >= 2 ? "color:#D4740A" : "color:#1A7A4A";
-          return `<tr><td style="font-size:11px;color:${cat.color};font-weight:700">Q${idx+1}</td><td>${item.text}${item.risk==="high"?' <span style="font-size:9px;color:#C0392B;font-weight:700;border:1px solid #C0392B30;padding:1px 4px;border-radius:3px">핵심</span>':""}</td><td style="${cls}">${label}</td></tr>`;
+          const isCore = item.risk === "high";
+          const isHighRisk = v >= 3;
+          return `<tr style="background:${isHighRisk?'#FDF4F2':(idx%2?'#FAFAF7':'#fff')}">
+            <td style="text-align:center;font-size:12px;color:${cat.color};font-weight:800;padding:14px 8px">Q${idx+1}</td>
+            <td style="padding:14px 12px;line-height:1.6">${item.text}${isCore?' <span style="font-size:9px;color:#C0392B;font-weight:700;border:1px solid #C0392B30;padding:1px 5px;border-radius:3px;margin-left:4px;background:#fff">핵심</span>':""}</td>
+            <td style="padding:14px 8px;text-align:center;white-space:nowrap">${scaleBoxes(v, cat.color)}</td>
+          </tr>`;
         }).join("")}
       </tbody></table>
     </div>
   `).join("");
   const riskItemsHtml = highRiskItems.length > 0 ? `
-    <div class="section"><h2>핵심 위험 신호 (${highRiskItems.length}건)</h2>
-      ${highRiskItems.map(i => `<div style="padding:6px 0;border-bottom:1px solid #F0EDE6">🚩 <strong style="color:${i.catColor}">[${i.catTitle}]</strong> ${i.text}</div>`).join("")}
+    <div class="section"><h2>🚩 핵심 위험 신호 (${highRiskItems.length}건)</h2>
+      <div class="card" style="border-left:5px solid #C0392B;background:#FDF4F2">
+        ${highRiskItems.map((i,idx) => `<div style="padding:11px 0;font-size:13px;display:flex;align-items:flex-start;gap:12px;border-bottom:${idx<highRiskItems.length-1?'1px dashed #F0CFC9':'none'}">
+          <span style="display:inline-block;flex-shrink:0;width:24px;height:24px;line-height:24px;text-align:center;border-radius:4px;background:#C0392B;color:#fff;font-size:11px;font-weight:900">${idx+1}</span>
+          <div style="flex:1;line-height:1.7">
+            <strong style="color:${i.catColor};font-size:11px;display:inline-block;padding:2px 8px;border-radius:3px;background:${i.catColor}15;margin-right:6px">[${i.catTitle}]</strong>
+            ${i.text}
+          </div>
+        </div>`).join("")}
+      </div>
     </div>` : "";
 
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>조직문화 진단 결과 - WIHAM 인사이드</title>${PRINT_STYLE}</head><body>
