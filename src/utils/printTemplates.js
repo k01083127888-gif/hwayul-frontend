@@ -181,16 +181,17 @@ export function generateChecklistPrintHtml(prereq, behavior, impact, continuity,
 export function generateCulturePrintHtml(totalRisk, catResults, highRiskItems, answers, orgInfo, getRiskGrade) {
   const now = new Date().toLocaleString("ko-KR");
   const grade = getRiskGrade(totalRisk);
-  // 5점 척도 응답을 시각적 박스로 표현 — 0(전혀 아니다)~4(매우 그렇다)
-  // 선택된 칸만 컬러로 채워서 한눈에 응답 강도 파악 가능
-  const scaleBoxes = (v, color) => {
+  // 5점 척도 응답을 테이블 셀로 표현 — 이메일 클라이언트가 inline-block 제거해도 안전.
+  // 선택된 셀만 컬러 채움. 0(전혀 아니다)~4(매우 그렇다)
+  const scaleBoxes = (v) => {
     const labels = ["전혀","아니","보통","그렇","매우"];
-    return Array.from({length:5}, (_,i) => {
+    const cells = Array.from({length:5}, (_,i) => {
       const on = i === v;
       const isHigh = i >= 3;
       const fillColor = isHigh ? "#C0392B" : i === 2 ? "#D4740A" : "#1A7A4A";
-      return `<span style="display:inline-block;width:30px;height:22px;line-height:18px;text-align:center;font-size:9px;font-weight:${on?900:500};margin-right:3px;border:1.5px solid ${on?fillColor:'#D8D5CE'};border-radius:4px;background:${on?fillColor:'#fff'};color:${on?'#fff':'#B0ADA6'};vertical-align:middle">${labels[i]}</span>`;
-    }).join("");
+      return `<td style="padding:4px 6px;text-align:center;font-size:10px;font-weight:${on?900:500};border:1.5px solid ${on?fillColor:'#D8D5CE'};background:${on?fillColor:'#fff'};color:${on?'#fff':'#B0ADA6'};border-radius:4px;width:36px">${labels[i]}</td>`;
+    }).join('<td style="width:3px"></td>');
+    return `<table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;border-collapse:separate"><tr>${cells}</tr></table>`;
   };
 
   const catRows = catResults.map((cat, ci) => `
@@ -215,7 +216,7 @@ export function generateCulturePrintHtml(totalRisk, catResults, highRiskItems, a
           return `<tr style="background:${isHighRisk?'#FDF4F2':(idx%2?'#FAFAF7':'#fff')}">
             <td style="text-align:center;font-size:12px;color:${cat.color};font-weight:800;padding:14px 8px">Q${idx+1}</td>
             <td style="padding:14px 12px;line-height:1.6">${item.text}${isCore?' <span style="font-size:9px;color:#C0392B;font-weight:700;border:1px solid #C0392B30;padding:1px 5px;border-radius:3px;margin-left:4px;background:#fff">핵심</span>':""}</td>
-            <td style="padding:14px 8px;text-align:center;white-space:nowrap">${scaleBoxes(v, cat.color)}</td>
+            <td style="padding:14px 8px;text-align:center">${scaleBoxes(v)}</td>
           </tr>`;
         }).join("")}
       </tbody></table>
