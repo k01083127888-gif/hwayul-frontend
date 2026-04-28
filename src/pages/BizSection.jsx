@@ -54,7 +54,7 @@ function sendConfirmEmail(form) {
         <div style="background:#FFF8E7;padding:16px 18px;border-radius:8px;border:1px solid #F0E6C8;margin:20px 0;">
           <p style="font-size:13px;font-weight:700;color:#8B7A40;margin:0 0 8px;">💳 입금 안내</p>
           <p style="font-size:13px;margin:4px 0;">• 금액: <strong>22만원 (VAT 포함)</strong></p>
-          <p style="font-size:13px;margin:4px 0;">• 계좌: <strong>하나은행 824-910010-97104 (뷰랩스)</strong></p>
+          <p style="font-size:13px;margin:4px 0;">• 계좌: <strong>하나은행 824-910010-97104 (위함랩스)</strong></p>
           <p style="font-size:13px;margin:4px 0;">• 입금 확인 후 1차 전화 상담이 예약됩니다</p>
         </div>
 
@@ -123,7 +123,7 @@ export function BizSection() {
         <div style={{ padding:"14px 18px", background:"rgba(201,168,76,0.1)", border:"1px solid rgba(201,168,76,0.28)", borderRadius:10, marginBottom:22, lineHeight:1.8, textAlign:"left" }}>
           <div style={{ fontSize:12, fontWeight:700, color:C.gold, marginBottom:4 }}>💳 입금 계좌 안내 (VAT 포함 22만원)</div>
           <div style={{ fontSize:13, fontWeight:800, color:C.cream }}>하나은행 824-910010-97104</div>
-          <div style={{ fontSize:12, color:"rgba(244,241,235,0.6)" }}>예금주: 뷰랩스 · 입금 확인 후 1차 전화 상담 예약</div>
+          <div style={{ fontSize:12, color:"rgba(244,241,235,0.6)" }}>예금주: 위함랩스 · 입금 확인 후 1차 전화 상담 예약</div>
         </div>
         <div style={{ padding:"18px 24px", background:"rgba(201,168,76,0.1)", border:"1px solid rgba(201,168,76,0.25)", borderRadius:10, marginBottom:28 }}>
           <div style={{ fontSize:13, color:C.gold, fontWeight:700 }}>신청 정보</div>

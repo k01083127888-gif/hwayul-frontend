@@ -67,7 +67,7 @@ export function ReportForm({ type, resultData, dark = false, resultHtml = "", ge
         <div style={{ padding:"12px 18px", background:dark?"rgba(201,168,76,0.08)":"rgba(13,115,119,0.06)", border:`1px solid ${dark?"rgba(201,168,76,0.25)":"rgba(13,115,119,0.2)"}`, borderRadius:10, marginBottom:12, lineHeight:1.8 }}>
           <div style={{ fontSize:12, fontWeight:700, color:dark?C.gold:C.teal, marginBottom:4 }}>💳 입금 계좌 안내</div>
           <div style={{ fontSize:13, fontWeight:800, color:dark?C.cream:C.navy }}>하나은행 824-910010-97104</div>
-          <div style={{ fontSize:12, color:dark?"rgba(244,241,235,0.6)":"#5A4A30" }}>예금주: 뷰랩스</div>
+          <div style={{ fontSize:12, color:dark?"rgba(244,241,235,0.6)":"#5A4A30" }}>예금주: 위함랩스</div>
         </div>
         <p style={{ fontSize:13, color:textColor, lineHeight:1.85, marginBottom:10 }}>
           입금 확인 후 전문 노무사가 진단 결과를 검토하여<br/>

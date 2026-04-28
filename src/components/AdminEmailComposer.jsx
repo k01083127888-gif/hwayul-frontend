@@ -7,7 +7,7 @@ import { adminFetch } from "../utils/adminApi.js";
 export function AdminEmailComposer({ data, onClose, onViewResult }) {
   const [greeting, setGreeting] = useState(data.greeting || "");
   const [body, setBody] = useState(data.body || "");
-  const [closing, setClosing] = useState("감사합니다.\n\nWIHAM 인사이드\n대표 노무사 김재정\nTel. 02-2088-1767\nEmail. hwayulinside@gmail.com\nWeb. www.hwayul.kr");
+  const [closing, setClosing] = useState("감사합니다.\n\nWIHAM 인사이드\n대표 노무사 김재정\nTel. 02-2088-1767\nEmail. wihaminside@gmail.com\nWeb. www.hwayul.kr");
   const [showPreview, setShowPreview] = useState(false);
   const [sent, setSent] = useState(false);
   // AI 자동 작성 관련 상태
@@ -109,7 +109,7 @@ ${resultSummary || "(결과 데이터 없음)"}
   </div>
   <div style="background:#0A1628;padding:20px 32px;text-align:center">
     <div style="font-size:10px;color:rgba(244,241,235,0.3);line-height:1.8">
-      © 2025 WIHAM 인사이드 | Tel. 02-2088-1767 | hwayulinside@gmail.com<br/>
+      © 2025 WIHAM 인사이드 | Tel. 02-2088-1767 | wihaminside@gmail.com<br/>
       본 이메일은 요청에 따라 발송되었습니다.
     </div>
   </div>

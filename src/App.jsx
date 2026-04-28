@@ -451,7 +451,7 @@ useEffect(() => {
           {[
             { title:"서비스", links:["소개", "콘텐츠", "진단 체크리스트", "조직문화 진단"] },
             { title:"지원",   links:["익명 제보", "해결 의뢰", "심층 상담"] },
-            { title:"문의",   links:["이메일: hwayulinside@gmail.com", "전화: 02-2088-1767", "운영시간: 평일 09-18시"] },
+            { title:"문의",   links:["이메일: wihaminside@gmail.com", "전화: 02-2088-1767", "운영시간: 평일 09-18시"] },
             { title:"법적 고지", links:["개인정보 처리방침", "이용약관"] },
           ].map(col => (
             <div key={col.title}>

@@ -108,9 +108,9 @@ h2{color:#0D7377;margin-top:32px;font-size:16px;border-left:4px solid #C9A84C;pa
 <h2>5. ${r.type==="checklist"?"증거 수집·보전 가이드":"맞춤 교육·예방 프로그램"}</h2><div class="section">${report.section5}</div>
 <h2>6. 결론</h2><div class="section">${report.conclusion}</div>
 <div class="footer">
-WIHAM 인사이드 | hwayulinside@gmail.com | 02-2088-1767<br/>
+WIHAM 인사이드 | wihaminside@gmail.com | 02-2088-1767<br/>
 본 리포트는 전문 노무사가 진단 결과를 검토하여 작성한 유료 리포트입니다 (${price}원, VAT 포함). 무단 배포를 금합니다.<br/>
-&copy; ${new Date().getFullYear()} 뷰랩스. All rights reserved.
+&copy; ${new Date().getFullYear()} 위함랩스. All rights reserved.
 </div></body></html>`;
 
   // 리포트 HTML 다운로드
@@ -141,10 +141,10 @@ body{font-family:'Noto Sans KR',sans-serif;margin:0;padding:0;background:#F5F3EF
       <div style="font-size:13px;color:#0D7377;font-weight:700">📎 첨부: ${diagType} 검토 리포트</div>
       <div style="font-size:11px;color:#8B8680;margin-top:4px">상세 검토 리포트가 첨부되어 있습니다.</div>
     </div>
-    <div style="border-top:1px solid #E8E5DE;padding-top:20px;font-size:13px;color:#8B8680;line-height:1.9;white-space:pre-wrap">감사합니다.\n\nWIHAM 인사이드\n대표 노무사 김재정\nTel. 02-2088-1767\nEmail. hwayulinside@gmail.com\nWeb. www.hwayul.kr</div>
+    <div style="border-top:1px solid #E8E5DE;padding-top:20px;font-size:13px;color:#8B8680;line-height:1.9;white-space:pre-wrap">감사합니다.\n\nWIHAM 인사이드\n대표 노무사 김재정\nTel. 02-2088-1767\nEmail. wihaminside@gmail.com\nWeb. www.hwayul.kr</div>
   </div>
   <div style="background:#0A1628;padding:20px 32px;text-align:center">
-    <div style="font-size:10px;color:rgba(244,241,235,0.3);line-height:1.8">&copy; 2025 WIHAM 인사이드 | Tel. 02-2088-1767 | hwayulinside@gmail.com</div>
+    <div style="font-size:10px;color:rgba(244,241,235,0.3);line-height:1.8">&copy; 2025 WIHAM 인사이드 | Tel. 02-2088-1767 | wihaminside@gmail.com</div>
   </div>
 </div></body></html>`;
 
@@ -221,7 +221,7 @@ body{font-family:'Noto Sans KR',sans-serif;margin:0;padding:0;background:#F5F3EF
       <div style={{ marginBottom:16 }}>
         <label style={lbl}>이메일 본문 (간단한 안내만 — 상세 내용은 첨부 리포트에)</label>
         <textarea value={emailBody} onChange={e=>setEmailBody(e.target.value)} rows={6} style={txArea}
-          placeholder={`${r.name||""} 님 안녕하세요.\nWIHAM 인사이드입니다.\n\n요청하신 ${diagType} 전문 노무사 검토 리포트를 첨부파일로 보내드립니다.\n상세 내용은 첨부된 리포트를 확인해 주시기 바랍니다.\n\n리포트 내용에 대한 문의사항이 있으시면 언제든 연락 주세요.\n\n감사합니다.\nWIHAM 인사이드\n대표 노무사 김재정\nhwayulinside@gmail.com | 02-2088-1767`} />
+          placeholder={`${r.name||""} 님 안녕하세요.\nWIHAM 인사이드입니다.\n\n요청하신 ${diagType} 전문 노무사 검토 리포트를 첨부파일로 보내드립니다.\n상세 내용은 첨부된 리포트를 확인해 주시기 바랍니다.\n\n리포트 내용에 대한 문의사항이 있으시면 언제든 연락 주세요.\n\n감사합니다.\nWIHAM 인사이드\n대표 노무사 김재정\nwihaminside@gmail.com | 02-2088-1767`} />
       </div>
       <div style={{ padding:"10px 14px", background:"rgba(13,115,119,0.06)", borderRadius:8, marginBottom:16, fontSize:11, color:C.gray }}>
         📎 <b>첨부파일:</b> 뷰_검토리포트_{r.orgName||r.name||""}_{new Date().toISOString().slice(0,10)}.html

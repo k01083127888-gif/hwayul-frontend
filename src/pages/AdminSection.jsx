@@ -102,7 +102,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
   const [reportWrite, setReportWrite] = useState(null);
   const resultIframeRef = useRef(null);
   const [nlMode, setNlMode] = useState("list"); // list | compose | preview | history
-  const [nlForm, setNlForm] = useState({ title:"", greeting:"안녕하세요, WIHAM 인사이드입니다.", body:"", closing:"감사합니다.\n\nWIHAM 인사이드\n대표 노무사 김재정\nhwayulinside@gmail.com" });
+  const [nlForm, setNlForm] = useState({ title:"", greeting:"안녕하세요, WIHAM 인사이드입니다.", body:"", closing:"감사합니다.\n\nWIHAM 인사이드\n대표 노무사 김재정\nwihaminside@gmail.com" });
   const [nlSent, setNlSent] = useState(false);
   const nlPreviewRef = useRef(null);
   // AI 자동 작성 상태
@@ -1772,7 +1772,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
     <div style="border-top:1px solid #E8E5DE;padding-top:20px;font-size:13px;color:#8B8680;line-height:1.9;white-space:pre-wrap">${nlForm.closing}</div>
   </div>
   <div style="background:#0A1628;padding:20px 32px;text-align:center">
-    <div style="font-size:10px;color:rgba(244,241,235,0.3);line-height:1.8">© 2025 WIHAM 인사이드 | hwayulinside@gmail.com<br/><a href="#" style="color:rgba(244,241,235,0.4);font-size:9px">수신 거부</a></div>
+    <div style="font-size:10px;color:rgba(244,241,235,0.3);line-height:1.8">© 2025 WIHAM 인사이드 | wihaminside@gmail.com<br/><a href="#" style="color:rgba(244,241,235,0.4);font-size:9px">수신 거부</a></div>
   </div>
 </div></body></html>`;
 
@@ -1908,7 +1908,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                   {/* ── 직접 편집 영역 ── */}
                   <div style={{ padding:"12px 14px", background:"rgba(13,115,119,0.05)", borderRadius:8, marginBottom:16, fontSize:12, color:C.teal, fontWeight:600 }}>
                     📧 발송 대상: 뉴스레터 구독자 <strong>{subscribers.length}명</strong>
-                    <span style={{ color:C.gray, fontWeight:400, marginLeft:8 }}>hwayulinside@gmail.com에서 일괄 발송됩니다.</span>
+                    <span style={{ color:C.gray, fontWeight:400, marginLeft:8 }}>wihaminside@gmail.com에서 일괄 발송됩니다.</span>
                   </div>
 
                   <div style={{ marginBottom:12 }}>
@@ -1972,7 +1972,7 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                         <div style={{ fontSize:18, marginBottom:6 }}>✅</div>
                         <div style={{ fontSize:14, fontWeight:700, color:C.green }}>뉴스레터가 {subscribers.length}명에게 발송되었습니다!</div>
                         <div style={{ fontSize:12, color:C.gray, marginTop:4 }}>발송 이력에 저장되었습니다.</div>
-                        <button onClick={()=>{ setNlMode("history"); setNlForm({title:"",greeting:"안녕하세요, WIHAM 인사이드입니다.",body:"",closing:"감사합니다.\n\nWIHAM 인사이드\n대표 노무사 김재정\nhwayulinside@gmail.com"}); setNlSent(false); }} style={{ marginTop:12, padding:"8px 20px", borderRadius:6, background:C.teal, border:"none", color:"white", fontWeight:700, fontSize:12, cursor:"pointer", fontFamily:"inherit" }}>발송 이력 보기 →</button>
+                        <button onClick={()=>{ setNlMode("history"); setNlForm({title:"",greeting:"안녕하세요, WIHAM 인사이드입니다.",body:"",closing:"감사합니다.\n\nWIHAM 인사이드\n대표 노무사 김재정\nwihaminside@gmail.com"}); setNlSent(false); }} style={{ marginTop:12, padding:"8px 20px", borderRadius:6, background:C.teal, border:"none", color:"white", fontWeight:700, fontSize:12, cursor:"pointer", fontFamily:"inherit" }}>발송 이력 보기 →</button>
                       </div>
                     : <button onClick={handleSend} style={{ width:"100%", padding:"16px", borderRadius:10, background:C.teal, border:"none", color:"white", fontWeight:800, fontSize:15, cursor:"pointer", fontFamily:"inherit" }}>
                         ✉️ 구독자 {subscribers.length}명에게 발송하기

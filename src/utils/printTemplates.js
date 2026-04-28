@@ -32,7 +32,7 @@ const PRINT_HEADER = `
     <div style="text-align:right;font-size:11px;color:#8B8680;line-height:1.8;white-space:nowrap">
       <div><strong style="color:#0A1628;font-family:'Gowun Batang','Noto Sans KR',sans-serif;font-size:14px">WIHAM 인사이드</strong></div>
       <div>Tel. 02-2088-1767</div>
-      <div>Email. hwayulinside@gmail.com</div>
+      <div>Email. wihaminside@gmail.com</div>
       <div>Web. www.hwayul.kr</div>
     </div>
   </div>
@@ -41,7 +41,7 @@ const PRINT_FOOTER = `
   <div style="margin-top:36px;border-top:2px solid #E8E5DE;padding-top:18px;text-align:center">
     <div style="font-size:10px;color:#8B8680;line-height:1.8">
       본 진단 결과는 참고용이며 법적 효력이 없습니다. 최종 판단은 전문 노무사와 확인하시기 바랍니다.<br/>
-      © 2025 WIHAM 인사이드 | Tel. 02-2088-1767 | hwayulinside@gmail.com
+      © 2025 WIHAM 인사이드 | Tel. 02-2088-1767 | wihaminside@gmail.com
     </div>
     <div style="margin-top:12px;padding:10px;background:#0A1628;border-radius:8px">
       <div style="font-size:12px;color:#C9A84C;font-weight:700">💡 전문가 상담이 필요하신가요?</div>
