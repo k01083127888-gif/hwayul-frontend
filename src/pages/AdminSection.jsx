@@ -683,40 +683,6 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                   }}
                 />
               </label>
-              {/* 업로드 취소 — 특정 ID 초과분 일괄 삭제 */}
-              <button onClick={async () => {
-                const input = window.prompt("업로드 취소: 어느 ID까지 보존하시겠습니까?\n\n이 ID 초과분이 모두 삭제됩니다.\n(엑셀 업로드 전 max ID를 입력하세요)\n\n예: 86397 입력 → 86398 이상 모두 삭제");
-                if (!input) return;
-                const cutId = parseInt(input.trim(), 10);
-                if (!Number.isFinite(cutId) || cutId < 0) { alert("유효한 숫자를 입력해 주세요."); return; }
-                try {
-                  // 1) 삭제 대상 조회
-                  const prev = await adminFetch(`https://hwayul-backend-production-96cf.up.railway.app/api/contents/above/${cutId}`);
-                  if (!prev.ok) { alert("조회 실패. 권한이 없거나 서버 오류입니다."); return; }
-                  const prevData = await prev.json();
-                  if (!prevData.count) { alert(`ID ${cutId} 초과 콘텐츠가 없습니다. 삭제할 것이 없어요.`); return; }
-                  // 2) 미리보기 + 1차 확인
-                  const preview = (prevData.items || []).slice(0, 8).map(it => `  [${it.id}] ${(it.title || "").slice(0, 40)}`).join("\n");
-                  const more = prevData.count > 8 ? `\n  ... 외 ${prevData.count - 8}건` : "";
-                  if (!confirm(`⚠️ 총 ${prevData.count}건이 영구 삭제됩니다.\n\n[삭제 대상 일부]\n${preview}${more}\n\n계속하시겠습니까?`)) return;
-                  // 3) 2차 확인
-                  const verify = window.prompt(`정말 ${prevData.count}건을 삭제하려면 "삭제" 를 입력하세요.`);
-                  if (verify !== "삭제") { alert("취소됨."); return; }
-                  // 4) 실행
-                  const delRes = await adminFetch(`https://hwayul-backend-production-96cf.up.railway.app/api/contents/above/${cutId}`, { method: "DELETE" });
-                  const delData = await delRes.json();
-                  if (delRes.ok) {
-                    alert(`✅ ${delData.deleted}건 삭제 완료`);
-                    loadContentsFromDB();
-                  } else {
-                    alert("삭제 실패: " + (delData.error || "알 수 없는 오류"));
-                  }
-                } catch (err) {
-                  alert("오류: " + err.message);
-                }
-              }} style={{ padding:"10px 20px", borderRadius:8, background:"rgba(192,57,43,0.08)", border:"1.5px solid rgba(192,57,43,0.35)", color:"#C0392B", fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"inherit", display:"flex", alignItems:"center", gap:8 }}>
-                🔙 업로드 취소
-              </button>
             </div>
             {/* ── 핵심 KPI ── */}
             <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12, marginBottom:20 }}>
