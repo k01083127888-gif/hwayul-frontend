@@ -79,7 +79,7 @@ export function BizSection() {
   usePageMeta({
     title: "심층 상담 신청 — 3단계 패키지 22만원 | WIHAM 인사이드",
     description: "전문 노무사 심층 상담 (1차 전화 → 2차 서류 검토 → 3차 대면) 22만원. 해결 의뢰 전환 시 상담료 전액 차감. 개인·기업 모두 이용 가능합니다.",
-    url: "https://hwayul.kr/biz",
+    url: "https://wiham.kr/biz",
   });
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({ name:"", company:"", phone:"", email:"", position:"", size:"", consultType:"", note:"", date:"", time:"", consent:false });

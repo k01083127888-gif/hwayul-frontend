@@ -33,7 +33,7 @@ const PRINT_HEADER = `
       <div><strong style="color:#0A1628;font-family:'Gowun Batang','Noto Sans KR',sans-serif;font-size:14px">WIHAM 인사이드</strong></div>
       <div>Tel. 02-2088-1767</div>
       <div>Email. wihaminside@gmail.com</div>
-      <div>Web. www.hwayul.kr</div>
+      <div>Web. www.wiham.kr</div>
     </div>
   </div>
 `;

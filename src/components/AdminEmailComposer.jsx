@@ -7,7 +7,7 @@ import { adminFetch } from "../utils/adminApi.js";
 export function AdminEmailComposer({ data, onClose, onViewResult }) {
   const [greeting, setGreeting] = useState(data.greeting || "");
   const [body, setBody] = useState(data.body || "");
-  const [closing, setClosing] = useState("감사합니다.\n\nWIHAM 인사이드\n대표 노무사 김재정\nTel. 02-2088-1767\nEmail. wihaminside@gmail.com\nWeb. www.hwayul.kr");
+  const [closing, setClosing] = useState("감사합니다.\n\nWIHAM 인사이드\n대표 노무사 김재정\nTel. 02-2088-1767\nEmail. wihaminside@gmail.com\nWeb. www.wiham.kr");
   const [showPreview, setShowPreview] = useState(false);
   const [sent, setSent] = useState(false);
   // AI 자동 작성 관련 상태

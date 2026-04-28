@@ -76,7 +76,7 @@ export function ContentDetailView({ item, onBack }) {
   usePageMeta({
     title: `${item.title} | WIHAM 인사이드`,
     description,
-    url: _slug ? `https://hwayul.kr/content/${item.id}/${encodeURIComponent(_slug)}` : `https://hwayul.kr/content/${item.id}`,
+    url: _slug ? `https://wiham.kr/content/${item.id}/${encodeURIComponent(_slug)}` : `https://wiham.kr/content/${item.id}`,
   });
 
   // ── 본문 체크박스 추적 → AI 상담에 자동 전달 ──────────────────────────

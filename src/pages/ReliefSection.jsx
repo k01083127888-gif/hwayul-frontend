@@ -123,7 +123,7 @@ export function ReliefSection() {
   usePageMeta({
     title: "해결 의뢰 — 피해자 구제·산재·피지목인·회사 조사 | WIHAM 인사이드",
     description: "전문 노무사에게 사건 해결을 의뢰하세요. 피해자 구제·산재 신청·피지목인 항변·회사 조사처리 4개 트랙. 가격 투명성, 착수금부터 성공보수까지 명확히 안내합니다.",
-    url: "https://hwayul.kr/relief",
+    url: "https://wiham.kr/relief",
   });
   const [selectedTrack, setSelectedTrack] = useState("victim");
   const [form, setForm] = useState({ name:"", phone:"", email:"", situation:"", urgency:"", consent:false });

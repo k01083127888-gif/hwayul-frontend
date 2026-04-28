@@ -13,7 +13,7 @@ export function ReportSection() {
   usePageMeta({
     title: "익명 제보 | WIHAM 인사이드",
     description: "직장내 괴롭힘·부당대우를 익명으로 제보하세요. 접수된 제보는 전문 노무사가 비밀리에 검토합니다.",
-    url: "https://hwayul.kr/report",
+    url: "https://wiham.kr/report",
   });
   const [form, setForm] = useState({ type:"", content:"", org:"", date:"", email:"" });
   const [done, setDone] = useState(false);

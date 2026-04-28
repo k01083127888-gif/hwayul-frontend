@@ -14,10 +14,10 @@ import { usePageMeta } from "../utils/usePageMeta.js";
 import { useCaseCount } from "../utils/useCaseCount.js";
 
 const TAB_META = {
-  victim:   { title:"괴롭힘 피해자 자가진단 | WIHAM 인사이드",   desc:"직장내 괴롭힘 피해자 자가진단. 고용노동부 판단 매뉴얼 기반으로 3대 요건·행위유형·피해영향도를 무료로 진단받으세요.", url:"https://hwayul.kr/diagnosis?type=victim" },
-  accused:  { title:"피지목인 자가진단 | WIHAM 인사이드",       desc:"괴롭힘 가해자로 지목됐을 때 자가진단. 행위의 업무 적정성과 성립 가능성을 객관적 기준으로 검토해보세요.", url:"https://hwayul.kr/diagnosis?type=accused" },
-  sanjae:   { title:"산재 상담 필요성 체크 | WIHAM 인사이드",    desc:"업무 스트레스·정신질환·과로로 산재 신청을 고민 중이신가요? 상담이 필요한 상황인지 무료로 체크해보세요.", url:"https://hwayul.kr/diagnosis?type=sanjae" },
-  company:  { title:"사내 괴롭힘 조사 체크 | WIHAM 인사이드",    desc:"사내 괴롭힘 신고를 접수한 HR 담당자를 위한 조사 필요성 체크. 사업주 법적 의무와 조사 절차를 확인하세요.", url:"https://hwayul.kr/diagnosis?type=company" },
+  victim:   { title:"괴롭힘 피해자 자가진단 | WIHAM 인사이드",   desc:"직장내 괴롭힘 피해자 자가진단. 고용노동부 판단 매뉴얼 기반으로 3대 요건·행위유형·피해영향도를 무료로 진단받으세요.", url:"https://wiham.kr/diagnosis?type=victim" },
+  accused:  { title:"피지목인 자가진단 | WIHAM 인사이드",       desc:"괴롭힘 가해자로 지목됐을 때 자가진단. 행위의 업무 적정성과 성립 가능성을 객관적 기준으로 검토해보세요.", url:"https://wiham.kr/diagnosis?type=accused" },
+  sanjae:   { title:"산재 상담 필요성 체크 | WIHAM 인사이드",    desc:"업무 스트레스·정신질환·과로로 산재 신청을 고민 중이신가요? 상담이 필요한 상황인지 무료로 체크해보세요.", url:"https://wiham.kr/diagnosis?type=sanjae" },
+  company:  { title:"사내 괴롭힘 조사 체크 | WIHAM 인사이드",    desc:"사내 괴롭힘 신고를 접수한 HR 담당자를 위한 조사 필요성 체크. 사업주 법적 의무와 조사 절차를 확인하세요.", url:"https://wiham.kr/diagnosis?type=company" },
 };
 
 // ── ChecklistSection ─────────────────────────────────────────────────────────────────

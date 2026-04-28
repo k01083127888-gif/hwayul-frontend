@@ -141,7 +141,7 @@ body{font-family:'Noto Sans KR',sans-serif;margin:0;padding:0;background:#F5F3EF
       <div style="font-size:13px;color:#0D7377;font-weight:700">📎 첨부: ${diagType} 검토 리포트</div>
       <div style="font-size:11px;color:#8B8680;margin-top:4px">상세 검토 리포트가 첨부되어 있습니다.</div>
     </div>
-    <div style="border-top:1px solid #E8E5DE;padding-top:20px;font-size:13px;color:#8B8680;line-height:1.9;white-space:pre-wrap">감사합니다.\n\nWIHAM 인사이드\n대표 노무사 김재정\nTel. 02-2088-1767\nEmail. wihaminside@gmail.com\nWeb. www.hwayul.kr</div>
+    <div style="border-top:1px solid #E8E5DE;padding-top:20px;font-size:13px;color:#8B8680;line-height:1.9;white-space:pre-wrap">감사합니다.\n\nWIHAM 인사이드\n대표 노무사 김재정\nTel. 02-2088-1767\nEmail. wihaminside@gmail.com\nWeb. www.wiham.kr</div>
   </div>
   <div style="background:#0A1628;padding:20px 32px;text-align:center">
     <div style="font-size:10px;color:rgba(244,241,235,0.3);line-height:1.8">&copy; 2025 WIHAM 인사이드 | Tel. 02-2088-1767 | wihaminside@gmail.com</div>

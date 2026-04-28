@@ -17,9 +17,9 @@ function setMeta(selector, attrName, attrValue, content) {
 // 사용: usePageMeta({ title, description, url, image })
 // - title: 브라우저 탭 제목 ("자가진단 | WIHAM 인사이드" 등)
 // - description: 페이지 설명 (160자 이내 권장)
-// - url: 절대 URL (https://hwayul.kr/xxx)
+// - url: 절대 URL (https://wiham.kr/xxx)
 // - image: (선택) og:image 절대 URL. 없으면 기본 og-image.png 사용
-export function usePageMeta({ title, description, url, image = "https://hwayul.kr/og-image.png" }) {
+export function usePageMeta({ title, description, url, image = "https://wiham.kr/og-image.png" }) {
   useEffect(() => {
     if (!title && !description && !url) return;
     const desc = (description || "").replace(/\s+/g, " ").trim().slice(0, 160);

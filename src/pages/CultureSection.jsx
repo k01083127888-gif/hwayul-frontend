@@ -77,7 +77,7 @@ export function CultureSection() {
   usePageMeta({
     title: "조직문화 진단 — 6개 영역 무료 자가진단 | WIHAM 인사이드",
     description: "조직 구조·소통·공정성·심리적 안전감·제도·교육 6개 영역을 무료로 진단하고, 전문 노무사의 맞춤 리포트(33만원)로 조직문화 개선 방향을 받아보세요.",
-    url: "https://hwayul.kr/culture",
+    url: "https://wiham.kr/culture",
   });
   const [answers, setAnswers] = useState(_savedCulture?.answers || {});
   const [showResult, setShowResult] = useState(_savedCulture?.showResult || false);
