@@ -67,12 +67,21 @@ const PRINT_STYLE = `<style>
     h2 { font-size:15px !important; }
     h3 { font-size:13px !important; }
   }
-  .section { margin-bottom:40px; }
-  .section + .section { margin-top:8px; }
+  .section { margin-bottom:48px; }
+  .section + .section { margin-top:24px; padding-top:8px; }
   .card { border:1px solid #E8E5DE; border-radius:10px; padding:22px; margin-bottom:16px; }
   .badge { display:inline-block; padding:3px 12px; border-radius:100px; font-size:11px; font-weight:700; }
-  h2 { font-size:17px; font-weight:900; margin-bottom:18px; margin-top:8px; color:#0A1628; padding-bottom:10px; border-bottom:2px solid #F0EDE6; }
+  /* 번호 매긴 메인 섹션 — 공식 서류 스타일 */
+  h2 { font-size:17px; font-weight:900; margin-bottom:20px; margin-top:8px; color:#0A1628; padding:12px 0 12px 16px; border-left:5px solid #0D7377; background:#F5F3EF; border-radius:0 6px 6px 0; }
   h3 { font-size:14px; font-weight:800; margin-bottom:10px; margin-top:4px; color:#0A1628; }
+  /* 체크박스 스타일 — 시인성 강화 (이메일·인쇄용 인라인 SVG-like 박스) */
+  .chk-box { display:inline-block; width:18px; height:18px; border:2px solid #0A1628; border-radius:3px; text-align:center; line-height:14px; font-size:13px; font-weight:900; vertical-align:middle; }
+  .chk-on  { background:#0D7377; color:#fff; border-color:#0D7377; }
+  .chk-off { background:#fff; color:transparent; border-color:#B0ADA6; }
+  /* 행 구분 강화 */
+  td.tdcheck { width:42px; text-align:center; padding:14px 10px !important; }
+  tr.row-on  td { background:#F0F8F8; }
+  tr.row-off td { background:#FAFAF7; color:#8B8680; }
   .bar-bg { height:8px; background:#E8E5DE; border-radius:4px; overflow:hidden; }
   .bar-fill { height:100%; border-radius:4px; }
   table { width:100%; border-collapse:collapse; margin-top:8px; }
@@ -95,20 +104,26 @@ const PRINT_STYLE = `<style>
 
 export function generateChecklistPrintHtml(prereq, behavior, impact, continuity, result) {
   const now = new Date().toLocaleString("ko-KR");
-  const prereqRows = prerequisiteItems.map(p => `
-    <tr><td class="${prereq[p.id]?"check":"uncheck"}">${prereq[p.id]?"✅":"⬜"}</td><td><strong>${p.req}</strong></td><td>${p.label}</td></tr>
-  `).join("");
+  const prereqRows = prerequisiteItems.map(p => {
+    const on = !!prereq[p.id];
+    return `
+    <tr class="${on?'row-on':'row-off'}">
+      <td class="tdcheck"><span class="chk-box ${on?'chk-on':'chk-off'}">${on?'✓':''}</span></td>
+      <td><strong>${p.req}</strong></td>
+      <td>${p.label}${on?'':' <span style="color:#C0C0C0;font-size:11px">(미충족)</span>'}</td>
+    </tr>`;
+  }).join("");
   const behaviorRows = behaviorCategories.map(cat => {
     const checked = cat.items.filter(i => behavior[i.id]);
     if (checked.length === 0) return "";
     return `<div class="card"><h3>${cat.icon} ${cat.category} <span class="badge" style="background:${cat.color}20;color:${cat.color}">${checked.length}건 해당</span></h3>
-      <div style="font-size:11px;color:#8B8680;margin-bottom:8px">법적 근거: ${cat.basis}</div>
-      ${checked.map(i => `<div style="padding:7px 0;font-size:12px">✅ ${i.text}</div>`).join("")}
+      <div style="font-size:11px;color:#8B8680;margin-bottom:10px">법적 근거: ${cat.basis}</div>
+      ${checked.map(i => `<div style="padding:9px 0;font-size:12px;display:flex;align-items:flex-start;gap:10px"><span class="chk-box chk-on" style="flex-shrink:0;margin-top:1px">✓</span><span>${i.text}</span></div>`).join("")}
     </div>`;
   }).join("");
   const impactRows = impactItems.map(cat => {
     const checked = cat.items.filter(i => impact[i.id]);
-    return checked.length > 0 ? `<div style="margin-bottom:14px"><strong style="font-size:12px">${cat.category}</strong>${checked.map(i => `<div style="padding:5px 0;font-size:12px">✅ ${i.text}</div>`).join("")}</div>` : "";
+    return checked.length > 0 ? `<div style="margin-bottom:18px;padding:14px 16px;background:#FAFAF7;border-left:3px solid #C9A84C;border-radius:0 6px 6px 0"><strong style="font-size:12px;color:#0A1628">${cat.category}</strong>${checked.map(i => `<div style="padding:7px 0 0;font-size:12px;display:flex;align-items:flex-start;gap:10px"><span class="chk-box chk-on" style="flex-shrink:0;margin-top:1px">✓</span><span>${i.text}</span></div>`).join("")}</div>` : "";
   }).join("");
   const contLabel = continuity ? continuityOptions.find(c => c.id === continuity)?.label || "-" : "-";
 
@@ -150,7 +165,7 @@ export function generateChecklistPrintHtml(prereq, behavior, impact, continuity,
     <div class="section"><h2>1. 사전요건 (3대 요건) 점검</h2><table><thead><tr><th style="width:40px"></th><th style="width:80px">요건</th><th>내용</th></tr></thead><tbody>${prereqRows}</tbody></table></div>
     <div class="section"><h2>2. 해당 행위유형 상세</h2>${behaviorRows || '<div style="color:#8B8680;padding:12px">해당 없음</div>'}</div>
     <div class="section"><h2>3. 피해 영향도</h2>${impactRows || '<div style="color:#8B8680;padding:12px">해당 없음</div>'}</div>
-    <div class="section"><h2>4. 권고 조치</h2><div class="card">${result.actions.map((a,i) => `<div style="padding:7px 0"><strong style="color:${result.color}">${i+1}.</strong> ${a}</div>`).join("")}</div></div>
+    <div class="section"><h2>4. 권고 조치</h2><div class="card" style="border-left:5px solid ${result.color};background:#FAFAF7">${result.actions.map((a,i) => `<div style="padding:10px 0;font-size:13px;display:flex;align-items:flex-start;gap:12px;border-bottom:${i<result.actions.length-1?'1px dashed #E8E5DE':'none'}"><span style="display:inline-block;flex-shrink:0;width:24px;height:24px;line-height:24px;text-align:center;border-radius:50%;background:${result.color};color:#fff;font-size:11px;font-weight:900">${i+1}</span><span style="flex:1;line-height:1.7">${a}</span></div>`).join("")}</div></div>
     ${PRINT_FOOTER}
     </div>
     <script>window.onload = function() { try { window.print(); } catch(e){} }</script>
@@ -376,7 +391,7 @@ export function generateCompanyPrintHtml(report, org, actions, result) {
     <div class="section"><h2>1. 신고·제보 접수 현황</h2><div class="card">${toList(reportChecked)}</div></div>
     <div class="section"><h2>2. 조직 상황</h2><div class="card">${toList(orgChecked)}</div></div>
     <div class="section"><h2>3. 현재 조치 상태</h2><div class="card">${toList(actionsChecked)}</div></div>
-    <div class="section"><h2>4. 권고 조치</h2><div class="card">${result.actions.map((a,i) => `<div style="padding:7px 0"><strong style="color:${result.color}">${i+1}.</strong> ${a}</div>`).join("")}</div></div>
+    <div class="section"><h2>4. 권고 조치</h2><div class="card" style="border-left:5px solid ${result.color};background:#FAFAF7">${result.actions.map((a,i) => `<div style="padding:10px 0;font-size:13px;display:flex;align-items:flex-start;gap:12px;border-bottom:${i<result.actions.length-1?'1px dashed #E8E5DE':'none'}"><span style="display:inline-block;flex-shrink:0;width:24px;height:24px;line-height:24px;text-align:center;border-radius:50%;background:${result.color};color:#fff;font-size:11px;font-weight:900">${i+1}</span><span style="flex:1;line-height:1.7">${a}</span></div>`).join("")}</div></div>
     <div class="section"><h2>5. 사업주 법적 의무</h2><div class="card"><table><tbody>
       ${[
         ["근거 법령","근로기준법 제76조의2·제76조의3"],
