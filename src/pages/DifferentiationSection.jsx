@@ -102,69 +102,9 @@ export function DifferentiationSection({ setActive }) {
           </div>
         </div>
 
-        {/* 3개 카드 */}
-        <div className="hero-cta-grid" style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 18,
-          marginBottom: 48,
-          maxWidth: 900,
-          marginLeft: "auto",
-          marginRight: "auto",
-        }}>
-          {[
-            {
-              icon: "⚖️",
-              num: caseCountLabel,
-              label: "판례 데이터베이스",
-              desc: "직장내 괴롭힘과 그로 인한\n부당해고, 산재 실제 법원\n판결문을 AI가 분석·학습",
-            },
-            {
-              icon: "💼",
-              num: "20년",
-              label: "노무 현장 경력",
-              desc: "교과서가 아닌 현장에서 쌓은\n실전 경험이 AI의 판단 기준",
-            },
-            {
-              icon: "🔍",
-              num: "판례 기반",
-              label: "근거 있는 답변",
-              desc: "추측이 아닌 실제 판결 결과를\n근거로 상담 방향을 제시",
-            },
-          ].map((item, i) => (
-            <div key={i} style={{
-              background: "rgba(255,255,255,0.025)",
-              border: "1px solid rgba(255,255,255,0.06)",
-              borderRadius: 14,
-              padding: "28px 16px",
-              textAlign: "center",
-              transition: "border-color 0.3s",
-            }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = "rgba(201,168,76,0.3)"}
-            onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"}
-            >
-              <div style={{ fontSize: 28, marginBottom: 14 }}>{item.icon}</div>
-              <div style={{
-                fontSize: "clamp(22px, 3vw, 30px)",
-                fontWeight: 800,
-                color: C.gold,
-                marginBottom: 4,
-              }}>{item.num}</div>
-              <div style={{
-                fontSize: 13,
-                color: "rgba(244,241,235,0.7)",
-                fontWeight: 600,
-                marginBottom: 12,
-              }}>{item.label}</div>
-              <div style={{
-                fontSize: 12,
-                color: "rgba(244,241,235,0.35)",
-                lineHeight: 1.7,
-                whiteSpace: "pre-line",
-              }}>{item.desc}</div>
-            </div>
-          ))}
-        </div>
+        {/* 3개 카드 제거 — 메인 페이지의 이용 안내(USAGE GUIDE) 풀섹션이
+            동일한 메시지(판례 1,000건+, 20년 경력, 근거 있는 답변)를 더
+            풍부하게 다루므로 중복 제거. 비교표만 남김. */}
 
         {/* 비교 테이블 제목 */}
         <div style={{
