@@ -202,7 +202,10 @@ export function DifferentiationSection({ setActive }) {
         </div>
 
         {/* 4단계 사용자 여정 흐름도 — 사례·진단·AI·심층상담 전체 흐름 시각화 */}
-        <div style={{ marginTop:24, fontSize:14, color:"rgba(244,241,235,0.4)", marginBottom:18 }}>전체 이용 흐름</div>
+        <div style={{ marginTop:24, marginBottom:18, display:"flex", alignItems:"center", justifyContent:"center", gap:8, flexWrap:"wrap" }}>
+          <span style={{ fontSize:18 }}>💡</span>
+          <span style={{ fontSize:15, fontWeight:700, color:C.gold, letterSpacing:"0.3px" }}>WIHAM 인사이드 사용 꿀팁</span>
+        </div>
         <div style={{ display:"flex", alignItems:"stretch", justifyContent:"center", gap:0, flexWrap:"wrap", maxWidth:980, margin:"0 auto" }}>
           {[
             { icon:"📚", label:"사례 찾기·반영", target:"content" },
