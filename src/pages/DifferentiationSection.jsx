@@ -180,14 +180,24 @@ export function DifferentiationSection({ setActive }) {
           <span style={{ fontSize:18 }}>💡</span>
           <span style={{ fontSize:15, fontWeight:700, color:C.gold, letterSpacing:"0.3px" }}>WIHAM 인사이드 사용 꿀팁</span>
         </div>
-        <div style={{ display:"flex", alignItems:"stretch", justifyContent:"center", gap:0, flexWrap:"wrap", maxWidth:980, margin:"0 auto" }}>
+        <style>{`
+          .wiham-flow { display:flex; align-items:stretch; justify-content:center; gap:0; max-width:980px; margin:0 auto; flex-wrap:nowrap; }
+          .wiham-flow-item { display:flex; align-items:center; flex-shrink:0; }
+          .wiham-flow-arrow { padding:0 10px; color:#C9A84C; font-size:22px; font-weight:900; line-height:1; }
+          @media (max-width: 768px) {
+            .wiham-flow { flex-direction:column; align-items:center; gap:0; }
+            .wiham-flow-item { flex-direction:column; }
+            .wiham-flow-arrow { padding:8px 0; transform:rotate(90deg); font-size:20px; }
+          }
+        `}</style>
+        <div className="wiham-flow">
           {[
             { icon:"📚", label:"사례 찾기·반영", hint:"콘텐츠에서 본인 상황 확인",      target:"content"   },
             { icon:"🔍", label:"자가 진단",      hint:"3대 요건·행위유형 체크",         target:"checklist" },
             { icon:"🤖", label:"AI 상담",        hint:"자가 진단 후 자동 시작",         target:"checklist", isAuto:true },
             { icon:"⚖️", label:"심층 전문 상담", hint:"AI 답변 후 노무사로 연결",       target:"biz"       },
           ].map((step, i, arr) => (
-            <div key={i} style={{ display:"flex", alignItems:"center", flexShrink:0 }}>
+            <div key={i} className="wiham-flow-item">
               <div
                 onClick={() => { if (step.target && typeof setActive === "function") { setActive(step.target); window.scrollTo({ top:0, behavior:"smooth" }); } }}
                 style={{
@@ -205,7 +215,7 @@ export function DifferentiationSection({ setActive }) {
                 <div style={{ fontSize:10, color:"rgba(244,241,235,0.5)", lineHeight:1.45, textAlign:"center", whiteSpace:"normal" }}>{step.hint}</div>
               </div>
               {i < arr.length - 1 && (
-                <div style={{ padding:"0 10px", color:C.gold, fontSize:22, fontWeight:900, lineHeight:1 }}>›››</div>
+                <div className="wiham-flow-arrow">›››</div>
               )}
             </div>
           ))}

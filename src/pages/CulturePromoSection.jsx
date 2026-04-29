@@ -131,20 +131,30 @@ export function CulturePromoSection({ setActive }) {
         {/* 진단 → 리포트 플로우 */}
         <div style={{ padding:"24px 28px", background:"rgba(13,115,119,0.06)", border:"1.5px solid rgba(13,115,119,0.25)", borderRadius:16, marginBottom:40 }}>
           <div style={{ fontSize:11, fontWeight:700, color:C.tealLight, letterSpacing:"2px", textAlign:"center", marginBottom:20 }}>진단에서 개선까지</div>
-          <div style={{ display:"flex", justifyContent:"center", gap:0, flexWrap:"wrap" }}>
+          <style>{`
+            .wiham-cflow { display:flex; justify-content:center; gap:0; flex-wrap:nowrap; }
+            .wiham-cflow-item { display:flex; align-items:center; }
+            .wiham-cflow-line { width:24px; height:2px; background:linear-gradient(90deg, #0D7377, #C9A84C); flex-shrink:0; }
+            @media (max-width: 768px) {
+              .wiham-cflow { flex-direction:column; align-items:center; }
+              .wiham-cflow-item { flex-direction:column; }
+              .wiham-cflow-line { width:2px; height:18px; background:linear-gradient(180deg, #0D7377, #C9A84C); }
+            }
+          `}</style>
+          <div className="wiham-cflow">
             {[
               { step:"1", label:"무료 자가진단", desc:"6개 영역 30문항", icon:"📝" },
               { step:"2", label:"위험도 분석", desc:"영역별 등급 산출", icon:"📊" },
               { step:"3", label:"전문 리포트", desc:"노무사 검토 33만원", icon:"📄" },
               { step:"4", label:"개선 실행", desc:"우선순위별 로드맵", icon:"🎯" },
             ].map((s, i) => (
-              <div key={s.step} style={{ display:"flex", alignItems:"center" }}>
+              <div key={s.step} className="wiham-cflow-item">
                 <div style={{ textAlign:"center", minWidth:120, padding:"12px 8px" }}>
                   <div style={{ width:36, height:36, borderRadius:"50%", background:C.teal, color:"white", fontWeight:800, fontSize:14, display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 8px" }}>{s.step}</div>
                   <div style={{ fontSize:13, fontWeight:800, color:C.cream, marginBottom:3 }}>{s.label}</div>
                   <div style={{ fontSize:10, color:"rgba(244,241,235,0.45)" }}>{s.desc}</div>
                 </div>
-                {i < 3 && <div style={{ width:24, height:2, background:`linear-gradient(90deg, ${C.teal}, ${C.gold})`, flexShrink:0 }} />}
+                {i < 3 && <div className="wiham-cflow-line" />}
               </div>
             ))}
           </div>
