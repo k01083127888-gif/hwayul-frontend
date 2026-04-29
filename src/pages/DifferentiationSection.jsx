@@ -201,26 +201,39 @@ export function DifferentiationSection({ setActive }) {
           ))}
         </div>
 
-        {/* CTA 버튼 */}
-        <button
-          onClick={() => setActive("checklist")}
-          style={{
-            background: C.gold,
-            color: C.navy,
-            fontSize: 15,
-            fontWeight: 700,
-            padding: "14px 40px",
-            borderRadius: 10,
-            border: "none",
-            cursor: "pointer",
-            letterSpacing: "0.5px",
-            transition: "opacity 0.2s",
-          }}
-          onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
-          onMouseLeave={e => e.currentTarget.style.opacity = "1"}
-        >
-          무료 AI 상담 시작하기 →
-        </button>
+        {/* 4단계 사용자 여정 흐름도 — 사례·진단·AI·심층상담 전체 흐름 시각화 */}
+        <div style={{ marginTop:24, fontSize:14, color:"rgba(244,241,235,0.4)", marginBottom:18 }}>전체 이용 흐름</div>
+        <div style={{ display:"flex", alignItems:"stretch", justifyContent:"center", gap:0, flexWrap:"wrap", maxWidth:980, margin:"0 auto" }}>
+          {[
+            { icon:"📚", label:"사례 찾기·반영", target:"content" },
+            { icon:"🔍", label:"자가 진단",     target:"checklist" },
+            { icon:"🤖", label:"AI 상담",       target:null },
+            { icon:"⚖️", label:"심층 전문 상담", target:"biz" },
+          ].map((step, i, arr) => (
+            <div key={i} style={{ display:"flex", alignItems:"center", flexShrink:0 }}>
+              <div
+                onClick={() => { if (step.target && typeof setActive === "function") { setActive(step.target); window.scrollTo({ top:0, behavior:"smooth" }); } }}
+                style={{
+                  display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center",
+                  minWidth:120, padding:"18px 14px", borderRadius:12,
+                  background:"rgba(201,168,76,0.08)", border:"1.5px solid rgba(201,168,76,0.35)",
+                  cursor: step.target ? "pointer" : "default",
+                  transition:"all 0.25s",
+                }}
+                onMouseEnter={e => { if (step.target) { e.currentTarget.style.background="rgba(201,168,76,0.18)"; e.currentTarget.style.borderColor=C.gold; e.currentTarget.style.transform="translateY(-3px)"; } }}
+                onMouseLeave={e => { e.currentTarget.style.background="rgba(201,168,76,0.08)"; e.currentTarget.style.borderColor="rgba(201,168,76,0.35)"; e.currentTarget.style.transform=""; }}>
+                <div style={{ fontSize:24, marginBottom:8 }}>{step.icon}</div>
+                <div style={{ fontSize:13, fontWeight:700, color:C.cream, whiteSpace:"nowrap" }}>{step.label}</div>
+              </div>
+              {i < arr.length - 1 && (
+                <div style={{ padding:"0 12px", color:C.gold, fontSize:22, fontWeight:900, lineHeight:1 }}>›››</div>
+              )}
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop:22, fontSize:12, color:"rgba(244,241,235,0.45)", letterSpacing:"0.3px" }}>
+          앞 단계의 정보가 다음 단계로 자동 전달돼 정확도가 올라갑니다
+        </div>
       </div>
     </section>
   );
