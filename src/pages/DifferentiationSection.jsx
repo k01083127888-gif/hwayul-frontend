@@ -172,34 +172,8 @@ export function DifferentiationSection({ setActive }) {
           ))}
         </div>
 
-        {/* 3단계 이용 가이드 카드 — 비교표(차별점)를 본 사용자가 그래서 어떻게 활용하는지 안내 */}
-        <div style={{ fontSize:14, color:"rgba(244,241,235,0.4)", marginBottom:16 }}>WIHAM 인사이드 활용법</div>
-        <div className="hero-cta-grid" style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 18,
-          marginBottom: 48,
-          maxWidth: 900,
-          marginLeft: "auto",
-          marginRight: "auto",
-        }}>
-          {[
-            { icon:"📚", num:"STEP 01", label:"사례 찾기", desc:`${caseCountLabel}+ 콘텐츠 중\n본인 상황과 비슷한\n판례·산재 사례를 확인`, target:"content" },
-            { icon:"🔍", num:"STEP 02", label:"무료 진단", desc:"고용노동부 기준으로\n3대 요건·행위유형을\n객관적으로 평가", target:"checklist" },
-            { icon:"💬", num:"STEP 03", label:"전문 상담", desc:"사례 + 진단 결과를\n자동 반영해 노무사가\n맞춤 답변을 제공", target:"biz" },
-          ].map((item, i) => (
-            <div key={i}
-              onClick={() => { if (typeof setActive === "function") setActive(item.target); window.scrollTo({ top:0, behavior:"smooth" }); }}
-              style={{ background:"rgba(255,255,255,0.025)", border:"1px solid rgba(255,255,255,0.06)", borderRadius:14, padding:"28px 16px", textAlign:"center", transition:"all 0.3s", cursor:"pointer" }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(201,168,76,0.5)"; e.currentTarget.style.background = "rgba(255,255,255,0.04)"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; e.currentTarget.style.background = "rgba(255,255,255,0.025)"; }}>
-              <div style={{ fontSize:28, marginBottom:14 }}>{item.icon}</div>
-              <div style={{ fontSize:"clamp(14px, 1.4vw, 16px)", fontWeight:700, color:C.gold, marginBottom:6, letterSpacing:"1.5px" }}>{item.num}</div>
-              <div style={{ fontSize:"clamp(18px, 2.4vw, 22px)", fontWeight:800, color:C.cream, marginBottom:12, fontFamily:"'Noto Serif KR', serif" }}>{item.label}</div>
-              <div style={{ fontSize:12, color:"rgba(244,241,235,0.55)", lineHeight:1.7, whiteSpace:"pre-line" }}>{item.desc}</div>
-            </div>
-          ))}
-        </div>
+        {/* STEP 01/02/03 카드 제거 — 아래 '💡 WIHAM 인사이드 사용 꿀팁' 흐름도가
+            동일 메시지를 4단계로 더 정확히 표현하므로 중복 제거. */}
 
         {/* 4단계 사용자 여정 흐름도 — 사례·진단·AI·심층상담 전체 흐름 시각화 */}
         <div style={{ marginTop:24, marginBottom:18, display:"flex", alignItems:"center", justifyContent:"center", gap:8, flexWrap:"wrap" }}>
