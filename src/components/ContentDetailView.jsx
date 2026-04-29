@@ -27,9 +27,23 @@ const fixBrokenEmojis = (html) => (html || "")
   // 헤딩 첫 글자가 빈 공백뿐인데 특정 키워드 시작 → 💡
   .replace(/<(h[2-4])>\s+(이 판례의 핵심|핵심 시사점|핵심 정리|이 사건의 핵심|핵심 포인트)/g, "<$1>💡 $2");
 
+// react-quill-new(Quill 2)는 글머리 기호 리스트도 <ol>로 저장하고
+// <li data-list="bullet"> 속성으로 구분함. 공개 페이지엔 Quill CSS가 없어
+// 기본 <ol>로 1.2.3 번호로 보임. data-list="bullet" 만 있는 <ol>은 <ul>로 변환.
+// (Quill UI 헬퍼 <span class="ql-ui"> 도 같이 제거)
+const normalizeQuillLists = (html) => (html || "")
+  .replace(/<ol(\s[^>]*)?>([\s\S]*?)<\/ol>/g, (full, attrs, inner) => {
+    const allBullet = /data-list="bullet"/.test(inner) && !/data-list="ordered"/.test(inner);
+    const cleaned = inner.replace(/<span[^>]*class="ql-ui"[^>]*>[\s\S]*?<\/span>/g, "");
+    if (allBullet) {
+      return "<ul>" + cleaned.replace(/<li[^>]*data-list="bullet"[^>]*>/g, "<li>") + "</ul>";
+    }
+    return "<ol" + (attrs || "") + ">" + cleaned.replace(/<li[^>]*data-list="ordered"[^>]*>/g, "<li>") + "</ol>";
+  });
+
 // XSS 방어: 본문 HTML을 렌더링하기 전 허용 태그·속성만 남기고 나머지 제거
 // 특히 <script>, onerror, onload 등 이벤트 핸들러, javascript: URL 완전 차단
-const sanitizeBody = (html) => DOMPurify.sanitize(fixBrokenEmojis(html), {
+const sanitizeBody = (html) => DOMPurify.sanitize(normalizeQuillLists(fixBrokenEmojis(html)), {
   ALLOWED_TAGS: [
     "h1","h2","h3","h4","h5","h6",
     "p","br","hr","strong","b","em","i","u","s","del","mark","small","sub","sup",
