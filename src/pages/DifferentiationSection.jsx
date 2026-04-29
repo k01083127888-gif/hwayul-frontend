@@ -208,28 +208,30 @@ export function DifferentiationSection({ setActive }) {
         </div>
         <div style={{ display:"flex", alignItems:"stretch", justifyContent:"center", gap:0, flexWrap:"wrap", maxWidth:980, margin:"0 auto" }}>
           {[
-            { icon:"📚", label:"사례 찾기·반영", target:"content" },
-            { icon:"🔍", label:"자가 진단",     target:"checklist" },
-            { icon:"🤖", label:"AI 상담",       target:null },
-            { icon:"⚖️", label:"심층 전문 상담", target:"biz" },
+            { icon:"📚", label:"사례 찾기·반영", hint:"콘텐츠에서 본인 상황 확인",      target:"content"   },
+            { icon:"🔍", label:"자가 진단",      hint:"3대 요건·행위유형 체크",         target:"checklist" },
+            { icon:"🤖", label:"AI 상담",        hint:"자가 진단 후 자동 시작",         target:"checklist", isAuto:true },
+            { icon:"⚖️", label:"심층 전문 상담", hint:"AI 답변 후 노무사로 연결",       target:"biz"       },
           ].map((step, i, arr) => (
             <div key={i} style={{ display:"flex", alignItems:"center", flexShrink:0 }}>
               <div
                 onClick={() => { if (step.target && typeof setActive === "function") { setActive(step.target); window.scrollTo({ top:0, behavior:"smooth" }); } }}
                 style={{
-                  display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center",
-                  minWidth:120, padding:"18px 14px", borderRadius:12,
-                  background:"rgba(201,168,76,0.08)", border:"1.5px solid rgba(201,168,76,0.35)",
-                  cursor: step.target ? "pointer" : "default",
+                  display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-start",
+                  width:140, padding:"18px 12px", borderRadius:12,
+                  background: step.isAuto ? "rgba(201,168,76,0.04)" : "rgba(201,168,76,0.08)",
+                  border:`1.5px ${step.isAuto ? "dashed" : "solid"} rgba(201,168,76,${step.isAuto ? "0.25" : "0.35"})`,
+                  cursor: "pointer",
                   transition:"all 0.25s",
                 }}
-                onMouseEnter={e => { if (step.target) { e.currentTarget.style.background="rgba(201,168,76,0.18)"; e.currentTarget.style.borderColor=C.gold; e.currentTarget.style.transform="translateY(-3px)"; } }}
-                onMouseLeave={e => { e.currentTarget.style.background="rgba(201,168,76,0.08)"; e.currentTarget.style.borderColor="rgba(201,168,76,0.35)"; e.currentTarget.style.transform=""; }}>
+                onMouseEnter={e => { e.currentTarget.style.background="rgba(201,168,76,0.18)"; e.currentTarget.style.borderColor=C.gold; e.currentTarget.style.transform="translateY(-3px)"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = step.isAuto ? "rgba(201,168,76,0.04)" : "rgba(201,168,76,0.08)"; e.currentTarget.style.borderColor=`rgba(201,168,76,${step.isAuto ? "0.25" : "0.35"})`; e.currentTarget.style.transform=""; }}>
                 <div style={{ fontSize:24, marginBottom:8 }}>{step.icon}</div>
-                <div style={{ fontSize:13, fontWeight:700, color:C.cream, whiteSpace:"nowrap" }}>{step.label}</div>
+                <div style={{ fontSize:13, fontWeight:700, color:C.cream, whiteSpace:"nowrap", marginBottom:6 }}>{step.label}</div>
+                <div style={{ fontSize:10, color:"rgba(244,241,235,0.5)", lineHeight:1.45, textAlign:"center", whiteSpace:"normal" }}>{step.hint}</div>
               </div>
               {i < arr.length - 1 && (
-                <div style={{ padding:"0 12px", color:C.gold, fontSize:22, fontWeight:900, lineHeight:1 }}>›››</div>
+                <div style={{ padding:"0 10px", color:C.gold, fontSize:22, fontWeight:900, lineHeight:1 }}>›››</div>
               )}
             </div>
           ))}
