@@ -153,8 +153,8 @@ export function ContentSection({ contentId = null, setContentDetail, setActive }
               </div>
               <h3 style={{ fontSize:14, fontWeight:700, color:C.navy, lineHeight:1.55, marginBottom:10 }}>{item.title}</h3>
               <p style={{ fontSize:13, color:C.gray, lineHeight:1.65, marginBottom:14 }}>{item.summary}</p>
-              <div style={{ display:"flex", justifyContent:"space-between", paddingTop:12, borderTop:"1px solid rgba(10,22,40,0.07)" }}>
-                <span style={{ fontSize:12, color:C.gray }}>👁 {item.views.toLocaleString()}</span>
+              <div style={{ display:"flex", justifyContent:"flex-end", paddingTop:12, borderTop:"1px solid rgba(10,22,40,0.07)" }}>
+                {/* 조회수 표시 제거 — 관리자모드에서만 노출 (DB에 저장은 그대로) */}
                 <button onClick={(e) => { e.stopPropagation(); if (setContentDetail) setContentDetail(item.id, slugify(item.title)); }} style={{ fontSize:12, color:C.teal, fontWeight:700, background:"none", border:"none", cursor:"pointer", fontFamily:"inherit" }}>자세히 보기 →</button>
               </div>
             </article>

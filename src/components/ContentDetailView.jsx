@@ -147,7 +147,7 @@ export function ContentDetailView({ item, onBack }) {
 
           <div style={{ display:"flex", alignItems:"center", gap:20, paddingBottom:20, borderBottom:"1px solid rgba(10,22,40,0.08)" }}>
             <span style={{ fontSize:13, color:C.gray }}>📅 {item.date}</span>
-            <span style={{ fontSize:13, color:C.gray }}>👁 조회 {item.views.toLocaleString()}</span>
+            {/* 조회수 표시 제거 — 관리자모드에서만 노출 */}
           </div>
 
           <div style={{ marginTop:24, padding:"16px 20px", background:`${typeMeta.color}08`, borderLeft:`4px solid ${typeMeta.color}`, borderRadius:"0 10px 10px 0" }}>
