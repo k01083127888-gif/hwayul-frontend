@@ -683,6 +683,23 @@ export function AdminSection({ setActive, authed, setAuthed }) {
                   }}
                 />
               </label>
+              {/* 조회수 일괄 초기화 — 모든 콘텐츠 views를 0으로 */}
+              <button onClick={async () => {
+                if (!confirm("모든 콘텐츠의 조회수를 0으로 초기화합니다.\n(엑셀에 적힌 옛날 임의 숫자 정리용)\n\n계속하시겠습니까?")) return;
+                const typed = window.prompt("정말 초기화하려면 '초기화' 라고 입력하세요.");
+                if (typed !== "초기화") { alert("취소되었습니다."); return; }
+                try {
+                  const res = await adminFetch("https://hwayul-backend-production-96cf.up.railway.app/api/contents/reset-views", { method: "POST" });
+                  if (!res.ok) { alert("초기화 실패: 권한 또는 서버 오류"); return; }
+                  const data = await res.json();
+                  alert(`✅ ${data.message}`);
+                  loadContentsFromDB();
+                } catch (err) {
+                  alert("오류: " + err.message);
+                }
+              }} style={{ padding:"10px 20px", borderRadius:8, background:"rgba(139,134,128,0.08)", border:"1.5px solid rgba(139,134,128,0.35)", color:"#5A5550", fontWeight:700, fontSize:13, cursor:"pointer", fontFamily:"inherit", display:"flex", alignItems:"center", gap:8 }}>
+                👁 조회수 일괄 초기화
+              </button>
             </div>
             {/* ── 핵심 KPI ── */}
             <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12, marginBottom:20 }}>
