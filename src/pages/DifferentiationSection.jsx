@@ -102,9 +102,78 @@ export function DifferentiationSection({ setActive }) {
           </div>
         </div>
 
-        {/* 3개 카드 제거 — 메인 페이지의 이용 안내(USAGE GUIDE) 풀섹션이
-            동일한 메시지(판례 1,000건+, 20년 경력, 근거 있는 답변)를 더
-            풍부하게 다루므로 중복 제거. 비교표만 남김. */}
+        {/* 3단계 이용 가이드 카드 — 사례 찾기 → 무료 진단 → 전문 상담 */}
+        {/* 다크 네이비 배경에 어울리는 컬러 + 클릭 시 해당 섹션으로 이동 */}
+        <div className="hero-cta-grid" style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: 18,
+          marginBottom: 48,
+          maxWidth: 900,
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}>
+          {[
+            {
+              icon: "📚",
+              num: "STEP 01",
+              label: "사례 찾기",
+              desc: `${caseCountLabel}+ 콘텐츠 중\n본인 상황과 비슷한\n판례·산재 사례를 확인`,
+              target: "content",
+            },
+            {
+              icon: "🔍",
+              num: "STEP 02",
+              label: "무료 진단",
+              desc: "고용노동부 기준으로\n3대 요건·행위유형을\n객관적으로 평가",
+              target: "checklist",
+            },
+            {
+              icon: "💬",
+              num: "STEP 03",
+              label: "전문 상담",
+              desc: "사례 + 진단 결과를\n자동 반영해 노무사가\n맞춤 답변을 제공",
+              target: "biz",
+            },
+          ].map((item, i) => (
+            <div key={i}
+              onClick={() => { if (typeof setActive === "function") setActive(item.target); window.scrollTo({ top:0, behavior:"smooth" }); }}
+              style={{
+                background: "rgba(255,255,255,0.025)",
+                border: "1px solid rgba(255,255,255,0.06)",
+                borderRadius: 14,
+                padding: "28px 16px",
+                textAlign: "center",
+                transition: "all 0.3s",
+                cursor: "pointer",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(201,168,76,0.5)"; e.currentTarget.style.background = "rgba(255,255,255,0.04)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; e.currentTarget.style.background = "rgba(255,255,255,0.025)"; }}
+            >
+              <div style={{ fontSize: 28, marginBottom: 14 }}>{item.icon}</div>
+              <div style={{
+                fontSize: "clamp(14px, 1.4vw, 16px)",
+                fontWeight: 700,
+                color: C.gold,
+                marginBottom: 6,
+                letterSpacing: "1.5px",
+              }}>{item.num}</div>
+              <div style={{
+                fontSize: "clamp(18px, 2.4vw, 22px)",
+                fontWeight: 800,
+                color: C.cream,
+                marginBottom: 12,
+                fontFamily: "'Noto Serif KR', serif",
+              }}>{item.label}</div>
+              <div style={{
+                fontSize: 12,
+                color: "rgba(244,241,235,0.55)",
+                lineHeight: 1.7,
+                whiteSpace: "pre-line",
+              }}>{item.desc}</div>
+            </div>
+          ))}
+        </div>
 
         {/* 비교 테이블 제목 */}
         <div style={{
