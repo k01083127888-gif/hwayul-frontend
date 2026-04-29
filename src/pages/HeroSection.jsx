@@ -21,6 +21,7 @@ export function HeroSection({ setActive }) {
   ];
 
   return (
+    <>
     <section className="hero-section" style={{
       minHeight:"100vh", background:`linear-gradient(160deg, ${C.navy} 0%, #0D2140 55%, #071225 100%)`,
       display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center",
@@ -164,6 +165,61 @@ export function HeroSection({ setActive }) {
 
       </div>
     </section>
+
+    {/* 🎯 이용 가이드 — 3단계 카드 (사례 → 진단 → 상담) */}
+    {/* 위함 인사이드 활용법 안내. 별로면 이 <section> 통째로 삭제 가능. */}
+    <section style={{ background:C.cream, padding:"80px 32px", borderBottom:`1px solid ${C.gold}22` }}>
+      <div style={{ maxWidth:1100, margin:"0 auto" }}>
+        <div style={{ textAlign:"center", marginBottom:48 }}>
+          <div style={{ fontSize:11, letterSpacing:"3px", color:C.gold, fontWeight:700, marginBottom:8 }}>HOW TO USE</div>
+          <h2 style={{ fontFamily:"'Noto Serif KR', Georgia, serif", fontSize:"clamp(1.4rem, 3vw, 2rem)", fontWeight:900, color:C.navy, marginBottom:14, letterSpacing:"-0.5px" }}>
+            정확한 상담을 위한 <span style={{ color:C.teal }}>3단계</span>
+          </h2>
+          <p style={{ fontSize:14, color:C.gray, lineHeight:1.7, maxWidth:560, margin:"0 auto" }}>
+            본인 상황과 비슷한 사례를 먼저 찾아보고 진단까지 하시면<br/>
+            노무사 상담의 정확도가 훨씬 높아집니다.
+          </p>
+        </div>
+
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(260px, 1fr))", gap:20, alignItems:"stretch" }}>
+          {[
+            {
+              n:"01", icon:"📚", color:C.teal,
+              title:"사례 찾기",
+              cta:"콘텐츠 둘러보기 →", target:"content",
+              desc:"313건의 판례·산재·뉴스에서 본인 상황과 비슷한 케이스를 확인하고 본문 체크리스트로 표시해두세요.",
+            },
+            {
+              n:"02", icon:"🔍", color:C.gold,
+              title:"무료 진단",
+              cta:"진단 시작하기 →", target:"checklist",
+              desc:"3대 요건·행위유형·피해영향도를 체크해 본인 사건의 위험도를 객관적으로 평가받으세요.",
+            },
+            {
+              n:"03", icon:"💬", color:C.navy,
+              title:"심층 상담",
+              cta:"상담 신청 →", target:"biz",
+              desc:"AI와 노무사가 1·2단계에서 모은 정보를 모두 참고하여 맞춤형 답변을 드립니다.",
+            },
+          ].map(s => (
+            <div key={s.n}
+              onClick={() => { if (typeof setActive === "function") setActive(s.target); window.scrollTo({ top:0, behavior:"smooth" }); }}
+              style={{ background:"white", borderRadius:14, padding:"32px 28px", border:`1px solid ${s.color}22`, borderTop:`4px solid ${s.color}`, cursor:"pointer", transition:"all 0.25s", boxShadow:"0 2px 12px rgba(10,22,40,0.04)", display:"flex", flexDirection:"column" }}
+              onMouseEnter={e => { e.currentTarget.style.transform="translateY(-4px)"; e.currentTarget.style.boxShadow="0 12px 32px rgba(10,22,40,0.10)"; }}
+              onMouseLeave={e => { e.currentTarget.style.transform=""; e.currentTarget.style.boxShadow="0 2px 12px rgba(10,22,40,0.04)"; }}>
+              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:18 }}>
+                <div style={{ fontSize:11, fontWeight:800, color:s.color, letterSpacing:"2px" }}>STEP {s.n}</div>
+                <div style={{ fontSize:30, lineHeight:1 }}>{s.icon}</div>
+              </div>
+              <h3 style={{ fontFamily:"'Noto Serif KR', Georgia, serif", fontSize:20, fontWeight:900, color:C.navy, marginBottom:12, letterSpacing:"-0.3px" }}>{s.title}</h3>
+              <p style={{ fontSize:13.5, color:C.gray, lineHeight:1.75, marginBottom:20, flex:1 }}>{s.desc}</p>
+              <div style={{ fontSize:12.5, fontWeight:700, color:s.color, paddingTop:14, borderTop:`1px solid ${s.color}15` }}>{s.cta}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+    </>
   );
 }
 
