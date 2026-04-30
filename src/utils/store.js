@@ -200,7 +200,10 @@ export async function saveContentsToDB(contents) {
         await adminFetch(`${API_BASE}/contents/bulk`, {
             method: "POST",
             body: JSON.stringify({ contents: contents.map(c => ({
-                id: c.id != null ? c.id : null,          // ★ id 보존: 기존 콘텐츠 /content/:id 링크 깨짐 방지
+                // ★ id 보존: 기존 콘텐츠 /content/:id 링크 깨짐 방지
+                // ★ Date.now() 같은 INT 범위 초과 임시 id는 null로 변환하여
+                //   백엔드 SERIAL이 정상 id 부여하도록 (PostgreSQL INTEGER max = 2,147,483,647)
+                id: (c.id != null && Number(c.id) > 0 && Number(c.id) <= 2147483647) ? c.id : null,
                 type: c.type || "news",
                 tag: c.tag || "",
                 case_number: c.case_number || "",
