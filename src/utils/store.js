@@ -177,12 +177,10 @@ export async function loadSingleContentFromDB(id) {
 
 // 데이터베이스에 콘텐츠 저장
 export async function saveContentsToDB(contents) {
-    const bodyByTitle = {};
-    mockNews.forEach(n => {
-        if (contentDetails[n.id]?.content) {
-            bodyByTitle[n.title] = contentDetails[n.id].content;
-        }
-    });
+    // ※ 과거에는 c.body가 비어있으면 mockNews/contentDetails(코드에 박힌 시드 데이터)로 폴백했지만,
+    //    그 폴백이 일괄저장 도중의 빈 body 스냅샷을 만나면 DB의 정상 본문을 옛날 mock 본문으로
+    //    덮어써서 "지운 본문이 유령처럼 부활"하는 사고가 발생함. → 폴백 제거.
+    //    빈 본문은 빈 본문 그대로 저장한다.
     // DB에서 기존 첨부파일 보존
     let dbAttachments = {};
     try {
@@ -212,7 +210,7 @@ export async function saveContentsToDB(contents) {
                 summary: c.summary || "",
                 views: c.views || 0,
                 hidden: c.hidden || false,
-                body: c.body || bodyByTitle[c.title] || "",
+                body: c.body || "",
                 attachments: (c.attachments && c.attachments.length > 0) ? c.attachments : (dbAttachments[c.title] || [])
             }))})
         });
